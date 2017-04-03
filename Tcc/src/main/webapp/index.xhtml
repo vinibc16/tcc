@@ -1,18 +1,25 @@
-<?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:p="http://primefaces.org/ui">
-    <h:head>        
-    </h:head>
-    <h:body>
-        <h:outputLabel value="Usuario" for="user" />
-        <p:inputText id="user" value="#{logonMB.login.matricula}" />
-        <h:outputLabel value="Senha" for="senha" />
-        <p:password id="senha" value="#{logonMB.login.senha}" />
-        <p:commandButton value="OK" action="#{logonMB.logon}" process="@form" update="@form" />
-    </h:body>
-</html>
-
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:p="http://primefaces.org/ui">
+   
+  <h:head>
+   
+  </h:head>
+   
+  <h:body>
+        <h:form>
+              <p:messages id="messages" />
+              <p:panelGrid columns="2">
+                    <p:outputLabel for="id" value="Id Usuário:" />
+                    <p:inputText id="id" value="#{LoginMB.usuario.id}" />
+                    
+                    <p:outputLabel for="senha" value="Senha:" />
+                    <p:password id="senha" value="#{LoginMB.usuario.senha}" />
+                    
+                    <p:commandButton value="Enviar" icon="ui-icon-star" action="#{LoginMB.envia}" ajax="false">
+                    </p:commandButton>   
+              </p:panelGrid>
+        </h:form>
+  </h:body>
+  </html>
