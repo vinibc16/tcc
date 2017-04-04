@@ -10,7 +10,7 @@
                 <h:inputText id="id" styleClass="form-control" value="#{LoginMB.usuario.id}"/>
                 <h:outputLabel value="Senha"/>
                 <h:inputText id="senha" styleClass="form-control" value="#{LoginMB.usuario.senha}"/>
-                <p:commandButton value="Login" id="login" actionListener="#{LoginMB.envia}" ajax="false" />
+                <p:commandButton value="Login" id="login" action="#{LoginMB.envia()}" ajax="false" />
             </h:panelGrid>
                 </h:form>
         </ui:define>

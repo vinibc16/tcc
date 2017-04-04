@@ -9,8 +9,8 @@ package pucrs.br.bean;
  *
  * @author psysvica
  */
-import javax.faces.bean.ViewScoped;
 import pucrs.br.dao.UsuarioDAO;
+import javax.faces.bean.ViewScoped;
 import pucrs.br.entity.Usuario;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -24,7 +24,7 @@ public class LoginManagedBean {
     private UsuarioDAO usuarioDAO = new UsuarioDAO();
     private Usuario usuario = new Usuario();
 
-    public String envia(ActionEvent actionEvent) {
+    public String envia() {
         usuario = usuarioDAO.getUsuario(usuario.getId(), usuario.getSenha());
         if (usuario == null) {
             usuario = new Usuario();
@@ -35,14 +35,14 @@ public class LoginManagedBean {
             return null;
         } else if(usuario.getIdGrupo() == 1) {
             System.out.println("Aqui 1");
-            return "admin.jsf";
+            return "admin";
         } else if(usuario.getIdGrupo() == 2) {
-            return "gestor.jsf";
+            return "gestor";
         } else if(usuario.getIdGrupo() == 3) {
-            return "usuario.jsf";
+            return "usuario";
         } else {
             System.out.println("Aqui 4");
-            return "index.jsf";
+            return null;
         }
 
     }
