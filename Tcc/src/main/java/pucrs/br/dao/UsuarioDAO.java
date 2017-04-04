@@ -18,7 +18,7 @@ import pucrs.br.entity.Usuario;
 public class UsuarioDAO {
 
     private EntityManagerFactory factory = Persistence
-            .createEntityManagerFactory("usuarios");
+            .createEntityManagerFactory("pucrs_Tcc_war_1.0PU");
     private EntityManager em = factory.createEntityManager();
 
     public Usuario getUsuario(String id, String senha) {

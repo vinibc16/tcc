@@ -28,7 +28,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Usuario.findAll", query = "SELECT u FROM Usuario u"),
     @NamedQuery(name = "Usuario.findById", query = "SELECT u FROM Usuario u WHERE u.id = :id"),
     @NamedQuery(name = "Usuario.findByUsuario", query = "SELECT u FROM Usuario u WHERE u.usuario = :usuario"),
-    @NamedQuery(name = "Usuario.findBySenha", query = "SELECT u FROM Usuario u WHERE u.senha = :senha")})
+    @NamedQuery(name = "Usuario.findBySenha", query = "SELECT u FROM Usuario u WHERE u.senha = :senha"),
+    @NamedQuery(name = "Usuario.findByIdGrupo", query = "SELECT u FROM Usuario u WHERE u.idGrupo = :idGrupo")})
 public class Usuario implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -48,6 +49,10 @@ public class Usuario implements Serializable {
     @Size(min = 1, max = 50)
     @Column(name = "senha")
     private String senha;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "id_grupo")
+    private int idGrupo;
 
     public Usuario() {
     }
@@ -56,10 +61,11 @@ public class Usuario implements Serializable {
         this.id = id;
     }
 
-    public Usuario(String id, String usuario, String senha) {
+    public Usuario(String id, String usuario, String senha, int idGrupo) {
         this.id = id;
         this.usuario = usuario;
         this.senha = senha;
+        this.idGrupo = idGrupo;
     }
 
     public String getId() {
@@ -86,6 +92,14 @@ public class Usuario implements Serializable {
         this.senha = senha;
     }
 
+    public int getIdGrupo() {
+        return idGrupo;
+    }
+
+    public void setIdGrupo(int idGrupo) {
+        this.idGrupo = idGrupo;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -108,7 +122,7 @@ public class Usuario implements Serializable {
 
     @Override
     public String toString() {
-        return "pucrs.tcc.controller.Usuario[ id=" + id + " ]";
+        return "pucrs.br.entity.Usuario[ id=" + id + " ]";
     }
     
 }
