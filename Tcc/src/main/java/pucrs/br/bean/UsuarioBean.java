@@ -39,6 +39,12 @@ public class UsuarioBean {
     
    
     public void criar() {
-        usuarioDAO.inserirUsuario(usuario);
+        System.out.println(usuario.getId());
+        if (usuarioDAO.inserirUsuario(usuario)) {
+            setMenssagem("Usuario Criado!");
+        } else {
+            setMenssagem("Usuario já existe!");
+        }
+        
     }
 }

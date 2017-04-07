@@ -13,9 +13,13 @@
                     <h:inputText id="usuario" styleClass="form-control" value="#{UsuarioMB.usuario.usuario}"/>
                     <h:outputLabel value="Senha"/>
                     <h:inputSecret id="senha" styleClass="form-control" value="#{UsuarioMB.usuario.senha}"/>
-                    <h:outputLabel value="Grupo"/>
-                    <h:inputText id="grupo" styleClass="form-control" value="#{UsuarioMB.usuario.idGrupo}"/>                
-                    <p:commandButton value="Criar" id="criar" action="#{UsuarioMB.criar()}" ajax="false" />
+                    <h:outputLabel value="Grupo"/>               
+                    <h:selectOneMenu id="grupo" label="Grupo" value="#{UsuarioMB.usuario.idGrupo}">
+                        <f:selectItem itemLabel="Administrador" itemValue="1"/>
+                        <f:selectItem itemLabel="Gestor" itemValue="2"/>
+                        <f:selectItem itemLabel="Usuario" itemValue="3"/>
+                    </h:selectOneMenu>
+                    <p:commandButton value="Criar" id="criar" action="#{UsuarioMB.criar}" ajax="false" />
                     <h:outputText value="#{UsuarioMB.menssagem}"></h:outputText>
                 </h:panelGrid>
             </h:form>

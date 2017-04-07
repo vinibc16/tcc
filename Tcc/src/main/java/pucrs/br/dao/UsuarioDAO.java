@@ -35,13 +35,30 @@ public class UsuarioDAO {
             return null;
         }
     }
+    
+    public boolean existeUsuario(String id) {
+
+        try {
+            Usuario usuario = (Usuario) em
+                    .createQuery(
+                            "SELECT u from Usuario u where u.id = :id")
+                    .setParameter("id", id).getSingleResult();
+            return usuario != null;
+        } catch (NoResultException e) {
+            return false;
+        }
+    }
 
     public boolean inserirUsuario(Usuario usuario) {
         try {
+            if (existeUsuario(usuario.getId())) {
+                return false;
+            }
+            em.getTransaction().begin();
             em.persist(usuario);
+            em.getTransaction().commit();
             return true;
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (NoResultException e) {
             return false;
         }
     }
