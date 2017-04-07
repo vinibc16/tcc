@@ -13,19 +13,18 @@
     <h:body>
         <div align="center">
             <p:layout style="min-width:1020px;max-width:1020px;min-height:600px">  
-                <p:layoutUnit position="north" size="250"> 
+                <p:layoutUnit position="north" size="250">                    
+                    <h:outputText value="#{LoginMB.usuario.usuario}"></h:outputText>
                     <br/><br/>
                     <img src="imagens/iot_logo.jpg"/>
                 </p:layoutUnit>  
 
-                <p:layoutUnit position="west" size="220">  
+                <p:layoutUnit position="west" size="220">
                     <ui:insert name="menu">
                         <h:form>
                             <p:menu style="width: 200px">
-                                <p:submenu label="Menu">
-                                    <p:menuitem value="Login" icon="ui-icon-key" action="#{LoginMB.login}" />
-                                    <p:menuitem value="Fazer meu cadastro" icon="ui-icon-contact" />         
-                                </p:submenu>
+                                <p:menuitem value="Login" icon="ui-icon-key" action="#{LoginMB.login}" />
+                                <p:menuitem value="Logout" icon="ui-icon-key" action="#{LoginMB.logout}" />         
                             </p:menu>
                         </h:form>
                     </ui:insert>
@@ -34,7 +33,7 @@
                     <ui:insert name="centro">
                         O que estiver aqui será substituido!
                     </ui:insert>
-                </p:layoutUnit>  
+                </p:layoutUnit> 
             </p:layout>  
         </div>
     </h:body>
