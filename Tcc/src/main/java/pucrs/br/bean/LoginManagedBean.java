@@ -9,12 +9,14 @@ package pucrs.br.bean;
  *
  * @author psysvica
  */
+import java.util.ArrayList;
 import pucrs.br.dao.UsuarioDAO;
 import pucrs.br.entity.Usuario;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import pucrs.br.entity.GrupoUsuario;
 
 @ManagedBean(name = "LoginMB")
 @SessionScoped
@@ -34,12 +36,12 @@ public class LoginManagedBean {
                     new FacesMessage(FacesMessage.SEVERITY_ERROR, "Usuário não encontrado!",
                             "Erro no Login!"));
             return null;
-        } else if(usuario.getIdGrupo() == 1) {
+        } else if(usuario.getIdGrupo().getIdGrupo() == 1) {
             System.out.println("Aqui 1"+usuario.getId());
             return "admin";
-        } else if(usuario.getIdGrupo() == 2) {
+        } else if(usuario.getIdGrupo().getIdGrupo() == 2) {
             return "gestor";
-        } else if(usuario.getIdGrupo() == 3) {
+        } else if(usuario.getIdGrupo().getIdGrupo() == 3) {
             return "usuario";
         } else {
             System.out.println("Aqui 4");
@@ -55,7 +57,7 @@ public class LoginManagedBean {
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
     }
-
+    
     public String getMenssagem() {
         return menssagem;
     }

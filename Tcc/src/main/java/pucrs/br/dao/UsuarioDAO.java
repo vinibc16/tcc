@@ -9,10 +9,13 @@ package pucrs.br.dao;
  *
  * @author psysvica
  */
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.NoResultException;
 import javax.persistence.Persistence;
+import pucrs.br.entity.GrupoUsuario;
 import pucrs.br.entity.Usuario;
 
 public class UsuarioDAO {
@@ -20,6 +23,17 @@ public class UsuarioDAO {
     private EntityManagerFactory factory = Persistence
             .createEntityManagerFactory("pucrs_Tcc_war_1.0PU");
     private EntityManager em = factory.createEntityManager();
+    
+    public ArrayList<GrupoUsuario> getGrupos() {
+        ArrayList<GrupoUsuario> lista = new ArrayList<GrupoUsuario>();
+        try {
+            lista = (ArrayList<GrupoUsuario>) em.createQuery("SELECT grupo_id from grupo_usuario").getResultList();
+
+            return lista;
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
 
     public Usuario getUsuario(String id, String senha) {
 

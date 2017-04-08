@@ -5,10 +5,12 @@
  */
 package pucrs.br.bean;
 
+import java.util.ArrayList;
 import pucrs.br.dao.UsuarioDAO;
 import pucrs.br.entity.Usuario;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import pucrs.br.entity.GrupoUsuario;
 /**
  *
  * @author psysvica
@@ -37,7 +39,9 @@ public class UsuarioBean {
         this.menssagem = menssagem;
     }
     
-   
+    public ArrayList<GrupoUsuario> getUsuarios() {
+        return usuarioDAO.getGrupos();
+    }
     public void criar() {
         System.out.println(usuario.getId());
         if (usuarioDAO.inserirUsuario(usuario)) {

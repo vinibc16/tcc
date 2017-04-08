@@ -6,6 +6,7 @@
 package pucrs.br.entity;
 
 import java.io.Serializable;
+import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,10 +15,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -50,6 +53,8 @@ public class Empresa implements Serializable {
     private String razaoSocial;
     @Column(name = "funcionarios")
     private Integer funcionarios;
+    @OneToMany(mappedBy = "idEmpresa")
+    private Collection<Usuario> usuarioCollection;
 
     public Empresa() {
     }
@@ -93,6 +98,15 @@ public class Empresa implements Serializable {
 
     public void setFuncionarios(Integer funcionarios) {
         this.funcionarios = funcionarios;
+    }
+
+    @XmlTransient
+    public Collection<Usuario> getUsuarioCollection() {
+        return usuarioCollection;
+    }
+
+    public void setUsuarioCollection(Collection<Usuario> usuarioCollection) {
+        this.usuarioCollection = usuarioCollection;
     }
 
     @Override

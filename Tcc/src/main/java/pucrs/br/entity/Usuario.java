@@ -10,6 +10,8 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -28,8 +30,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Usuario.findAll", query = "SELECT u FROM Usuario u"),
     @NamedQuery(name = "Usuario.findById", query = "SELECT u FROM Usuario u WHERE u.id = :id"),
     @NamedQuery(name = "Usuario.findByUsuario", query = "SELECT u FROM Usuario u WHERE u.usuario = :usuario"),
-    @NamedQuery(name = "Usuario.findBySenha", query = "SELECT u FROM Usuario u WHERE u.senha = :senha"),
-    @NamedQuery(name = "Usuario.findByIdGrupo", query = "SELECT u FROM Usuario u WHERE u.idGrupo = :idGrupo")})
+    @NamedQuery(name = "Usuario.findBySenha", query = "SELECT u FROM Usuario u WHERE u.senha = :senha")})
 public class Usuario implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -49,10 +50,12 @@ public class Usuario implements Serializable {
     @Size(min = 1, max = 50)
     @Column(name = "senha")
     private String senha;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "id_grupo")
-    private int idGrupo;
+    @JoinColumn(name = "id_empresa", referencedColumnName = "id_empresa")
+    @ManyToOne
+    private Empresa idEmpresa;
+    @JoinColumn(name = "id_grupo", referencedColumnName = "id_grupo")
+    @ManyToOne(optional = false)
+    private GrupoUsuario idGrupo;
 
     public Usuario() {
     }
@@ -61,11 +64,10 @@ public class Usuario implements Serializable {
         this.id = id;
     }
 
-    public Usuario(String id, String usuario, String senha, int idGrupo) {
+    public Usuario(String id, String usuario, String senha) {
         this.id = id;
         this.usuario = usuario;
         this.senha = senha;
-        this.idGrupo = idGrupo;
     }
 
     public String getId() {
@@ -92,11 +94,19 @@ public class Usuario implements Serializable {
         this.senha = senha;
     }
 
-    public int getIdGrupo() {
+    public Empresa getIdEmpresa() {
+        return idEmpresa;
+    }
+
+    public void setIdEmpresa(Empresa idEmpresa) {
+        this.idEmpresa = idEmpresa;
+    }
+
+    public GrupoUsuario getIdGrupo() {
         return idGrupo;
     }
 
-    public void setIdGrupo(int idGrupo) {
+    public void setIdGrupo(GrupoUsuario idGrupo) {
         this.idGrupo = idGrupo;
     }
 
