@@ -9,11 +9,14 @@ package pucrs.br.dao;
  *
  * @author psysvica
  */
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.NoResultException;
 import javax.persistence.Persistence;
+import javax.persistence.Query;
 import pucrs.br.entity.Empresa;
+import pucrs.br.entity.GrupoUsuario;
 
 public class EmpresaDAO {
 
@@ -29,6 +32,18 @@ public class EmpresaDAO {
             return true;
         } catch (NoResultException e) {
             return false;
+        }
+    }
+    
+    public List<Empresa> getEmpresas() {
+        try {
+            Query query = em.createNativeQuery("SELECT id_empresa from empresa");
+            List lista = query.getResultList();
+                //lista = (ArrayList<GrupoUsuario>) em.createQuery("SELECT id_grupo from grupo_usuario").getResultList();
+
+            return lista;
+        } catch (NoResultException e) {
+            return null;
         }
     }
 

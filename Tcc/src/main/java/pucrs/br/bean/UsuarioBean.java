@@ -6,11 +6,13 @@
 package pucrs.br.bean;
 
 import java.util.ArrayList;
+import java.util.List;
 import pucrs.br.dao.UsuarioDAO;
 import pucrs.br.entity.Usuario;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import pucrs.br.entity.GrupoUsuario;
+
 /**
  *
  * @author psysvica
@@ -18,7 +20,7 @@ import pucrs.br.entity.GrupoUsuario;
 @ManagedBean(name = "UsuarioMB")
 @SessionScoped
 public class UsuarioBean {
-    
+
     private UsuarioDAO usuarioDAO = new UsuarioDAO();
     private Usuario usuario = new Usuario();
     private String menssagem = null;
@@ -38,10 +40,11 @@ public class UsuarioBean {
     public void setMenssagem(String menssagem) {
         this.menssagem = menssagem;
     }
-    
-    public ArrayList<GrupoUsuario> getUsuarios() {
+
+    public List<GrupoUsuario> getUsuarios() {
         return usuarioDAO.getGrupos();
     }
+
     public void criar() {
         System.out.println(usuario.getId());
         if (usuarioDAO.inserirUsuario(usuario)) {
@@ -49,6 +52,6 @@ public class UsuarioBean {
         } else {
             setMenssagem("Usuario já existe!");
         }
-        
+
     }
 }

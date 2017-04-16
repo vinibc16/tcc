@@ -54,7 +54,7 @@ public class Usuario implements Serializable {
     @ManyToOne
     private Empresa idEmpresa;
     @JoinColumn(name = "id_grupo", referencedColumnName = "id_grupo")
-    @ManyToOne(optional = false)
+    @ManyToOne
     private GrupoUsuario idGrupo;
 
     public Usuario() {

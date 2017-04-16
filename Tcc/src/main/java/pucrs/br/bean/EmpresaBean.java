@@ -5,10 +5,12 @@
  */
 package pucrs.br.bean;
 
+import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import pucrs.br.dao.EmpresaDAO;
 import pucrs.br.entity.Empresa;
+import pucrs.br.entity.GrupoUsuario;
 /**
  *
  * @author psysvica
@@ -44,5 +46,9 @@ public class EmpresaBean {
         } else {
             setMenssagem("Empresa já existe!");
         }
+    }
+    
+    public List<Empresa> getEmpresas() {
+        return empresaDAO.getEmpresas();
     }
 }

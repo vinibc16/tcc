@@ -15,6 +15,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.NoResultException;
 import javax.persistence.Persistence;
+import javax.persistence.Query;
 import pucrs.br.entity.GrupoUsuario;
 import pucrs.br.entity.Usuario;
 
@@ -24,10 +25,11 @@ public class UsuarioDAO {
             .createEntityManagerFactory("pucrs_Tcc_war_1.0PU");
     private EntityManager em = factory.createEntityManager();
     
-    public ArrayList<GrupoUsuario> getGrupos() {
-        ArrayList<GrupoUsuario> lista = new ArrayList<GrupoUsuario>();
+    public List<GrupoUsuario> getGrupos() {
         try {
-            lista = (ArrayList<GrupoUsuario>) em.createQuery("SELECT grupo_id from grupo_usuario").getResultList();
+            Query query = em.createNativeQuery("SELECT id_grupo from grupo_usuario");
+            List lista = query.getResultList();
+                //lista = (ArrayList<GrupoUsuario>) em.createQuery("SELECT id_grupo from grupo_usuario").getResultList();
 
             return lista;
         } catch (NoResultException e) {
