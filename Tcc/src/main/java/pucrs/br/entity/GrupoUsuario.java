@@ -8,7 +8,6 @@ package pucrs.br.entity;
 import java.io.Serializable;
 import java.util.Collection;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -45,7 +44,7 @@ public class GrupoUsuario implements Serializable {
     @Size(min = 1, max = 500)
     @Column(name = "descricao")
     private String descricao;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idGrupo")
+    @OneToMany(mappedBy = "idGrupo")
     private Collection<Usuario> usuarioCollection;
 
     public GrupoUsuario() {

@@ -2,17 +2,7 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.org/ui">
-    <ui:decorate template="/template.xhtml">
-        <ui:define name="menu">
-            <h:form>
-                <p:menu style="width: 200px">
-                    <p:menuitem value="Home" action="admin.jsf"/>
-                    <p:menuitem value="Criar Usuario" action="criarusuario.jsf"/>
-                    <p:menuitem value="Criar Empresa" action="criarempresa.jsf"/>
-                    <p:menuitem value="Logout" icon="ui-icon-key" action="#{LoginMB.logout}" /> 
-                </p:menu>
-            </h:form>
-        </ui:define>
+    <ui:decorate template="/template_admin.xhtml">
         <ui:define name="centro">
             <h:outputLabel value="Login efetuado com sucesso! Bem vindo ao sistema ADMIN!"/>
         </ui:define>
