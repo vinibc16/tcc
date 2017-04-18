@@ -1,8 +1,9 @@
-package pucrs.tcc.controller;
+package pucrs.br.controller;
 
-import pucrs.br.entity.Vulnerabilidade;
-import pucrs.br.bean.util.JsfUtil;
-import pucrs.br.bean.util.PaginationHelper;
+import pucrs.br.entity.Usuario;
+import pucrs.br.controller.util.JsfUtil;
+import pucrs.br.controller.util.PaginationHelper;
+import pucrs.br.bean.UsuarioFacade;
 
 import java.io.Serializable;
 import java.util.ResourceBundle;
@@ -16,31 +17,30 @@ import javax.faces.convert.FacesConverter;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
-import pucrs.br.bean.VulnerabilidadeFacade;
 
-@Named("vulnerabilidadeController")
+@Named("usuarioController")
 @SessionScoped
-public class VulnerabilidadeController implements Serializable {
+public class UsuarioController implements Serializable {
 
-    private Vulnerabilidade current;
+    private Usuario current;
     private DataModel items = null;
     @EJB
-    private pucrs.br.bean.VulnerabilidadeFacade ejbFacade;
+    private pucrs.br.bean.UsuarioFacade ejbFacade;
     private PaginationHelper pagination;
     private int selectedItemIndex;
 
-    public VulnerabilidadeController() {
+    public UsuarioController() {
     }
 
-    public Vulnerabilidade getSelected() {
+    public Usuario getSelected() {
         if (current == null) {
-            current = new Vulnerabilidade();
+            current = new Usuario();
             selectedItemIndex = -1;
         }
         return current;
     }
 
-    private VulnerabilidadeFacade getFacade() {
+    private UsuarioFacade getFacade() {
         return ejbFacade;
     }
 
@@ -64,25 +64,25 @@ public class VulnerabilidadeController implements Serializable {
 
     public String prepareList() {
         recreateModel();
-        return "ListVul";
+        return "ListUsuario";
     }
 
     public String prepareView() {
-        current = (Vulnerabilidade) getItems().getRowData();
+        current = (Usuario) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
-        return "ViewVul";
+        return "ViewUsuario";
     }
 
     public String prepareCreate() {
-        current = new Vulnerabilidade();
+        current = new Usuario();
         selectedItemIndex = -1;
-        return "CreateVul";
+        return "CreateUsuario";
     }
 
     public String create() {
         try {
             getFacade().create(current);
-            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("VulnerabilidadeCreated"));
+            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("UsuarioCreated"));
             return prepareCreate();
         } catch (Exception e) {
             JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
@@ -91,16 +91,16 @@ public class VulnerabilidadeController implements Serializable {
     }
 
     public String prepareEdit() {
-        current = (Vulnerabilidade) getItems().getRowData();
+        current = (Usuario) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
-        return "EditVul";
+        return "EditUsuario";
     }
 
     public String update() {
         try {
             getFacade().edit(current);
-            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("VulnerabilidadeUpdated"));
-            return "ViewVul";
+            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("UsuarioUpdated"));
+            return "ListUsuario";
         } catch (Exception e) {
             JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
             return null;
@@ -108,12 +108,12 @@ public class VulnerabilidadeController implements Serializable {
     }
 
     public String destroy() {
-        current = (Vulnerabilidade) getItems().getRowData();
+        current = (Usuario) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
         performDestroy();
         recreatePagination();
         recreateModel();
-        return "ListVul";
+        return "ListUsuario";
     }
 
     public String destroyAndView() {
@@ -121,18 +121,18 @@ public class VulnerabilidadeController implements Serializable {
         recreateModel();
         updateCurrentItem();
         if (selectedItemIndex >= 0) {
-            return "ViewVul";
+            return "ViewUsuario";
         } else {
             // all items were removed - go back to list
             recreateModel();
-            return "ListVul";
+            return "ListUsuario";
         }
     }
 
     private void performDestroy() {
         try {
             getFacade().remove(current);
-            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("VulnerabilidadeDeleted"));
+            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("UsuarioDeleted"));
         } catch (Exception e) {
             JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
         }
@@ -171,13 +171,13 @@ public class VulnerabilidadeController implements Serializable {
     public String next() {
         getPagination().nextPage();
         recreateModel();
-        return "ListVul";
+        return "ListUsuario";
     }
 
     public String previous() {
         getPagination().previousPage();
         recreateModel();
-        return "ListVul";
+        return "ListUsuario";
     }
 
     public SelectItem[] getItemsAvailableSelectMany() {
@@ -188,30 +188,30 @@ public class VulnerabilidadeController implements Serializable {
         return JsfUtil.getSelectItems(ejbFacade.findAll(), true);
     }
 
-    public Vulnerabilidade getVulnerabilidade(java.lang.Integer id) {
+    public Usuario getUsuario(java.lang.String id) {
         return ejbFacade.find(id);
     }
 
-    @FacesConverter(forClass = Vulnerabilidade.class)
-    public static class VulnerabilidadeControllerConverter implements Converter {
+    @FacesConverter(forClass = Usuario.class)
+    public static class UsuarioControllerConverter implements Converter {
 
         @Override
         public Object getAsObject(FacesContext facesContext, UIComponent component, String value) {
             if (value == null || value.length() == 0) {
                 return null;
             }
-            VulnerabilidadeController controller = (VulnerabilidadeController) facesContext.getApplication().getELResolver().
-                    getValue(facesContext.getELContext(), null, "vulnerabilidadeController");
-            return controller.getVulnerabilidade(getKey(value));
+            UsuarioController controller = (UsuarioController) facesContext.getApplication().getELResolver().
+                    getValue(facesContext.getELContext(), null, "usuarioController");
+            return controller.getUsuario(getKey(value));
         }
 
-        java.lang.Integer getKey(String value) {
-            java.lang.Integer key;
-            key = Integer.valueOf(value);
+        java.lang.String getKey(String value) {
+            java.lang.String key;
+            key = value;
             return key;
         }
 
-        String getStringKey(java.lang.Integer value) {
+        String getStringKey(java.lang.String value) {
             StringBuilder sb = new StringBuilder();
             sb.append(value);
             return sb.toString();
@@ -222,11 +222,11 @@ public class VulnerabilidadeController implements Serializable {
             if (object == null) {
                 return null;
             }
-            if (object instanceof Vulnerabilidade) {
-                Vulnerabilidade o = (Vulnerabilidade) object;
-                return getStringKey(o.getIdVulnerabilidade());
+            if (object instanceof Usuario) {
+                Usuario o = (Usuario) object;
+                return getStringKey(o.getId());
             } else {
-                throw new IllegalArgumentException("object " + object + " is of type " + object.getClass().getName() + "; expected type: " + Vulnerabilidade.class.getName());
+                throw new IllegalArgumentException("object " + object + " is of type " + object.getClass().getName() + "; expected type: " + Usuario.class.getName());
             }
         }
 

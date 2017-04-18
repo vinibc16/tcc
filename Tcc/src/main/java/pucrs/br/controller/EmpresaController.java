@@ -1,9 +1,9 @@
-package pucrs.tcc.controller;
+package pucrs.br.controller;
 
-import pucrs.br.entity.Usuario;
-import pucrs.tcc.controller.util.JsfUtil;
-import pucrs.tcc.controller.util.PaginationHelper;
-import pucrs.br.bean.UsuarioFacade;
+import pucrs.br.entity.Empresa;
+import pucrs.br.controller.util.JsfUtil;
+import pucrs.br.controller.util.PaginationHelper;
+import pucrs.br.bean.EmpresaFacade;
 
 import java.io.Serializable;
 import java.util.ResourceBundle;
@@ -18,29 +18,29 @@ import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
 
-@Named("usuarioController")
+@Named("empresaController")
 @SessionScoped
-public class UsuarioController implements Serializable {
+public class EmpresaController implements Serializable {
 
-    private Usuario current;
+    private Empresa current;
     private DataModel items = null;
     @EJB
-    private pucrs.br.bean.UsuarioFacade ejbFacade;
+    private pucrs.br.bean.EmpresaFacade ejbFacade;
     private PaginationHelper pagination;
     private int selectedItemIndex;
 
-    public UsuarioController() {
+    public EmpresaController() {
     }
 
-    public Usuario getSelected() {
+    public Empresa getSelected() {
         if (current == null) {
-            current = new Usuario();
+            current = new Empresa();
             selectedItemIndex = -1;
         }
         return current;
     }
 
-    private UsuarioFacade getFacade() {
+    private EmpresaFacade getFacade() {
         return ejbFacade;
     }
 
@@ -64,25 +64,25 @@ public class UsuarioController implements Serializable {
 
     public String prepareList() {
         recreateModel();
-        return "ListUsuario";
+        return "ListEmpresa";
     }
 
     public String prepareView() {
-        current = (Usuario) getItems().getRowData();
+        current = (Empresa) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
-        return "ViewUsuario";
+        return "ViewEmpresa";
     }
 
     public String prepareCreate() {
-        current = new Usuario();
+        current = new Empresa();
         selectedItemIndex = -1;
-        return "CreateUsuario";
+        return "CreateEmpresa";
     }
 
     public String create() {
         try {
             getFacade().create(current);
-            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("UsuarioCreated"));
+            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("EmpresaCreated"));
             return prepareCreate();
         } catch (Exception e) {
             JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
@@ -91,16 +91,16 @@ public class UsuarioController implements Serializable {
     }
 
     public String prepareEdit() {
-        current = (Usuario) getItems().getRowData();
+        current = (Empresa) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
-        return "EditUsuario";
+        return "EditEmpresa";
     }
 
     public String update() {
         try {
             getFacade().edit(current);
-            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("UsuarioUpdated"));
-            return "ListUsuario";
+            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("EmpresaUpdated"));
+            return "ViewEmpresa";
         } catch (Exception e) {
             JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
             return null;
@@ -108,12 +108,12 @@ public class UsuarioController implements Serializable {
     }
 
     public String destroy() {
-        current = (Usuario) getItems().getRowData();
+        current = (Empresa) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
         performDestroy();
         recreatePagination();
         recreateModel();
-        return "ListUsuario";
+        return "ListEmpresa";
     }
 
     public String destroyAndView() {
@@ -121,18 +121,18 @@ public class UsuarioController implements Serializable {
         recreateModel();
         updateCurrentItem();
         if (selectedItemIndex >= 0) {
-            return "ViewUsuario";
+            return "ViewEmpresa";
         } else {
             // all items were removed - go back to list
             recreateModel();
-            return "ListUsuario";
+            return "ListEmpresa";
         }
     }
 
     private void performDestroy() {
         try {
             getFacade().remove(current);
-            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("UsuarioDeleted"));
+            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("EmpresaDeleted"));
         } catch (Exception e) {
             JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
         }
@@ -171,13 +171,13 @@ public class UsuarioController implements Serializable {
     public String next() {
         getPagination().nextPage();
         recreateModel();
-        return "ListUsuario";
+        return "ListEmpresa";
     }
 
     public String previous() {
         getPagination().previousPage();
         recreateModel();
-        return "ListUsuario";
+        return "ListEmpresa";
     }
 
     public SelectItem[] getItemsAvailableSelectMany() {
@@ -188,30 +188,30 @@ public class UsuarioController implements Serializable {
         return JsfUtil.getSelectItems(ejbFacade.findAll(), true);
     }
 
-    public Usuario getUsuario(java.lang.String id) {
+    public Empresa getEmpresa(java.lang.Integer id) {
         return ejbFacade.find(id);
     }
 
-    @FacesConverter(forClass = Usuario.class)
-    public static class UsuarioControllerConverter implements Converter {
+    @FacesConverter(forClass = Empresa.class)
+    public static class EmpresaControllerConverter implements Converter {
 
         @Override
         public Object getAsObject(FacesContext facesContext, UIComponent component, String value) {
             if (value == null || value.length() == 0) {
                 return null;
             }
-            UsuarioController controller = (UsuarioController) facesContext.getApplication().getELResolver().
-                    getValue(facesContext.getELContext(), null, "usuarioController");
-            return controller.getUsuario(getKey(value));
+            EmpresaController controller = (EmpresaController) facesContext.getApplication().getELResolver().
+                    getValue(facesContext.getELContext(), null, "empresaController");
+            return controller.getEmpresa(getKey(value));
         }
 
-        java.lang.String getKey(String value) {
-            java.lang.String key;
-            key = value;
+        java.lang.Integer getKey(String value) {
+            java.lang.Integer key;
+            key = Integer.valueOf(value);
             return key;
         }
 
-        String getStringKey(java.lang.String value) {
+        String getStringKey(java.lang.Integer value) {
             StringBuilder sb = new StringBuilder();
             sb.append(value);
             return sb.toString();
@@ -222,11 +222,11 @@ public class UsuarioController implements Serializable {
             if (object == null) {
                 return null;
             }
-            if (object instanceof Usuario) {
-                Usuario o = (Usuario) object;
-                return getStringKey(o.getId());
+            if (object instanceof Empresa) {
+                Empresa o = (Empresa) object;
+                return getStringKey(o.getIdEmpresa());
             } else {
-                throw new IllegalArgumentException("object " + object + " is of type " + object.getClass().getName() + "; expected type: " + Usuario.class.getName());
+                throw new IllegalArgumentException("object " + object + " is of type " + object.getClass().getName() + "; expected type: " + Empresa.class.getName());
             }
         }
 

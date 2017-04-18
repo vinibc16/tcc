@@ -1,9 +1,8 @@
-package pucrs.tcc.controller;
+package pucrs.br.controller;
 
-import pucrs.br.entity.GrupoUsuario;
-import pucrs.tcc.controller.util.JsfUtil;
-import pucrs.tcc.controller.util.PaginationHelper;
-import pucrs.br.bean.GrupoUsuarioFacade;
+import pucrs.br.entity.Vulnerabilidade;
+import pucrs.br.controller.util.JsfUtil;
+import pucrs.br.controller.util.PaginationHelper;
 
 import java.io.Serializable;
 import java.util.ResourceBundle;
@@ -17,30 +16,31 @@ import javax.faces.convert.FacesConverter;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
+import pucrs.br.bean.VulnerabilidadeFacade;
 
-@Named("grupoUsuarioController")
+@Named("vulnerabilidadeController")
 @SessionScoped
-public class GrupoUsuarioController implements Serializable {
+public class VulnerabilidadeController implements Serializable {
 
-    private GrupoUsuario current;
+    private Vulnerabilidade current;
     private DataModel items = null;
     @EJB
-    private pucrs.br.bean.GrupoUsuarioFacade ejbFacade;
+    private pucrs.br.bean.VulnerabilidadeFacade ejbFacade;
     private PaginationHelper pagination;
     private int selectedItemIndex;
 
-    public GrupoUsuarioController() {
+    public VulnerabilidadeController() {
     }
 
-    public GrupoUsuario getSelected() {
+    public Vulnerabilidade getSelected() {
         if (current == null) {
-            current = new GrupoUsuario();
+            current = new Vulnerabilidade();
             selectedItemIndex = -1;
         }
         return current;
     }
 
-    private GrupoUsuarioFacade getFacade() {
+    private VulnerabilidadeFacade getFacade() {
         return ejbFacade;
     }
 
@@ -64,25 +64,25 @@ public class GrupoUsuarioController implements Serializable {
 
     public String prepareList() {
         recreateModel();
-        return "List";
+        return "ListVul";
     }
 
     public String prepareView() {
-        current = (GrupoUsuario) getItems().getRowData();
+        current = (Vulnerabilidade) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
-        return "View";
+        return "ViewVul";
     }
 
     public String prepareCreate() {
-        current = new GrupoUsuario();
+        current = new Vulnerabilidade();
         selectedItemIndex = -1;
-        return "Create";
+        return "CreateVul";
     }
 
     public String create() {
         try {
             getFacade().create(current);
-            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("GrupoUsuarioCreated"));
+            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("VulnerabilidadeCreated"));
             return prepareCreate();
         } catch (Exception e) {
             JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
@@ -91,16 +91,16 @@ public class GrupoUsuarioController implements Serializable {
     }
 
     public String prepareEdit() {
-        current = (GrupoUsuario) getItems().getRowData();
+        current = (Vulnerabilidade) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
-        return "Edit";
+        return "EditVul";
     }
 
     public String update() {
         try {
             getFacade().edit(current);
-            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("GrupoUsuarioUpdated"));
-            return "View";
+            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("VulnerabilidadeUpdated"));
+            return "ViewVul";
         } catch (Exception e) {
             JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
             return null;
@@ -108,12 +108,12 @@ public class GrupoUsuarioController implements Serializable {
     }
 
     public String destroy() {
-        current = (GrupoUsuario) getItems().getRowData();
+        current = (Vulnerabilidade) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
         performDestroy();
         recreatePagination();
         recreateModel();
-        return "List";
+        return "ListVul";
     }
 
     public String destroyAndView() {
@@ -121,18 +121,18 @@ public class GrupoUsuarioController implements Serializable {
         recreateModel();
         updateCurrentItem();
         if (selectedItemIndex >= 0) {
-            return "View";
+            return "ViewVul";
         } else {
             // all items were removed - go back to list
             recreateModel();
-            return "List";
+            return "ListVul";
         }
     }
 
     private void performDestroy() {
         try {
             getFacade().remove(current);
-            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("GrupoUsuarioDeleted"));
+            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("VulnerabilidadeDeleted"));
         } catch (Exception e) {
             JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
         }
@@ -171,13 +171,13 @@ public class GrupoUsuarioController implements Serializable {
     public String next() {
         getPagination().nextPage();
         recreateModel();
-        return "List";
+        return "ListVul";
     }
 
     public String previous() {
         getPagination().previousPage();
         recreateModel();
-        return "List";
+        return "ListVul";
     }
 
     public SelectItem[] getItemsAvailableSelectMany() {
@@ -188,21 +188,21 @@ public class GrupoUsuarioController implements Serializable {
         return JsfUtil.getSelectItems(ejbFacade.findAll(), true);
     }
 
-    public GrupoUsuario getGrupoUsuario(java.lang.Integer id) {
+    public Vulnerabilidade getVulnerabilidade(java.lang.Integer id) {
         return ejbFacade.find(id);
     }
 
-    @FacesConverter(forClass = GrupoUsuario.class)
-    public static class GrupoUsuarioControllerConverter implements Converter {
+    @FacesConverter(forClass = Vulnerabilidade.class)
+    public static class VulnerabilidadeControllerConverter implements Converter {
 
         @Override
         public Object getAsObject(FacesContext facesContext, UIComponent component, String value) {
             if (value == null || value.length() == 0) {
                 return null;
             }
-            GrupoUsuarioController controller = (GrupoUsuarioController) facesContext.getApplication().getELResolver().
-                    getValue(facesContext.getELContext(), null, "grupoUsuarioController");
-            return controller.getGrupoUsuario(getKey(value));
+            VulnerabilidadeController controller = (VulnerabilidadeController) facesContext.getApplication().getELResolver().
+                    getValue(facesContext.getELContext(), null, "vulnerabilidadeController");
+            return controller.getVulnerabilidade(getKey(value));
         }
 
         java.lang.Integer getKey(String value) {
@@ -222,11 +222,11 @@ public class GrupoUsuarioController implements Serializable {
             if (object == null) {
                 return null;
             }
-            if (object instanceof GrupoUsuario) {
-                GrupoUsuario o = (GrupoUsuario) object;
-                return getStringKey(o.getIdGrupo());
+            if (object instanceof Vulnerabilidade) {
+                Vulnerabilidade o = (Vulnerabilidade) object;
+                return getStringKey(o.getIdVulnerabilidade());
             } else {
-                throw new IllegalArgumentException("object " + object + " is of type " + object.getClass().getName() + "; expected type: " + GrupoUsuario.class.getName());
+                throw new IllegalArgumentException("object " + object + " is of type " + object.getClass().getName() + "; expected type: " + Vulnerabilidade.class.getName());
             }
         }
 

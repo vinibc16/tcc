@@ -1,4 +1,4 @@
-package pucrs.br.bean.util;
+package pucrs.br.controller.util;
 
 import java.util.List;
 import javax.faces.application.FacesMessage;

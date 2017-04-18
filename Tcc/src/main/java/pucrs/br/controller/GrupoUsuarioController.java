@@ -1,9 +1,9 @@
-package pucrs.tcc.controller;
+package pucrs.br.controller;
 
-import pucrs.br.entity.Empresa;
-import pucrs.tcc.controller.util.JsfUtil;
-import pucrs.tcc.controller.util.PaginationHelper;
-import pucrs.br.bean.EmpresaFacade;
+import pucrs.br.entity.GrupoUsuario;
+import pucrs.br.controller.util.JsfUtil;
+import pucrs.br.controller.util.PaginationHelper;
+import pucrs.br.bean.GrupoUsuarioFacade;
 
 import java.io.Serializable;
 import java.util.ResourceBundle;
@@ -18,29 +18,29 @@ import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
 
-@Named("empresaController")
+@Named("grupoUsuarioController")
 @SessionScoped
-public class EmpresaController implements Serializable {
+public class GrupoUsuarioController implements Serializable {
 
-    private Empresa current;
+    private GrupoUsuario current;
     private DataModel items = null;
     @EJB
-    private pucrs.br.bean.EmpresaFacade ejbFacade;
+    private pucrs.br.bean.GrupoUsuarioFacade ejbFacade;
     private PaginationHelper pagination;
     private int selectedItemIndex;
 
-    public EmpresaController() {
+    public GrupoUsuarioController() {
     }
 
-    public Empresa getSelected() {
+    public GrupoUsuario getSelected() {
         if (current == null) {
-            current = new Empresa();
+            current = new GrupoUsuario();
             selectedItemIndex = -1;
         }
         return current;
     }
 
-    private EmpresaFacade getFacade() {
+    private GrupoUsuarioFacade getFacade() {
         return ejbFacade;
     }
 
@@ -64,25 +64,25 @@ public class EmpresaController implements Serializable {
 
     public String prepareList() {
         recreateModel();
-        return "ListEmpresa";
+        return "List";
     }
 
     public String prepareView() {
-        current = (Empresa) getItems().getRowData();
+        current = (GrupoUsuario) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
-        return "ViewEmpresa";
+        return "View";
     }
 
     public String prepareCreate() {
-        current = new Empresa();
+        current = new GrupoUsuario();
         selectedItemIndex = -1;
-        return "CreateEmpresa";
+        return "Create";
     }
 
     public String create() {
         try {
             getFacade().create(current);
-            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("EmpresaCreated"));
+            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("GrupoUsuarioCreated"));
             return prepareCreate();
         } catch (Exception e) {
             JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
@@ -91,16 +91,16 @@ public class EmpresaController implements Serializable {
     }
 
     public String prepareEdit() {
-        current = (Empresa) getItems().getRowData();
+        current = (GrupoUsuario) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
-        return "EditEmpresa";
+        return "Edit";
     }
 
     public String update() {
         try {
             getFacade().edit(current);
-            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("EmpresaUpdated"));
-            return "ViewEmpresa";
+            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("GrupoUsuarioUpdated"));
+            return "View";
         } catch (Exception e) {
             JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
             return null;
@@ -108,12 +108,12 @@ public class EmpresaController implements Serializable {
     }
 
     public String destroy() {
-        current = (Empresa) getItems().getRowData();
+        current = (GrupoUsuario) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
         performDestroy();
         recreatePagination();
         recreateModel();
-        return "ListEmpresa";
+        return "List";
     }
 
     public String destroyAndView() {
@@ -121,18 +121,18 @@ public class EmpresaController implements Serializable {
         recreateModel();
         updateCurrentItem();
         if (selectedItemIndex >= 0) {
-            return "ViewEmpresa";
+            return "View";
         } else {
             // all items were removed - go back to list
             recreateModel();
-            return "ListEmpresa";
+            return "List";
         }
     }
 
     private void performDestroy() {
         try {
             getFacade().remove(current);
-            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("EmpresaDeleted"));
+            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("GrupoUsuarioDeleted"));
         } catch (Exception e) {
             JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
         }
@@ -171,13 +171,13 @@ public class EmpresaController implements Serializable {
     public String next() {
         getPagination().nextPage();
         recreateModel();
-        return "ListEmpresa";
+        return "List";
     }
 
     public String previous() {
         getPagination().previousPage();
         recreateModel();
-        return "ListEmpresa";
+        return "List";
     }
 
     public SelectItem[] getItemsAvailableSelectMany() {
@@ -188,21 +188,21 @@ public class EmpresaController implements Serializable {
         return JsfUtil.getSelectItems(ejbFacade.findAll(), true);
     }
 
-    public Empresa getEmpresa(java.lang.Integer id) {
+    public GrupoUsuario getGrupoUsuario(java.lang.Integer id) {
         return ejbFacade.find(id);
     }
 
-    @FacesConverter(forClass = Empresa.class)
-    public static class EmpresaControllerConverter implements Converter {
+    @FacesConverter(forClass = GrupoUsuario.class)
+    public static class GrupoUsuarioControllerConverter implements Converter {
 
         @Override
         public Object getAsObject(FacesContext facesContext, UIComponent component, String value) {
             if (value == null || value.length() == 0) {
                 return null;
             }
-            EmpresaController controller = (EmpresaController) facesContext.getApplication().getELResolver().
-                    getValue(facesContext.getELContext(), null, "empresaController");
-            return controller.getEmpresa(getKey(value));
+            GrupoUsuarioController controller = (GrupoUsuarioController) facesContext.getApplication().getELResolver().
+                    getValue(facesContext.getELContext(), null, "grupoUsuarioController");
+            return controller.getGrupoUsuario(getKey(value));
         }
 
         java.lang.Integer getKey(String value) {
@@ -222,11 +222,11 @@ public class EmpresaController implements Serializable {
             if (object == null) {
                 return null;
             }
-            if (object instanceof Empresa) {
-                Empresa o = (Empresa) object;
-                return getStringKey(o.getIdEmpresa());
+            if (object instanceof GrupoUsuario) {
+                GrupoUsuario o = (GrupoUsuario) object;
+                return getStringKey(o.getIdGrupo());
             } else {
-                throw new IllegalArgumentException("object " + object + " is of type " + object.getClass().getName() + "; expected type: " + Empresa.class.getName());
+                throw new IllegalArgumentException("object " + object + " is of type " + object.getClass().getName() + "; expected type: " + GrupoUsuario.class.getName());
             }
         }
 

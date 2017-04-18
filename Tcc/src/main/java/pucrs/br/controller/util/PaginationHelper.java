@@ -1,4 +1,4 @@
-package pucrs.br.bean.util;
+package pucrs.br.controller.util;
 
 import javax.faces.model.DataModel;
 
