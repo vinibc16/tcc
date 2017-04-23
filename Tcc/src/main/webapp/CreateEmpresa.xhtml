@@ -5,7 +5,7 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 
-    <ui:composition template="/template_admin.xhtml">
+    <ui:decorate template="/template_admin.xhtml">
         <ui:define name="centro">
             <h:panelGroup id="messagePanel" layout="block">
                 <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
@@ -23,6 +23,6 @@
                 <h:commandButton action="#{empresaController.create}" value="#{bundle.CreateEmpresaSaveLink}" />
             </h:form>
         </ui:define>
-    </ui:composition>
+    </ui:decorate>
 
 </html>

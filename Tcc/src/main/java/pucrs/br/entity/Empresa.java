@@ -8,6 +8,7 @@ package pucrs.br.entity;
 import java.io.Serializable;
 import java.util.Collection;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -53,6 +54,8 @@ public class Empresa implements Serializable {
     private String razaoSocial;
     @Column(name = "funcionarios")
     private Integer funcionarios;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "empresa")
+    private Collection<Escopo> escopoCollection;
     @OneToMany(mappedBy = "idEmpresa")
     private Collection<Usuario> usuarioCollection;
 
@@ -98,6 +101,15 @@ public class Empresa implements Serializable {
 
     public void setFuncionarios(Integer funcionarios) {
         this.funcionarios = funcionarios;
+    }
+
+    @XmlTransient
+    public Collection<Escopo> getEscopoCollection() {
+        return escopoCollection;
+    }
+
+    public void setEscopoCollection(Collection<Escopo> escopoCollection) {
+        this.escopoCollection = escopoCollection;
     }
 
     @XmlTransient

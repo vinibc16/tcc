@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:decorate template="/template_usuario.xhtml">
+        <ui:define name="centro">
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            <h:form>
+                <h:panelGrid columns="2">
+                    <h:outputLabel value="#{bundle.EditVulnerabilidadeLabel_idVulnerabilidade}" for="idVulnerabilidade" />
+                    <h:inputText id="idVulnerabilidade" value="#{vulnerabilidadeController.selected.idVulnerabilidade}" title="#{bundle.EditVulnerabilidadeTitle_idVulnerabilidade}" required="true" requiredMessage="#{bundle.EditVulnerabilidadeRequiredMessage_idVulnerabilidade}"/>
+                    <h:outputLabel value="#{bundle.EditVulnerabilidadeLabel_nome}" for="nome" />
+                    <h:inputText id="nome" value="#{vulnerabilidadeController.selected.nome}" title="#{bundle.EditVulnerabilidadeTitle_nome}" required="true" requiredMessage="#{bundle.EditVulnerabilidadeRequiredMessage_nome}"/>
+                    <h:outputLabel value="#{bundle.EditVulnerabilidadeLabel_descricao}" for="descricao" />
+                    <h:inputText id="descricao" value="#{vulnerabilidadeController.selected.descricao}" title="#{bundle.EditVulnerabilidadeTitle_descricao}" required="true" requiredMessage="#{bundle.EditVulnerabilidadeRequiredMessage_descricao}"/>
+                    <h:outputLabel value="#{bundle.EditVulnerabilidadeLabel_nível}" for="nível" />
+                    <h:inputText id="nível" value="#{vulnerabilidadeController.selected.nível}" title="#{bundle.EditVulnerabilidadeTitle_nível}" required="true" requiredMessage="#{bundle.EditVulnerabilidadeRequiredMessage_nível}"/>
+                    <h:outputLabel value="#{bundle.EditVulnerabilidadeLabel_acoes}" for="acoes" />
+                    <h:inputText id="acoes" value="#{vulnerabilidadeController.selected.acoes}" title="#{bundle.EditVulnerabilidadeTitle_acoes}" required="true" requiredMessage="#{bundle.EditVulnerabilidadeRequiredMessage_acoes}"/>
+                    <h:outputLabel value="#{bundle.EditVulnerabilidadeLabel_fonte}" for="fonte" />
+                    <h:inputText id="fonte" value="#{vulnerabilidadeController.selected.fonte}" title="#{bundle.EditVulnerabilidadeTitle_fonte}" required="true" requiredMessage="#{bundle.EditVulnerabilidadeRequiredMessage_fonte}"/>
+                    <h:outputLabel value="#{bundle.EditVulnerabilidadeLabel_dataCriacao}" for="dataCriacao" />
+                    <h:inputText id="dataCriacao" value="#{vulnerabilidadeController.selected.dataCriacao}" title="#{bundle.EditVulnerabilidadeTitle_dataCriacao}" required="true" requiredMessage="#{bundle.EditVulnerabilidadeRequiredMessage_dataCriacao}">
+                        <f:convertDateTime pattern="MM/dd/yyyy" />
+                    </h:inputText>
+                </h:panelGrid>
+                <h:commandButton action="#{vulnerabilidadeController.update}" value="#{bundle.EditVulnerabilidadeSaveLink}"/>
+            </h:form>
+        </ui:define>
+    </ui:decorate>
+
+</html>

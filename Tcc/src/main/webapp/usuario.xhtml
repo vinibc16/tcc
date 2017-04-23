@@ -2,15 +2,7 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.org/ui">
-    <ui:decorate template="/template.xhtml">
-        <ui:define name="menu">
-            <h:form>
-                <p:menu style="width: 200px">
-                    <p:menuitem value="Home"/>
-                    <p:menuitem value="Menu USUARIO"/>         
-                </p:menu>
-            </h:form>
-        </ui:define>
+    <ui:decorate template="/template_usuario.xhtml">
         <ui:define name="centro">
             <h:outputLabel value="Login efetuado com sucesso! Bem vindo ao sistema USUARIO!"/>
         </ui:define>

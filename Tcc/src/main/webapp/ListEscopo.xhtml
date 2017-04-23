@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:decorate template="/template_usuario.xhtml">
+        <ui:define name="centro">
+            <h:form styleClass="jsfcrud_list_form">
+                <h:panelGroup id="messagePanel" layout="block">
+                    <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+                </h:panelGroup>
+                <h:outputText escape="false" value="#{bundle.ListEscopoEmpty}" rendered="#{escopoController.items.rowCount == 0}"/>
+                <h:panelGroup rendered="#{escopoController.items.rowCount > 0}">
+                    <h:outputText value="#{escopoController.pagination.pageFirstItem + 1}..#{escopoController.pagination.pageLastItem + 1}/#{escopoController.pagination.itemsCount}"/>&nbsp;
+                    <h:commandLink action="#{escopoController.previous}" value="#{bundle.Previous} #{escopoController.pagination.pageSize}" rendered="#{escopoController.pagination.hasPreviousPage}"/>&nbsp;
+                    <h:commandLink action="#{escopoController.next}" value="#{bundle.Next} #{escopoController.pagination.pageSize}" rendered="#{escopoController.pagination.hasNextPage}"/>&nbsp;
+                    <h:dataTable value="#{escopoController.items}" var="item" border="0" cellpadding="2" cellspacing="0" rowClasses="jsfcrud_odd_row,jsfcrud_even_row" rules="all" style="border:solid 1px">
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListEscopoTitle_escopoPK_idEscopo}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.escopoPK.idEscopo}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListEscopoTitle_nome}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.nome}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListEscopoTitle_idResponsavel}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.idResponsavel}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListEscopoTitle_descricao}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.descricao}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListEscopoTitle_dataCriacao}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.dataCriacao}">
+                                <f:convertDateTime pattern="MM/dd/yyyy" />
+                            </h:outputText>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListEscopoTitle_empresa}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.empresa}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="&nbsp;"/>
+                            </f:facet>
+                            <h:commandLink action="#{escopoController.prepareView}" value="#{bundle.ListEscopoViewLink}"/>
+                            <h:outputText value=" "/>
+                            <h:commandLink action="#{escopoController.prepareEdit}" value="#{bundle.ListEscopoEditLink}"/>
+                            <h:outputText value=" "/>
+                            <h:commandLink action="#{escopoController.destroy}" value="#{bundle.ListEscopoDestroyLink}"/>
+                        </h:column>
+                    </h:dataTable>
+                </h:panelGroup>
+                <br />
+                <h:commandButton action="#{escopoController.prepareCreate}" value="#{bundle.ListEscopoCreateLink}"/>
+            </h:form>
+        </ui:define>
+    </ui:decorate>
+
+</html>
