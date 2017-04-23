@@ -6,12 +6,15 @@
 package pucrs.br.entity;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -21,6 +24,7 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -38,6 +42,13 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Escopo.findByDescricao", query = "SELECT e FROM Escopo e WHERE e.descricao = :descricao"),
     @NamedQuery(name = "Escopo.findByDataCriacao", query = "SELECT e FROM Escopo e WHERE e.dataCriacao = :dataCriacao")})
 public class Escopo implements Serializable {
+
+    @JoinTable(name = "escopo_vul", joinColumns = {
+        @JoinColumn(name = "id_empresa", referencedColumnName = "id_empresa"),
+        @JoinColumn(name = "id_escopo", referencedColumnName = "id_escopo")}, inverseJoinColumns = {
+        @JoinColumn(name = "id_vulnerabilidade", referencedColumnName = "id_vulnerabilidade")})
+    @ManyToMany
+    private Collection<Vulnerabilidade> vulnerabilidadeCollection;
 
     private static final long serialVersionUID = 1L;
     @EmbeddedId
@@ -154,7 +165,16 @@ public class Escopo implements Serializable {
 
     @Override
     public String toString() {
-        return "pucrs.br.entity.Escopo[ escopoPK=" + escopoPK + " ]";
+        return getNome();
+    }
+
+    @XmlTransient
+    public Collection<Vulnerabilidade> getVulnerabilidadeCollection() {
+        return vulnerabilidadeCollection;
+    }
+
+    public void setVulnerabilidadeCollection(Collection<Vulnerabilidade> vulnerabilidadeCollection) {
+        this.vulnerabilidadeCollection = vulnerabilidadeCollection;
     }
     
 }

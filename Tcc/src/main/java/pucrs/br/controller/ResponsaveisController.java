@@ -62,18 +62,18 @@ public class ResponsaveisController implements Serializable {
         return pagination;
     }
 
-    public String prepareListResponsaveis() {
+    public String prepareList() {
         recreateModel();
         return "ListResponsaveis";
     }
 
-    public String prepareViewResponsaveis() {
+    public String prepareView() {
         current = (Responsaveis) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
         return "ViewResponsaveis";
     }
 
-    public String prepareCreateResponsaveis() {
+    public String prepareCreate() {
         current = new Responsaveis();
         selectedItemIndex = -1;
         return "CreateResponsaveis";
@@ -82,15 +82,15 @@ public class ResponsaveisController implements Serializable {
     public String create() {
         try {
             getFacade().create(current);
-            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("ResponsaveisCreateResponsaveisd"));
-            return prepareCreateResponsaveis();
+            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("ResponsaveisCreated"));
+            return prepareCreate();
         } catch (Exception e) {
             JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
             return null;
         }
     }
 
-    public String prepareEditResponsaveis() {
+    public String prepareEdit() {
         current = (Responsaveis) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
         return "EditResponsaveis";
@@ -116,7 +116,7 @@ public class ResponsaveisController implements Serializable {
         return "ListResponsaveis";
     }
 
-    public String destroyAndViewResponsaveis() {
+    public String destroyAndView() {
         performDestroy();
         recreateModel();
         updateCurrentItem();

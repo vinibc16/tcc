@@ -143,7 +143,7 @@ public class Empresa implements Serializable {
 
     @Override
     public String toString() {
-        return "pucrs.br.entity.Empresa[ idEmpresa=" + idEmpresa + " ]";
+        return getNome();
     }
     
 }

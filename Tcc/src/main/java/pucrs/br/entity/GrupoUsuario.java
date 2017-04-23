@@ -106,7 +106,7 @@ public class GrupoUsuario implements Serializable {
 
     @Override
     public String toString() {
-        return "pucrs.br.entity.GrupoUsuario[ idGrupo=" + idGrupo + " ]";
+        return getDescricao();
     }
     
 }

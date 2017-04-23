@@ -6,6 +6,7 @@ import pucrs.br.controller.util.PaginationHelper;
 import pucrs.br.bean.EscopoFacade;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.ResourceBundle;
 import javax.ejb.EJB;
 import javax.inject.Named;
@@ -17,6 +18,7 @@ import javax.faces.convert.FacesConverter;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
+import pucrs.br.entity.Vulnerabilidade;
 
 @Named("escopoController")
 @SessionScoped
@@ -63,18 +65,18 @@ public class EscopoController implements Serializable {
         return pagination;
     }
 
-    public String prepareListEscopo() {
+    public String prepareList() {
         recreateModel();
         return "ListEscopo";
     }
 
-    public String prepareViewEscopo() {
+    public String prepareView() {
         current = (Escopo) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
         return "ViewEscopo";
     }
 
-    public String prepareCreateEscopo() {
+    public String prepareCreate() {
         current = new Escopo();
         current.setEscopoPK(new pucrs.br.entity.EscopoPK());
         selectedItemIndex = -1;
@@ -85,15 +87,15 @@ public class EscopoController implements Serializable {
         try {
             current.getEscopoPK().setIdEmpresa(current.getEmpresa().getIdEmpresa());
             getFacade().create(current);
-            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("EscopoCreateEscopod"));
-            return prepareCreateEscopo();
+            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("EscopoCreated"));
+            return prepareCreate();
         } catch (Exception e) {
             JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
             return null;
         }
     }
 
-    public String prepareEditEscopo() {
+    public String prepareEdit() {
         current = (Escopo) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
         return "EditEscopo";
@@ -120,7 +122,7 @@ public class EscopoController implements Serializable {
         return "ListEscopo";
     }
 
-    public String destroyAndViewEscopo() {
+    public String destroyAndView() {
         performDestroy();
         recreateModel();
         updateCurrentItem();

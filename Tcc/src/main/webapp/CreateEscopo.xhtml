@@ -22,7 +22,7 @@
                     <h:inputText id="descricao" value="#{escopoController.selected.descricao}" title="#{bundle.CreateEscopoTitle_descricao}" required="true" requiredMessage="#{bundle.CreateEscopoRequiredMessage_descricao}"/>
                     <h:outputLabel value="#{bundle.CreateEscopoLabel_dataCriacao}" for="dataCriacao" />
                     <h:inputText id="dataCriacao" value="#{escopoController.selected.dataCriacao}" title="#{bundle.CreateEscopoTitle_dataCriacao}" required="true" requiredMessage="#{bundle.CreateEscopoRequiredMessage_dataCriacao}">
-                        <f:convertDateTime pattern="MM/dd/yyyy" />
+                        <f:convertDateTime pattern="dd/MM/yyyy" />
                     </h:inputText>
                     <h:outputLabel value="#{bundle.CreateEscopoLabel_empresa}" for="empresa" />
                     <h:selectOneMenu id="empresa" value="#{escopoController.selected.empresa}" title="#{bundle.CreateEscopoTitle_empresa}" required="true" requiredMessage="#{bundle.CreateEscopoRequiredMessage_empresa}">
