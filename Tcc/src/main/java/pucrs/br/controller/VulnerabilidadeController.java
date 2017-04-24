@@ -29,7 +29,6 @@ public class VulnerabilidadeController implements Serializable {
     private pucrs.br.bean.VulnerabilidadeFacade ejbFacade;
     private PaginationHelper pagination;
     private int selectedItemIndex;
-    private List<Vulnerabilidade> selectedVul;
 
     public VulnerabilidadeController() {
     }
@@ -233,15 +232,4 @@ public class VulnerabilidadeController implements Serializable {
         }
 
     }
-
-    public List<Vulnerabilidade> getSelectedVul() {
-        return selectedVul;
-    }
-
-    public void setSelectedVul(List<Vulnerabilidade> selectedVul) {
-        this.selectedVul = selectedVul;
-    }
-    
-    
-
 }

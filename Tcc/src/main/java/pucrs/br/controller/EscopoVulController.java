@@ -7,6 +7,7 @@ import pucrs.br.bean.EscopoVulFacade;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -258,8 +259,10 @@ public class EscopoVulController implements Serializable {
     }
     
     public String associaVul(Escopo escopo, List<Vulnerabilidade> vul) {
-        for (int i=0; ejbFacade.findAllfindByIdEscopo(escopo).size()>i; i++) {
-            ejbFacade.remove(ejbFacade.findAllfindByIdEscopo(escopo).get(i));
+        List<EscopoVul> lista = ejbFacade.findAllfindByIdEscopo(escopo);
+        System.out.println("Aqui B->"+lista.size());
+        for (int i=0; lista.size()>i; i++) {
+            ejbFacade.remove(lista.get(i));
         }
         
         for( int i=0; i<vul.size();i++) {

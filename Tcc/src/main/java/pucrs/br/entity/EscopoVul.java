@@ -41,7 +41,6 @@ public class EscopoVul implements Serializable {
     @EmbeddedId
     protected EscopoVulPK escopoVulPK;
     @Basic(optional = false)
-    @NotNull
     @Column(name = "data_link")
     @Temporal(TemporalType.DATE)
     private Date dataLink;

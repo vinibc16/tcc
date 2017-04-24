@@ -18,6 +18,7 @@ import javax.faces.convert.FacesConverter;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
+import pucrs.br.entity.EscopoVul;
 import pucrs.br.entity.Vulnerabilidade;
 
 @Named("escopoController")
@@ -30,6 +31,8 @@ public class EscopoController implements Serializable {
     private pucrs.br.bean.EscopoFacade ejbFacade;
     private PaginationHelper pagination;
     private int selectedItemIndex;
+    private List<Vulnerabilidade> selectedVul;
+    private pucrs.br.bean.EscopoVulFacade ejbFacadeEv;
 
     public EscopoController() {
     }
@@ -73,6 +76,9 @@ public class EscopoController implements Serializable {
     public String prepareView() {
         current = (Escopo) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
+        //Popular lista de vul
+        //populaListaVul();
+        selectedVul = null;
         return "ViewEscopo";
     }
 
@@ -244,6 +250,14 @@ public class EscopoController implements Serializable {
             }
         }
 
+    }
+
+    public List<Vulnerabilidade> getSelectedVul() {
+        return selectedVul;
+    }
+
+    public void setSelectedVul(List<Vulnerabilidade> selectedVul) {
+        this.selectedVul = selectedVul;
     }
 
 }
