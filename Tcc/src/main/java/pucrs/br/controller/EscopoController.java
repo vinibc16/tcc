@@ -6,6 +6,7 @@ import pucrs.br.controller.util.PaginationHelper;
 import pucrs.br.bean.EscopoFacade;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import javax.ejb.EJB;
@@ -18,6 +19,10 @@ import javax.faces.convert.FacesConverter;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import javax.persistence.Query;
 import pucrs.br.entity.EscopoVul;
 import pucrs.br.entity.Vulnerabilidade;
 
@@ -31,8 +36,11 @@ public class EscopoController implements Serializable {
     private pucrs.br.bean.EscopoFacade ejbFacade;
     private PaginationHelper pagination;
     private int selectedItemIndex;
-    private List<Vulnerabilidade> selectedVul;
+    private List<Vulnerabilidade> selectedVul = new ArrayList<Vulnerabilidade>();
     private pucrs.br.bean.EscopoVulFacade ejbFacadeEv;
+    private EntityManagerFactory factory = Persistence
+            .createEntityManagerFactory("pucrs_Tcc_war_1.0PU");
+    private EntityManager em = factory.createEntityManager();
 
     public EscopoController() {
     }
@@ -77,8 +85,14 @@ public class EscopoController implements Serializable {
         current = (Escopo) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
         //Popular lista de vul
-        //populaListaVul();
-        selectedVul = null;
+        //selectedVul = null;
+        //System.out.println();
+        selectedVul.clear();
+        for(int i=0;i<current.getVulnerabilidadeCollection().size();i++) {
+            Vulnerabilidade vul = current.getVulnerabilidadeCollection().iterator().next();
+            selectedVul.add(vul);
+        }
+        //selectedVul.addAll(current.getVulnerabilidadeCollection().toArray());
         return "ViewEscopo";
     }
 
@@ -259,5 +273,4 @@ public class EscopoController implements Serializable {
     public void setSelectedVul(List<Vulnerabilidade> selectedVul) {
         this.selectedVul = selectedVul;
     }
-
 }
