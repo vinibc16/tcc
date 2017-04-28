@@ -33,10 +33,10 @@
             <h:form>
                 <p:dataTable id="checkboxVul" var="item" value="#{vulnerabilidadeController.items}" selection="#{escopoController.selectedVul}" rowKey="#{item.idVulnerabilidade}" style="margin-bottom:0">
                     <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
-                    <p:column headerText="id_vulnerabilidade">
+                    <p:column headerText="ID Vulnerabilidade">
                         <h:outputText value="#{item.idVulnerabilidade}"/>
                     </p:column>
-                    <p:column headerText="nome">
+                    <p:column headerText="Nome">
                         <h:outputText value="#{item.nome}"/>
                     </p:column>
                     <f:facet name="footer">

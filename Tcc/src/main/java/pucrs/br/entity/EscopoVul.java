@@ -7,7 +7,6 @@ package pucrs.br.entity;
 
 import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -19,7 +18,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -34,16 +32,21 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "EscopoVul.findByIdEmpresa", query = "SELECT e FROM EscopoVul e WHERE e.escopoVulPK.idEmpresa = :idEmpresa"),
     @NamedQuery(name = "EscopoVul.findByIdEscopo", query = "SELECT e FROM EscopoVul e WHERE e.escopoVulPK.idEscopo = :idEscopo"),
     @NamedQuery(name = "EscopoVul.findByIdVulnerabilidade", query = "SELECT e FROM EscopoVul e WHERE e.escopoVulPK.idVulnerabilidade = :idVulnerabilidade"),
-    @NamedQuery(name = "EscopoVul.findByDataLink", query = "SELECT e FROM EscopoVul e WHERE e.dataLink = :dataLink")})
+    @NamedQuery(name = "EscopoVul.findByDataLink", query = "SELECT e FROM EscopoVul e WHERE e.dataLink = :dataLink"),
+    @NamedQuery(name = "EscopoVul.findByImpacto", query = "SELECT e FROM EscopoVul e WHERE e.impacto = :impacto"),
+    @NamedQuery(name = "EscopoVul.findByProbabilidade", query = "SELECT e FROM EscopoVul e WHERE e.probabilidade = :probabilidade")})
 public class EscopoVul implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @EmbeddedId
     protected EscopoVulPK escopoVulPK;
-    @Basic(optional = false)
     @Column(name = "data_link")
     @Temporal(TemporalType.DATE)
     private Date dataLink;
+    @Column(name = "impacto")
+    private Integer impacto;
+    @Column(name = "probabilidade")
+    private Integer probabilidade;
     @JoinColumns({
         @JoinColumn(name = "id_empresa", referencedColumnName = "id_empresa", insertable = false, updatable = false),
         @JoinColumn(name = "id_escopo", referencedColumnName = "id_escopo", insertable = false, updatable = false)})
@@ -58,11 +61,6 @@ public class EscopoVul implements Serializable {
 
     public EscopoVul(EscopoVulPK escopoVulPK) {
         this.escopoVulPK = escopoVulPK;
-    }
-
-    public EscopoVul(EscopoVulPK escopoVulPK, Date dataLink) {
-        this.escopoVulPK = escopoVulPK;
-        this.dataLink = dataLink;
     }
 
     public EscopoVul(int idEmpresa, int idEscopo, int idVulnerabilidade) {
@@ -83,6 +81,22 @@ public class EscopoVul implements Serializable {
 
     public void setDataLink(Date dataLink) {
         this.dataLink = dataLink;
+    }
+
+    public Integer getImpacto() {
+        return impacto;
+    }
+
+    public void setImpacto(Integer impacto) {
+        this.impacto = impacto;
+    }
+
+    public Integer getProbabilidade() {
+        return probabilidade;
+    }
+
+    public void setProbabilidade(Integer probabilidade) {
+        this.probabilidade = probabilidade;
     }
 
     public Escopo getEscopo() {

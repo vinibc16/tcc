@@ -6,18 +6,18 @@
 package pucrs.br.entity;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -43,13 +43,6 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Escopo.findByDataCriacao", query = "SELECT e FROM Escopo e WHERE e.dataCriacao = :dataCriacao")})
 public class Escopo implements Serializable {
 
-    @JoinTable(name = "escopo_vul", joinColumns = {
-        @JoinColumn(name = "id_empresa", referencedColumnName = "id_empresa"),
-        @JoinColumn(name = "id_escopo", referencedColumnName = "id_escopo")}, inverseJoinColumns = {
-        @JoinColumn(name = "id_vulnerabilidade", referencedColumnName = "id_vulnerabilidade")})
-    @ManyToMany
-    private Collection<Vulnerabilidade> vulnerabilidadeCollection;
-
     private static final long serialVersionUID = 1L;
     @EmbeddedId
     protected EscopoPK escopoPK;
@@ -72,6 +65,8 @@ public class Escopo implements Serializable {
     @Column(name = "data_criacao")
     @Temporal(TemporalType.DATE)
     private Date dataCriacao;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "escopo")
+    private List<EscopoVul> escopoVulList;
     @JoinColumn(name = "id_empresa", referencedColumnName = "id_empresa", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Empresa empresa;
@@ -135,6 +130,15 @@ public class Escopo implements Serializable {
         this.dataCriacao = dataCriacao;
     }
 
+    @XmlTransient
+    public List<EscopoVul> getEscopoVulList() {
+        return escopoVulList;
+    }
+
+    public void setEscopoVulList(List<EscopoVul> escopoVulList) {
+        this.escopoVulList = escopoVulList;
+    }
+
     public Empresa getEmpresa() {
         return empresa;
     }
@@ -165,16 +169,7 @@ public class Escopo implements Serializable {
 
     @Override
     public String toString() {
-        return getNome();
-    }
-
-    @XmlTransient
-    public Collection<Vulnerabilidade> getVulnerabilidadeCollection() {
-        return vulnerabilidadeCollection;
-    }
-
-    public void setVulnerabilidadeCollection(Collection<Vulnerabilidade> vulnerabilidadeCollection) {
-        this.vulnerabilidadeCollection = vulnerabilidadeCollection;
+        return "pucrs.br.entity.Escopo[ escopoPK=" + escopoPK + " ]";
     }
     
 }

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:decorate template="/template_usuario.xhtml">
+        <ui:define name="centro">
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            <h:form>
+                <h:panelGrid columns="2">
+                    <h:outputLabel value="#{bundle.CreateEscopoVulLabel_dataLink}" for="dataLink" />
+                    <h:inputText id="dataLink" value="#{escopoVulController.selected.dataLink}" title="#{bundle.CreateEscopoVulTitle_dataLink}" >
+                        <f:convertDateTime pattern="MM/dd/yyyy" />
+                    </h:inputText>
+                    <h:outputLabel value="#{bundle.CreateEscopoVulLabel_impacto}" for="impacto" />
+                    <h:inputText id="impacto" value="#{escopoVulController.selected.impacto}" title="#{bundle.CreateEscopoVulTitle_impacto}" />
+                    <h:outputLabel value="#{bundle.CreateEscopoVulLabel_probabilidade}" for="probabilidade" />
+                    <h:inputText id="probabilidade" value="#{escopoVulController.selected.probabilidade}" title="#{bundle.CreateEscopoVulTitle_probabilidade}" />
+                    <h:outputLabel value="#{bundle.CreateEscopoVulLabel_escopo}" for="escopo" />
+                    <h:selectOneMenu id="escopo" value="#{escopoVulController.selected.escopo}" title="#{bundle.CreateEscopoVulTitle_escopo}" required="true" requiredMessage="#{bundle.CreateEscopoVulRequiredMessage_escopo}">
+                        <f:selectItems value="#{escopoController.itemsAvailableSelectOne}"/>
+                    </h:selectOneMenu>
+                    <h:outputLabel value="#{bundle.CreateEscopoVulLabel_vulnerabilidade}" for="vulnerabilidade" />
+                    <h:selectOneMenu id="vulnerabilidade" value="#{escopoVulController.selected.vulnerabilidade}" title="#{bundle.CreateEscopoVulTitle_vulnerabilidade}" required="true" requiredMessage="#{bundle.CreateEscopoVulRequiredMessage_vulnerabilidade}">
+                        <f:selectItems value="#{vulnerabilidadeController.itemsAvailableSelectOne}"/>
+                    </h:selectOneMenu>
+                </h:panelGrid>
+                <br />
+                <h:commandLink action="#{escopoVulController.create}" value="#{bundle.CreateEscopoVulSaveLink}" />
+            </h:form>
+        </ui:define>
+    </ui:decorate>
+
+</html>

@@ -7,6 +7,7 @@ import pucrs.br.bean.EscopoVulFacade;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -22,6 +23,7 @@ import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
 import pucrs.br.entity.Escopo;
+import pucrs.br.entity.EscopoPK;
 import pucrs.br.entity.EscopoVulPK;
 import pucrs.br.entity.Vulnerabilidade;
 
@@ -35,8 +37,12 @@ public class EscopoVulController implements Serializable {
     private pucrs.br.bean.EscopoVulFacade ejbFacade;
     private PaginationHelper pagination;
     private int selectedItemIndex;
+    private DataModel lista = null;
+    private List<EscopoVul> listaApontamento = new ArrayList<>();
+    private Escopo escopoPag = null;
 
     public EscopoVulController() {
+        //lista = new ArrayList<>();
     }
 
     public EscopoVul getSelected() {
@@ -69,16 +75,34 @@ public class EscopoVulController implements Serializable {
         }
         return pagination;
     }
+    
+    public PaginationHelper getPagination2() {
+        if (pagination == null) {
+            pagination = new PaginationHelper(10) {
+
+                @Override
+                public int getItemsCount() {
+                    return getFacade().count();
+                }
+
+                @Override
+                public DataModel createPageDataModel() {
+                    return new ListDataModel(getFacade().findAllfindByIdEscopo(escopoPag));
+                }
+            };
+        }
+        return pagination;
+    }
 
     public String prepareList() {
         recreateModel();
-        return "List";
+        return "ListEscopoVul";
     }
 
     public String prepareView() {
         current = (EscopoVul) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
-        return "View";
+        return "ViewEscopoVul";
     }
 
     public String prepareCreate() {
@@ -105,7 +129,7 @@ public class EscopoVulController implements Serializable {
     public String prepareEdit() {
         current = (EscopoVul) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
-        return "Edit";
+        return "EditEscopoVul";
     }
 
     public String update() {
@@ -115,7 +139,7 @@ public class EscopoVulController implements Serializable {
             current.getEscopoVulPK().setIdVulnerabilidade(current.getVulnerabilidade().getIdVulnerabilidade());
             getFacade().edit(current);
             JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("EscopoVulUpdated"));
-            return "View";
+            return "ViewEscopoVul";
         } catch (Exception e) {
             JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
             return null;
@@ -128,7 +152,7 @@ public class EscopoVulController implements Serializable {
         performDestroy();
         recreatePagination();
         recreateModel();
-        return "List";
+        return "ListEscopoVul";
     }
 
     public String destroyAndView() {
@@ -136,11 +160,11 @@ public class EscopoVulController implements Serializable {
         recreateModel();
         updateCurrentItem();
         if (selectedItemIndex >= 0) {
-            return "View";
+            return "ViewEscopoVul";
         } else {
             // all items were removed - go back to list
             recreateModel();
-            return "List";
+            return "ListEscopoVul";
         }
     }
 
@@ -186,13 +210,13 @@ public class EscopoVulController implements Serializable {
     public String next() {
         getPagination().nextPage();
         recreateModel();
-        return "List";
+        return "ListEscopoVul";
     }
 
     public String previous() {
         getPagination().previousPage();
         recreateModel();
-        return "List";
+        return "ListEscopoVul";
     }
 
     public SelectItem[] getItemsAvailableSelectMany() {
@@ -260,7 +284,6 @@ public class EscopoVulController implements Serializable {
     
     public String associaVul(Escopo escopo, List<Vulnerabilidade> vul) {
         List<EscopoVul> lista = ejbFacade.findAllfindByIdEscopo(escopo);
-        System.out.println("Aqui B->"+lista.size());
         for (int i=0; lista.size()>i; i++) {
             ejbFacade.remove(lista.get(i));
         }
@@ -284,5 +307,56 @@ public class EscopoVulController implements Serializable {
         }                
         return "ListEscopo";
     }
+    
+    public String editEscopoVul(Escopo escopo) {
+        //lista.clear();
+        recreateModel();
+        //current = (EscopoVul) getItems().getRowData();
+        //selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();        
+        escopoPag = escopo;
+        lista = getPagination2().createPageDataModel();
+        //System.out.println(lista.size());
+        //for(int i=0;i<lista.size();i++) {
+            //lista.get(i).setEscopo(escopo);
+            //System.out.println("Aqui ->"+lista.get(i).getEscopoVulPK().getIdEscopo());
+        //}
+        return "ListEscopoVul2";
+    }
 
+    public DataModel getLista() {
+        return lista;
+    }
+
+    public void setLista(List<EscopoVul> lista) {
+        this.lista = (DataModel) lista;
+    }
+
+    public List<EscopoVul> getListaApontamento() {
+        return listaApontamento;
+    }
+
+    public void setListaApontamento(List<EscopoVul> listaApontamento) {
+        this.listaApontamento = listaApontamento;
+    }
+    
+    
+    public String update2(EscopoVul escopovul) {
+        try {            
+            //lista = ejbFacade.findAllfindByIdEscopo(escopo);
+            System.out.println(""+escopovul);
+            /*for (int i = 0; i < lista.size(); i++) {
+                current.getEscopoVulPK().setIdEscopo(lista.get(i).getEscopoVulPK().getIdEscopo());
+                current.getEscopoVulPK().setIdEmpresa(lista.get(i).getEscopoVulPK().getIdEmpresa());
+                current.getEscopoVulPK().setIdVulnerabilidade(lista.get(i).getEscopoVulPK().getIdVulnerabilidade());
+                current.setImpacto(lista.get(i).getImpacto());
+                current.setProbabilidade(lista.get(i).getProbabilidade());
+                getFacade().edit(current);
+                JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("EscopoVulUpdated"));
+            }*/
+            return "ViewEscopoVul";
+        } catch (Exception e) {
+            JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
+            return null;
+        }
+    }
 }

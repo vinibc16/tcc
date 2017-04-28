@@ -61,7 +61,7 @@
                             </f:facet>
                             <h:commandLink action="#{escopoController.prepareView}" value="Associar"/>
                             <h:outputText value=" "/>
-                            <h:commandLink value="Calcular Risco"/>
+                            <h:commandLink action="#{escopoVulController.editEscopoVul(item)}" value="Definir Risco"/>
                             <h:outputText value=" "/>
                             <h:commandLink action="#{escopoController.prepareEdit}" value="#{bundle.ListEscopoEditLink}"/>
                             <h:outputText value=" "/>

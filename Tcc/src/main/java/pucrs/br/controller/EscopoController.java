@@ -7,6 +7,7 @@ import pucrs.br.bean.EscopoFacade;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.ResourceBundle;
 import javax.ejb.EJB;
@@ -85,12 +86,10 @@ public class EscopoController implements Serializable {
         current = (Escopo) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
         //Popular lista de vul
-        //selectedVul = null;
-        //System.out.println();
         selectedVul.clear();
-        for(int i=0;i<current.getVulnerabilidadeCollection().size();i++) {
-            Vulnerabilidade vul = current.getVulnerabilidadeCollection().iterator().next();
-            selectedVul.add(vul);
+        for(int i=0;i<current.getEscopoVulList().size();i++) {
+            System.out.println(current.getEscopoVulList().get(i).getVulnerabilidade());
+            selectedVul.add(current.getEscopoVulList().get(i).getVulnerabilidade());
         }
         //selectedVul.addAll(current.getVulnerabilidadeCollection().toArray());
         return "ViewEscopo";
@@ -273,4 +272,5 @@ public class EscopoController implements Serializable {
     public void setSelectedVul(List<Vulnerabilidade> selectedVul) {
         this.selectedVul = selectedVul;
     }
+    
 }

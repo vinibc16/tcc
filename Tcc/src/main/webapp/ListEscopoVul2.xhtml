@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:decorate template="/template_usuario.xhtml">
+        <ui:define name="centro">
+            <h:form>
+                <p:dataTable id="escopoVul" var="item" value="#{escopoVulController.lista}" selection="#{escopoVulController.listaApontamento}" rowKey="#{item.escopoVulPK}" style="margin-bottom:0">
+                    <p:column headerText="ID Vulnerabilidade">
+                        <h:outputText value="#{item.escopoVulPK.idVulnerabilidade}"/>
+                    </p:column>
+                    <p:column headerText="Escopo">
+                        <h:outputText value="#{item.escopoVulPK.idEscopo}"/>
+                    </p:column>
+                    <p:column headerText="Impacto">
+                        <h:selectOneMenu id="impacto" value="#{item.impacto}">
+                            <f:selectItem itemValue="1"/>
+                            <f:selectItem itemValue="2"/>
+                            <f:selectItem itemValue="3"/>
+                            <f:selectItem itemValue="4"/>
+                            <f:selectItem itemValue="5"/>
+                        </h:selectOneMenu>
+                    </p:column>
+                    <p:column headerText="Probabilidade">
+                        <h:selectOneMenu id="probabilidade" value="#{item.probabilidade}">
+                            <f:selectItem itemValue="1"/>
+                            <f:selectItem itemValue="2"/>
+                            <f:selectItem itemValue="3"/>
+                            <f:selectItem itemValue="4"/>
+                            <f:selectItem itemValue="5"/>
+                        </h:selectOneMenu>
+                    </p:column>
+                    <f:facet name="footer">
+                        <p:commandButton process="escopoVul" value="Salvar" action="#{escopoVulController.update2(item)}" />
+                    </f:facet>
+                </p:dataTable>
+            </h:form>    
+        </ui:define>
+    </ui:decorate>
+
+</html>

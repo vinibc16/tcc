@@ -40,7 +40,7 @@ public class EscopoVulFacade extends AbstractFacade<EscopoVul> {
         List<Object[]> lista = query.getResultList();
         List<EscopoVul> ev = new ArrayList<>();
         for (Object[] row : lista) {
-            ev.add(new EscopoVul(new EscopoVulPK((int)row[0], (int)row[1],(int)row[2]),(Date)row[3]));
+            ev.add(new EscopoVul(new EscopoVulPK((int)row[0], (int)row[1],(int)row[2])));
         }
         return ev;
     }
