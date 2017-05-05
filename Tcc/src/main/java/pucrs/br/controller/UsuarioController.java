@@ -6,10 +6,12 @@ import pucrs.br.controller.util.PaginationHelper;
 import pucrs.br.bean.UsuarioFacade;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.ResourceBundle;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
@@ -17,6 +19,12 @@ import javax.faces.convert.FacesConverter;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.NoResultException;
+import javax.persistence.Persistence;
+import javax.persistence.Query;
+import pucrs.br.entity.GrupoUsuario;
 
 @Named("usuarioController")
 @SessionScoped
@@ -28,6 +36,8 @@ public class UsuarioController implements Serializable {
     private pucrs.br.bean.UsuarioFacade ejbFacade;
     private PaginationHelper pagination;
     private int selectedItemIndex;
+    private String menssagem = null;
+    
 
     public UsuarioController() {
     }
@@ -229,7 +239,59 @@ public class UsuarioController implements Serializable {
                 throw new IllegalArgumentException("object " + object + " is of type " + object.getClass().getName() + "; expected type: " + Usuario.class.getName());
             }
         }
-
+    }
+    
+    public String envia() {
+        current = ejbFacade.getUsuario(current.getId(), current.getSenha());
+        if (current == null) {
+            current = new Usuario();
+            setMenssagem("Erro no Login!");
+            FacesContext.getCurrentInstance().addMessage(
+                    null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Usuário não encontrado!",
+                            "Erro no Login!"));
+            return null;
+        } else if(current.getIdGrupo().getIdGrupo() == 1) {
+            System.out.println("Aqui 1"+current.getId());
+            return "admin";
+        } else if(current.getIdGrupo().getIdGrupo() == 2) {
+            return "gestor";
+        } else if(current.getIdGrupo().getIdGrupo() == 3) {
+            return "usuario";
+        } else {
+            System.out.println("Aqui 4");
+            return null;
+        }
+    }
+    
+    public String login() {
+        System.out.println(current.getId());
+        if (current.getId() != null) {
+            System.out.println("Aqui logado");
+            return "usuarioLogado";
+        }
+        return "login";
+    }
+    
+    public String logout() {
+        current = new Usuario();
+        return "index";
+    }
+    
+    public String inicio() {
+        return "index";
+    }
+    
+    public String admin() {
+        return "admin";
     }
 
+    public String getMenssagem() {
+        return menssagem;
+    }
+
+    public void setMenssagem(String menssagem) {
+        this.menssagem = menssagem;
+    }
+    
 }

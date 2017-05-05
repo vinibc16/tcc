@@ -9,7 +9,8 @@
     <ui:decorate template="/template_usuario.xhtml">
         <ui:define name="centro">
             <h:form>
-                <p:dataTable id="escopoVul" var="item" value="#{escopoVulController.lista}" selection="#{escopoVulController.listaApontamento}" rowKey="#{item.escopoVulPK}" style="margin-bottom:0">
+                <p:dataTable id="escopoVul" var="item" value="#{escopoVulController.listaApontamento}" editable="true" editMode="cell" rowKey="#{item.escopoVulPK}" style="margin-bottom:0">
+                    <p:ajax event="cellEdit" listener="#{escopoVulController.onCellEdit}" />
                     <p:column headerText="ID Vulnerabilidade">
                         <h:outputText value="#{item.escopoVulPK.idVulnerabilidade}"/>
                     </p:column>
@@ -35,7 +36,7 @@
                         </h:selectOneMenu>
                     </p:column>
                     <f:facet name="footer">
-                        <p:commandButton process="escopoVul" value="Salvar" action="#{escopoVulController.update2(item)}" />
+                        <p:commandButton process="escopoVul" value="Salvar" action="#{escopoVulController.update2}" />
                     </f:facet>
                 </p:dataTable>
             </h:form>    

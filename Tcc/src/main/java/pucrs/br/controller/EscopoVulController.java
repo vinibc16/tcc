@@ -26,6 +26,16 @@ import pucrs.br.entity.Escopo;
 import pucrs.br.entity.EscopoPK;
 import pucrs.br.entity.EscopoVulPK;
 import pucrs.br.entity.Vulnerabilidade;
+import java.io.Serializable;
+import java.util.List;
+import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
+import org.primefaces.event.CellEditEvent;
+import org.primefaces.event.RowEditEvent;
 
 @Named("escopoVulController")
 @SessionScoped
@@ -38,10 +48,12 @@ public class EscopoVulController implements Serializable {
     private PaginationHelper pagination;
     private int selectedItemIndex;
     private DataModel lista = null;
-    private List<EscopoVul> listaApontamento = new ArrayList<>();
+    private List<EscopoVul> listaApontamento;
     private Escopo escopoPag = null;
 
     public EscopoVulController() {
+        listaApontamento = new ArrayList<>();
+        System.out.println("EscopoVulController CRIADO!");
         //lista = new ArrayList<>();
     }
 
@@ -315,6 +327,8 @@ public class EscopoVulController implements Serializable {
         //selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();        
         escopoPag = escopo;
         lista = getPagination2().createPageDataModel();
+        listaApontamento = getFacade().findAllfindByIdEscopo(escopo);
+        System.out.println(""+listaApontamento.size());
         //System.out.println(lista.size());
         //for(int i=0;i<lista.size();i++) {
             //lista.get(i).setEscopo(escopo);
@@ -340,23 +354,35 @@ public class EscopoVulController implements Serializable {
     }
     
     
-    public String update2(EscopoVul escopovul) {
+    public String update2() {
         try {            
-            //lista = ejbFacade.findAllfindByIdEscopo(escopo);
-            System.out.println(""+escopovul);
-            /*for (int i = 0; i < lista.size(); i++) {
-                current.getEscopoVulPK().setIdEscopo(lista.get(i).getEscopoVulPK().getIdEscopo());
-                current.getEscopoVulPK().setIdEmpresa(lista.get(i).getEscopoVulPK().getIdEmpresa());
-                current.getEscopoVulPK().setIdVulnerabilidade(lista.get(i).getEscopoVulPK().getIdVulnerabilidade());
-                current.setImpacto(lista.get(i).getImpacto());
-                current.setProbabilidade(lista.get(i).getProbabilidade());
+            for (int i = 0; i < listaApontamento.size(); i++) {
+                System.out.println("Impacto ->"+listaApontamento.get(i).getImpacto());                
+                System.out.println("PK ->"+listaApontamento.get(i).getEscopoVulPK());
+                current = new EscopoVul();
+                current.setEscopoVulPK(listaApontamento.get(i).getEscopoVulPK());
+                current.setImpacto(listaApontamento.get(i).getImpacto());
+                current.setProbabilidade(listaApontamento.get(i).getProbabilidade());
                 getFacade().edit(current);
-                JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("EscopoVulUpdated"));
-            }*/
+            }
             return "ViewEscopoVul";
         } catch (Exception e) {
-            JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
             return null;
         }
+    }
+    
+    public void onRowEdit(RowEditEvent event) {
+        FacesMessage msg = new FacesMessage("EscopoVul Edited");
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+     
+    public void onRowCancel(RowEditEvent event) {
+        FacesMessage msg = new FacesMessage("EscopoVul Cancelled");
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+     
+    public void onCellEdit(CellEditEvent event) {
+        Object oldValue = event.getOldValue();
+        Object newValue = event.getNewValue();
     }
 }
