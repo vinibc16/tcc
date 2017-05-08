@@ -1,26 +1,35 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:p="http://primefaces.org/ui">
-    <ui:decorate template="/template.xhtml">
-        <ui:define name="menu">
-            <h:form>
-                <p:menu style="width: 200px">
-                    <p:submenu label="Usuarios">
-                        <p:menuitem value="Criar" outcome="CreateUsuario.jsf"/>
-                        <p:menuitem value="Listar" outcome="ListUsuario.jsf"/>                    
-                    </p:submenu>  
-                    <p:submenu label="Empresas">
-                        <p:menuitem value="Criar" outcome="CreateEmpresa.jsf"/>
-                        <p:menuitem value="Listar" outcome="ListEmpresa.jsf"/>
-                    </p:submenu>
-                    <p:submenu label="Vulnerabilidades">
-                        <p:menuitem value="Criar" outcome="CreateVul.jsf"/>
-                        <p:menuitem value="Listar" outcome="ListVul.jsf"/>
-                    </p:submenu>
-                    <p:menuitem value="Logout" icon="ui-icon-key" action="#{usuarioController.logout}" /> 
-                </p:menu>
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <h:head>
+        <title>Tcc</title>
+        <style type="text/css">
+            .body-sigin {
+                background-color: #31b0d5;
+                padding-top: 100px;
+            }
+        </style>
+    </h:head>
+    <h:body styleClass="body-sigin">
+        <h:form>
+            <b:navBar brand="Inicio" brandHref="home.jsf" fixed="top" inverse="true">
+                <b:navbarLinks>
+                    <b:navLink value="Usuarios" href="ListUsuario.jsf"></b:navLink>
+                    <b:navLink value="Empresas" href="ListEmpresa.jsf"></b:navLink>
+                    <b:navLink value="Vulnerabilidades" href="ListVul.jsf"></b:navLink>
+                    <b:navCommandLink value="Logout" actionListener="#{usuarioController.logout()}"></b:navCommandLink>
+                </b:navbarLinks>
+            </b:navBar>
+        </h:form>
+        <b:container>
+            <h:form id="principal">
+                <ui:insert name="centro"/>
             </h:form>
-        </ui:define>
-    </ui:decorate>
+        </b:container>
+
+    </h:body>
 </html>

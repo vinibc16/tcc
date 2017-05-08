@@ -1,33 +1,29 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:p="http://primefaces.org/ui"
-      xmlns:f="http://java.sun.com/jsf/core">
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
     <h:head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <title>TCC</title>
+        <title>Tcc</title>
         <style type="text/css">
-            body {background-color: #eeeeee; font-size: 12px}
-        </style> 
+            .body-sigin {
+                background-image:url(imagens/iot_bg.jpg);
+            }
+        </style>
     </h:head>
-    <h:body>
-        <div align="center">
-            <p:layout style="min-width:1020px;max-width:1020px;min-height:600px">  
-                <p:layoutUnit position="north" size="250">                    
-                    <h:outputText value="#{usuarioController.selected.usuario}"></h:outputText>
-                    <br/><br/>
-                    <img src="imagens/iot_logo.jpg"/>
-                </p:layoutUnit>  
+    <h:body styleClass="body-sigin">
+        <b:navBar brand="Inicio" brandHref="#" fixed="top" inverse="true">
+            <b:navbarLinks>
+                <b:navLink value="Home" href="#"></b:navLink>
+                <b:navLink value="About" href="#about"></b:navLink>
+                <b:navLink value="Contact" href="#contact"></b:navLink>
+            </b:navbarLinks>
+        </b:navBar>
+        <b:container>
+           <ui:insert name="content"/>
+        </b:container>
 
-                <p:layoutUnit position="west" size="220">
-                    <ui:insert name="menu"></ui:insert>
-                </p:layoutUnit>  
-                <p:layoutUnit position="center">  
-                    <ui:insert name="centro">
-                        O que estiver aqui será substituido!
-                    </ui:insert>
-                </p:layoutUnit> 
-            </p:layout>  
-        </div>
     </h:body>
 </html>

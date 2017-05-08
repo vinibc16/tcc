@@ -1,18 +1,19 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
     <ui:decorate template="/template.xhtml">
         <ui:define name="menu">
             <h:form>
                 <p:menu style="width: 200px">
-                    <p:menuitem value="Home"/>
-                    <p:menuitem value="Menu GESTOR"/>         
+                    <p:menuitem value="Login" icon="ui-icon-key" outcome="login.jsf" />
+                    <p:menuitem value="Logout" icon="ui-icon-key" action="#{usuarioController.logout}" />         
                 </p:menu>
             </h:form>
         </ui:define>
         <ui:define name="centro">
-            <h:outputLabel value="Usuario Ja logado!"/>
+            Aqui é o centro do index!
         </ui:define>
     </ui:decorate>
 </html>

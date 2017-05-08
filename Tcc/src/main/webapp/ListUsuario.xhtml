@@ -4,61 +4,43 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:p="http://primefaces.org/ui"
+      xmlns:b="http://bootsfaces.net/ui"
       xmlns:f="http://java.sun.com/jsf/core">
     <ui:decorate template="/template_admin.xhtml">
         <ui:define name="centro">
-            <h:form styleClass="jsfcrud_list_form">
-                <h:panelGroup id="messagePanel" layout="block">
-                    <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
-                </h:panelGroup>
-                <h:outputText escape="false" value="#{bundle.ListUsuarioEmpty}" rendered="#{usuarioController.items.rowCount == 0}"/>
-                <h:panelGroup rendered="#{usuarioController.items.rowCount > 0}">
-                    <h:outputText value="#{usuarioController.pagination.pageFirstItem + 1}..#{usuarioController.pagination.pageLastItem + 1}/#{usuarioController.pagination.itemsCount}"/>&nbsp;
-                    <h:commandLink action="#{usuarioController.previous}" value="#{bundle.Previous} #{usuarioController.pagination.pageSize}" rendered="#{usuarioController.pagination.hasPreviousPage}"/>&nbsp;
-                    <h:commandLink action="#{usuarioController.next}" value="#{bundle.Next} #{usuarioController.pagination.pageSize}" rendered="#{usuarioController.pagination.hasNextPage}"/>&nbsp;
-                    <br />
-                    <h:dataTable value="#{usuarioController.items}" var="item" border="0" cellpadding="2" cellspacing="0" rowClasses="jsfcrud_odd_row,jsfcrud_even_row" rules="all" style="border:solid 1px">
-                        <h:column>
-                            <f:facet name="header">
-                                <h:outputText value="#{bundle.ListUsuarioTitle_id}"/>
+            <h:form id="form">
+                <p:growl id="msgs" showDetail="true"/>
+                <p:dataTable id="usuarios" var="user" value="#{usuarioController.items}" editable="true" style="margin-bottom:20px">
+                    
+                    <p:ajax event="rowEdit" listener="#{usuarioController.onRowEdit}" update=":principal:form:msgs" />
+                    <p:ajax event="rowEditCancel" listener="#{usuarioController.onRowCancel}" update=":principal:form:msgs" />
+
+                    <p:column headerText="Usuario">
+                        <p:cellEditor>
+                            <f:facet name="output">
+                                <h:outputText value="#{user.usuario}" />
                             </f:facet>
-                            <h:outputText value="#{item.id}"/>
-                        </h:column>
-                        <h:column>
-                            <f:facet name="header">
-                                <h:outputText value="#{bundle.ListUsuarioTitle_usuario}"/>
+                            <f:facet name="input">
+                                <p:inputText id="UsuarioInput" value="#{user.usuario}" style="width:100%"/>
                             </f:facet>
-                            <h:outputText value="#{item.usuario}"/>
-                        </h:column>
-                        <h:column>
-                            <f:facet name="header">
-                                <h:outputText value="#{bundle.ListUsuarioTitle_senha}"/>
+                        </p:cellEditor>
+                    </p:column>
+                    
+                    <p:column headerText="Senha">
+                        <p:cellEditor>
+                            <f:facet name="output">
+                                <h:outputText value="#{user.senha}" />
                             </f:facet>
-                            <h:outputText value="#{item.senha}"/>
-                        </h:column>
-                        <h:column>
-                            <f:facet name="header">
-                                <h:outputText value="#{bundle.ListUsuarioTitle_idEmpresa}"/>
+                            <f:facet name="input">
+                                <p:inputText id="SenhaInput" value="#{user.senha}" style="width:100%"/>
                             </f:facet>
-                            <h:outputText value="#{item.idEmpresa}"/>
-                        </h:column>
-                        <h:column>
-                            <f:facet name="header">
-                                <h:outputText value="#{bundle.ListUsuarioTitle_idGrupo}"/>
-                            </f:facet>
-                            <h:outputText value="#{item.idGrupo}"/>
-                        </h:column>
-                        <h:column>
-                            <f:facet name="header">
-                                <h:outputText value="&nbsp;"/>
-                            </f:facet>
-                            <h:commandLink action="#{usuarioController.prepareEdit}" value="#{bundle.ListUsuarioEditLink}"/>
-                            <h:outputText value=" "/>
-                            <h:commandLink action="#{usuarioController.destroy}" value="#{bundle.ListUsuarioDestroyLink}"/>
-                        </h:column>
-                    </h:dataTable>
-                </h:panelGroup>
-                <br />
+                        </p:cellEditor>
+                    </p:column>
+                    
+                    <p:column style="width:32px">
+                        <p:rowEditor />
+                    </p:column>
+                </p:dataTable>
             </h:form>
         </ui:define>
     </ui:decorate>

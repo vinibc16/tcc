@@ -1,5 +1,6 @@
 package pucrs.br.controller;
 
+import java.io.IOException;
 import pucrs.br.entity.Usuario;
 import pucrs.br.controller.util.JsfUtil;
 import pucrs.br.controller.util.PaginationHelper;
@@ -24,6 +25,8 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.NoResultException;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
+import org.primefaces.event.CellEditEvent;
+import org.primefaces.event.RowEditEvent;
 import pucrs.br.entity.GrupoUsuario;
 
 @Named("usuarioController")
@@ -251,16 +254,8 @@ public class UsuarioController implements Serializable {
                     new FacesMessage(FacesMessage.SEVERITY_ERROR, "Usuário não encontrado!",
                             "Erro no Login!"));
             return null;
-        } else if(current.getIdGrupo().getIdGrupo() == 1) {
-            System.out.println("Aqui 1"+current.getId());
-            return "admin";
-        } else if(current.getIdGrupo().getIdGrupo() == 2) {
-            return "gestor";
-        } else if(current.getIdGrupo().getIdGrupo() == 3) {
-            return "usuario";
         } else {
-            System.out.println("Aqui 4");
-            return null;
+            return "home";
         }
     }
     
@@ -273,9 +268,9 @@ public class UsuarioController implements Serializable {
         return "login";
     }
     
-    public String logout() {
-        current = new Usuario();
-        return "index";
+    public void logout() throws IOException {
+        current = null;
+        FacesContext.getCurrentInstance().getExternalContext().redirect("index.jsf");
     }
     
     public String inicio() {
@@ -294,4 +289,33 @@ public class UsuarioController implements Serializable {
         this.menssagem = menssagem;
     }
     
+    public void logado() throws IOException {
+        if (current == null) {
+            FacesContext.getCurrentInstance().getExternalContext().redirect("login.jsf");
+        } else if (current.getId() == null) {
+            FacesContext.getCurrentInstance().getExternalContext().redirect("login.jsf");    
+        } else {
+            FacesContext.getCurrentInstance().getExternalContext().redirect("home.jsf");
+        }
+    }
+    
+    public void redireciona() throws IOException {
+        if(current.getIdGrupo().getIdGrupo() == 1) {
+            FacesContext.getCurrentInstance().getExternalContext().redirect("admin.jsf");
+        } else if(current.getIdGrupo().getIdGrupo() == 2) {
+            FacesContext.getCurrentInstance().getExternalContext().redirect("gestor.jsf");
+        } else if(current.getIdGrupo().getIdGrupo() == 3) {
+            FacesContext.getCurrentInstance().getExternalContext().redirect("usuario.jsf");
+        } 
+    }
+    
+    public void onRowEdit(RowEditEvent event) {
+        current = ((Usuario) event.getObject());
+        update();
+    }
+     
+    public void onRowCancel(RowEditEvent event) {
+        FacesMessage msg = new FacesMessage("Usuario Cancelled", ((Usuario) event.getObject()).getId());
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
 }
