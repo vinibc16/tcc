@@ -9,11 +9,17 @@
     <ui:decorate template="/template_admin.xhtml">
         <ui:define name="centro">
             <h:form id="form">
-                <p:growl id="msgs" showDetail="true"/>
-                <p:dataTable id="usuarios" var="user" value="#{usuarioController.items}" editable="true" style="margin-bottom:20px">
+                <p:dataTable id="usuarios" 
+                             var="user" 
+                             value="#{usuarioController.items}" 
+                             style="margin-bottom:20px"
+                             rows="10" 
+                             paginator="true" 
+                             editable="true"
+                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
                     
-                    <p:ajax event="rowEdit" listener="#{usuarioController.onRowEdit}" update=":principal:form:msgs" />
-                    <p:ajax event="rowEditCancel" listener="#{usuarioController.onRowCancel}" update=":principal:form:msgs" />
+                    <p:ajax event="rowEdit" listener="#{usuarioController.onRowEdit}" update=":principal:msgs" />
+                    <p:ajax event="rowEditCancel" listener="#{usuarioController.onRowCancel}" update=":principal:msgs" />
 
                     <p:column headerText="Usuario">
                         <p:cellEditor>
@@ -41,6 +47,8 @@
                         <p:rowEditor />
                     </p:column>
                 </p:dataTable>
+                <br />
+                <b:commandButton value="Criar Usuario" action="CreateUsuario.jsf"/>
             </h:form>
         </ui:define>
     </ui:decorate>

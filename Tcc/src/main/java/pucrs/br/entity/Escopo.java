@@ -165,11 +165,11 @@ public class Escopo implements Serializable {
             return false;
         }
         return true;
-    }
+    }    
 
     @Override
     public String toString() {
-        return "pucrs.br.entity.Escopo[ escopoPK=" + escopoPK + " ]";
+        return getNome();
     }
     
 }

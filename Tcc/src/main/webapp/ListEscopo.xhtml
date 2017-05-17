@@ -1,78 +1,85 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
-
-    <ui:decorate template="/template_usuario.xhtml">
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <ui:composition template="/template_usuario.xhtml">
         <ui:define name="centro">
-            <h:form styleClass="jsfcrud_list_form">
-                <h:panelGroup id="messagePanel" layout="block">
-                    <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
-                </h:panelGroup>
-                <h:outputText escape="false" value="#{bundle.ListEscopoEmpty}" rendered="#{escopoController.items.rowCount == 0}"/>
-                <h:panelGroup rendered="#{escopoController.items.rowCount > 0}">
-                    <h:outputText value="#{escopoController.pagination.pageFirstItem + 1}..#{escopoController.pagination.pageLastItem + 1}/#{escopoController.pagination.itemsCount}"/>&nbsp;
-                    <h:commandLink action="#{escopoController.previous}" value="#{bundle.Previous} #{escopoController.pagination.pageSize}" rendered="#{escopoController.pagination.hasPreviousPage}"/>&nbsp;
-                    <h:commandLink action="#{escopoController.next}" value="#{bundle.Next} #{escopoController.pagination.pageSize}" rendered="#{escopoController.pagination.hasNextPage}"/>&nbsp;
-                    <h:dataTable value="#{escopoController.items}" var="item" border="0" cellpadding="2" cellspacing="0" rowClasses="jsfcrud_odd_row,jsfcrud_even_row" rules="all" style="border:solid 1px">
-                        <h:column>
-                            <f:facet name="header">
-                                <h:outputText value="#{bundle.ListEscopoTitle_escopoPK_idEscopo}"/>
+            <h:form id="form">
+                <p:dataTable id="escopo" var="esc" value="#{escopoController.items}" 
+                             editable="true" editMode="cell" widgetVar="cellEscop"
+                             rows="10" paginator="true"    
+                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
+                    
+                    <p:ajax event="cellEdit" listener="#{escopoController.onCellEdit}" update=":principal:msgs" />
+                    
+                    <p:column headerText="Nome">
+                        <p:cellEditor>
+                            <f:facet name="output">
+                                <h:outputText value="#{esc.nome}" />
                             </f:facet>
-                            <h:outputText value="#{item.escopoPK.idEscopo}"/>
-                        </h:column>
-                        <h:column>
-                            <f:facet name="header">
-                                <h:outputText value="#{bundle.ListEscopoTitle_nome}"/>
+                            <f:facet name="input">
+                                <p:inputText id="NomeInput" value="#{esc.nome}" style="width:100%"/>
                             </f:facet>
-                            <h:outputText value="#{item.nome}"/>
-                        </h:column>
-                        <h:column>
-                            <f:facet name="header">
-                                <h:outputText value="#{bundle.ListEscopoTitle_idResponsavel}"/>
+                        </p:cellEditor>
+                    </p:column>
+                    
+                    <p:column headerText="Responsável">
+                        <p:cellEditor>
+                            <f:facet name="output">
+                                <h:outputText value="#{esc.idResponsavel}" />
                             </f:facet>
-                            <h:outputText value="#{item.idResponsavel}"/>
-                        </h:column>
-                        <h:column>
-                            <f:facet name="header">
-                                <h:outputText value="#{bundle.ListEscopoTitle_descricao}"/>
+                            <f:facet name="input">
+                                <p:inputText id="IdRespInput" value="#{esc.idResponsavel}" style="width:100%"/>
                             </f:facet>
-                            <h:outputText value="#{item.descricao}"/>
-                        </h:column>
-                        <h:column>
-                            <f:facet name="header">
-                                <h:outputText value="#{bundle.ListEscopoTitle_dataCriacao}"/>
+                        </p:cellEditor>
+                    </p:column>
+                    
+                    <p:column headerText="Descrição">
+                        <p:cellEditor>
+                            <f:facet name="output">
+                                <h:outputText value="#{esc.descricao}" />
                             </f:facet>
-                            <h:outputText value="#{item.dataCriacao}">
-                                <f:convertDateTime pattern="MM/dd/yyyy" />
-                            </h:outputText>
-                        </h:column>
-                        <h:column>
-                            <f:facet name="header">
-                                <h:outputText value="#{bundle.ListEscopoTitle_empresa}"/>
+                            <f:facet name="input">
+                                <p:inputText id="DescInput" value="#{esc.descricao}" style="width:100%"/>
                             </f:facet>
-                            <h:outputText value="#{item.empresa}"/>
-                        </h:column>
-                        <h:column>
-                            <f:facet name="header">
-                                <h:outputText value="&nbsp;"/>
+                        </p:cellEditor>
+                    </p:column>
+                    
+                    <p:column headerText="Data Criação">
+                        <p:cellEditor>
+                            <f:facet name="output">
+                                <h:outputText value="#{esc.dataCriacao}">
+                                    <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                </h:outputText>
                             </f:facet>
-                            <h:commandLink action="#{escopoController.prepareView}" value="Associar"/>
-                            <h:outputText value=" "/>
-                            <h:commandLink action="#{escopoVulController.editEscopoVul(item)}" value="Definir Risco"/>
-                            <h:outputText value=" "/>
-                            <h:commandLink action="#{escopoController.prepareEdit}" value="#{bundle.ListEscopoEditLink}"/>
-                            <h:outputText value=" "/>
-                            <h:commandLink action="#{escopoController.destroy}" value="#{bundle.ListEscopoDestroyLink}"/>
-                        </h:column>
-                    </h:dataTable>
-                </h:panelGroup>
+                            <f:facet name="input">
+                                <p:inputText id="DataCriInput" value="#{esc.dataCriacao}" style="width:100%">
+                                    <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                </p:inputText>
+                            </f:facet>
+                        </p:cellEditor>
+                    </p:column>
+                    
+                    <p:column headerText="Associar Vul" style="width:100px;text-align: center">
+                        <p:commandButton icon="ui-icon-search" action="#{escopoController.prepareView}"/>
+                    </p:column>
+                    
+                    <p:column headerText="Definir Risco" style="width:100px;text-align: center">
+                        <p:commandButton icon="ui-icon-search" action="#{escopoVulController.editEscopoVul(esc)}"/>
+                    </p:column>
+                    
+                    <p:column headerText="Relatório" style="width:100px;text-align: center">
+                        <p:commandButton icon="ui-icon-search" action="relatorio.jsf"/>
+                    </p:column>
+                </p:dataTable>                
                 <br />
-                <h:commandButton action="#{escopoController.prepareCreate}" value="#{bundle.ListEscopoCreateLink}"/>
+                <b:commandButton value="Criar Escopo" action="CreateEscopo.jsf"/>
             </h:form>
         </ui:define>
-    </ui:decorate>
+    </ui:composition>
 
 </html>

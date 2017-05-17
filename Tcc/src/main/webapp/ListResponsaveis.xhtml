@@ -1,50 +1,41 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
-
-    <ui:decorate template="/template_usuario.xhtml">
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <ui:composition template="/template_usuario.xhtml">
         <ui:define name="centro">
-            <h:form styleClass="jsfcrud_list_form">
-                <h:panelGroup id="messagePanel" layout="block">
-                    <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
-                </h:panelGroup>
-                <h:outputText escape="false" value="#{bundle.ListResponsaveisEmpty}" rendered="#{responsaveisController.items.rowCount == 0}"/>
-                <h:panelGroup rendered="#{responsaveisController.items.rowCount > 0}">
-                    <h:outputText value="#{responsaveisController.pagination.pageFirstItem + 1}..#{responsaveisController.pagination.pageLastItem + 1}/#{responsaveisController.pagination.itemsCount}"/>&nbsp;
-                    <h:commandLink action="#{responsaveisController.previous}" value="#{bundle.Previous} #{responsaveisController.pagination.pageSize}" rendered="#{responsaveisController.pagination.hasPreviousPage}"/>&nbsp;
-                    <h:commandLink action="#{responsaveisController.next}" value="#{bundle.Next} #{responsaveisController.pagination.pageSize}" rendered="#{responsaveisController.pagination.hasNextPage}"/>&nbsp;
-                    <h:dataTable value="#{responsaveisController.items}" var="item" border="0" cellpadding="2" cellspacing="0" rowClasses="jsfcrud_odd_row,jsfcrud_even_row" rules="all" style="border:solid 1px">
-                        <h:column>
-                            <f:facet name="header">
-                                <h:outputText value="#{bundle.ListResponsaveisTitle_idResponsavel}"/>
+            <h:form id="form">
+                <p:dataTable id="responsaveis" var="resp" value="#{responsaveisController.items}" editable="true" style="margin-bottom:20px"
+                             rows="10" paginator="true"
+                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
+                    
+                    <p:ajax event="rowEdit" listener="#{responsaveisController.onRowEdit}" update=":principal:msgs" />
+                    <p:ajax event="rowEditCancel" listener="#{responsaveisController.onRowCancel}" update=":principal:msgs" />
+
+                    <p:column headerText="Nome">
+                        <p:cellEditor>
+                            <f:facet name="output">
+                                <h:outputText value="#{resp.nome}" />
                             </f:facet>
-                            <h:outputText value="#{item.idResponsavel}"/>
-                        </h:column>
-                        <h:column>
-                            <f:facet name="header">
-                                <h:outputText value="#{bundle.ListResponsaveisTitle_nome}"/>
+                            <f:facet name="input">
+                                <p:inputText id="NomeInput" value="#{resp.nome}" style="width:100%"/>
                             </f:facet>
-                            <h:outputText value="#{item.nome}"/>
-                        </h:column>
-                        <h:column>
-                            <f:facet name="header">
-                                <h:outputText value="&nbsp;"/>
-                            </f:facet>
-                            <h:commandLink action="#{responsaveisController.prepareView}" value="#{bundle.ListResponsaveisViewLink}"/>
-                            <h:outputText value=" "/>
-                            <h:commandLink action="#{responsaveisController.prepareEdit}" value="#{bundle.ListResponsaveisEditLink}"/>
-                            <h:outputText value=" "/>
-                            <h:commandLink action="#{responsaveisController.destroy}" value="#{bundle.ListResponsaveisDestroyLink}"/>
-                        </h:column>
-                    </h:dataTable>
-                </h:panelGroup>
+                        </p:cellEditor>
+                    </p:column>
+                    
+                    <p:column style="width:32px">
+                        <p:rowEditor />
+                    </p:column>
+                </p:dataTable>
                 <br />
-                <h:commandButton action="#{responsaveisController.prepareCreate}" value="#{bundle.ListResponsaveisCreateLink}"/>
+                <br />
+                <b:commandButton value="Criar REsponsável" action="CreateResponsaveis.jsf"/>
             </h:form>
         </ui:define>
-    </ui:decorate>
+    </ui:composition>
 
 </html>

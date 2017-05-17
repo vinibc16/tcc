@@ -1,26 +1,36 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:p="http://primefaces.org/ui">
-    <ui:decorate template="/template.xhtml">
-        <ui:define name="menu">
-            <h:form>
-                <p:menu style="width: 200px">
-                    <p:submenu label="Vulnerabilidades">
-                        <p:menuitem value="Criar" outcome="CreateVulUser.jsf"/>
-                        <p:menuitem value="Listar" outcome="ListVulUser.jsf"/>
-                    </p:submenu>
-                    <p:submenu label="Responsaveis">
-                        <p:menuitem value="Criar" outcome="CreateResponsaveis.jsf"/>
-                        <p:menuitem value="Listar" outcome="ListResponsaveis.jsf"/>
-                    </p:submenu>
-                    <p:submenu label="Escopo">
-                        <p:menuitem value="Criar" outcome="CreateEscopo.jsf"/>
-                        <p:menuitem value="Listar" outcome="ListEscopo.jsf"/>
-                    </p:submenu>
-                    <p:menuitem value="Logout" icon="ui-icon-key" action="#{usuarioController.logout}" /> 
-                </p:menu>
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <h:head>
+        <title>Tcc</title>
+        <style type="text/css">
+            .body-sigin {
+                background-color: #31b0d5;
+                padding-top: 100px;
+            }
+        </style>
+    </h:head>
+    <h:body styleClass="body-sigin">
+        <h:form>
+            <b:navBar brand="Inicio" brandHref="home.jsf" fixed="top" inverse="true">
+                <b:navbarLinks>
+                    <b:navLink value="Vulnerabilidades" href="ListVulUser.jsf"></b:navLink>
+                    <b:navLink value="Responsáveis" href="ListResponsaveis.jsf"></b:navLink>
+                    <b:navLink value="Escopos" href="ListEscopo.jsf"></b:navLink>
+                    <b:navCommandLink value="Logout" actionListener="#{usuarioController.logout()}"></b:navCommandLink>
+                </b:navbarLinks>
+            </b:navBar>
+        </h:form>
+        <b:container>
+            <h:form id="principal">
+                <p:growl id="msgs" showDetail="true"/>
+                <ui:insert name="centro"/>
             </h:form>
-        </ui:define>
-    </ui:decorate>
+        </b:container>
+
+    </h:body>
 </html>

@@ -10,6 +10,7 @@ import java.util.ResourceBundle;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
@@ -17,12 +18,15 @@ import javax.faces.convert.FacesConverter;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
+import org.primefaces.event.RowEditEvent;
+import pucrs.br.entity.Usuario;
 
 @Named("empresaController")
 @SessionScoped
 public class EmpresaController implements Serializable {
 
     private Empresa current;
+    private Empresa newEmpresa;
     private DataModel items = null;
     @EJB
     private pucrs.br.bean.EmpresaFacade ejbFacade;
@@ -39,6 +43,14 @@ public class EmpresaController implements Serializable {
         }
         return current;
     }
+    
+    public Empresa getSelectedNew() {
+        if (newEmpresa == null) {
+            newEmpresa = new Empresa();
+            selectedItemIndex = -1;
+        }
+        return newEmpresa;
+    }
 
     private EmpresaFacade getFacade() {
         return ejbFacade;
@@ -46,7 +58,7 @@ public class EmpresaController implements Serializable {
 
     public PaginationHelper getPagination() {
         if (pagination == null) {
-            pagination = new PaginationHelper(10) {
+            pagination = new PaginationHelper(1000) {
 
                 @Override
                 public int getItemsCount() {
@@ -74,14 +86,14 @@ public class EmpresaController implements Serializable {
     }
 
     public String prepareCreate() {
-        current = new Empresa();
+        newEmpresa = new Empresa();
         selectedItemIndex = -1;
         return "CreateEmpresa";
     }
 
     public String create() {
         try {
-            getFacade().create(current);
+            getFacade().create(newEmpresa);
             JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("EmpresaCreated"));
             return prepareCreate();
         } catch (Exception e) {
@@ -230,6 +242,16 @@ public class EmpresaController implements Serializable {
             }
         }
 
+    }
+    
+    public void onRowEdit(RowEditEvent event) {
+        current = ((Empresa) event.getObject());
+        update();
+    }
+     
+    public void onRowCancel(RowEditEvent event) {
+        FacesMessage msg = new FacesMessage("Empresa Cancelled", ((Empresa) event.getObject()).getNome());
+        FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 
 }

@@ -1,34 +1,26 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:b="http://bootsfaces.net/ui">
 
     <ui:decorate template="/template_admin.xhtml">
         <ui:define name="centro">
-            <h:panelGroup id="messagePanel" layout="block">
-                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
-            </h:panelGroup>
             <h:form>
-                <h:panelGrid columns="2">
-                    <h:outputLabel value="#{bundle.CreateVulnerabilidadeLabel_nome}" for="nome" />
-                    <h:inputText id="nome" value="#{vulnerabilidadeController.selected.nome}" title="#{bundle.CreateVulnerabilidadeTitle_nome}" required="true" requiredMessage="#{bundle.CreateVulnerabilidadeRequiredMessage_nome}"/>
-                    <h:outputLabel value="#{bundle.CreateVulnerabilidadeLabel_descricao}" for="descricao" />
-                    <h:inputText id="descricao" value="#{vulnerabilidadeController.selected.descricao}" title="#{bundle.CreateVulnerabilidadeTitle_descricao}" required="true" requiredMessage="#{bundle.CreateVulnerabilidadeRequiredMessage_descricao}"/>
-                    <h:outputLabel value="#{bundle.CreateVulnerabilidadeLabel_nível}" for="nível" />
-                    <h:inputText id="nível" value="#{vulnerabilidadeController.selected.nível}" title="#{bundle.CreateVulnerabilidadeTitle_nível}" required="true" requiredMessage="#{bundle.CreateVulnerabilidadeRequiredMessage_nível}"/>
-                    <h:outputLabel value="#{bundle.CreateVulnerabilidadeLabel_acoes}" for="acoes" />
-                    <h:inputText id="acoes" value="#{vulnerabilidadeController.selected.acoes}" title="#{bundle.CreateVulnerabilidadeTitle_acoes}" required="true" requiredMessage="#{bundle.CreateVulnerabilidadeRequiredMessage_acoes}"/>
-                    <h:outputLabel value="#{bundle.CreateVulnerabilidadeLabel_fonte}" for="fonte" />
-                    <h:inputText id="fonte" value="#{vulnerabilidadeController.selected.fonte}" title="#{bundle.CreateVulnerabilidadeTitle_fonte}" required="true" requiredMessage="#{bundle.CreateVulnerabilidadeRequiredMessage_fonte}"/>
-                    <h:outputLabel value="#{bundle.CreateVulnerabilidadeLabel_dataCriacao}" for="dataCriacao" />
-                    <h:inputText id="dataCriacao" value="#{vulnerabilidadeController.selected.dataCriacao}" title="#{bundle.CreateVulnerabilidadeTitle_dataCriacao}" required="true" requiredMessage="#{bundle.CreateVulnerabilidadeRequiredMessage_dataCriacao}">
-                        <f:convertDateTime pattern="MM/dd/yyyy" />
-                    </h:inputText>
-                </h:panelGrid>
+                <b:panel>
+                    <b:inputText label="Nome" id="nome" value="#{vulnerabilidadeController.selectedNew.nome}" required="true"/>
+                    <b:inputText label="Descrição" id="descricao" value="#{vulnerabilidadeController.selectedNew.descricao}" required="true"/>
+                    <b:inputText label="Nível" id="nivel" value="#{vulnerabilidadeController.selectedNew.nivel}" required="true"/>
+                    <b:inputText label="Ações" id="acoes" value="#{vulnerabilidadeController.selectedNew.acoes}" required="true"/>
+                    <b:inputText label="Fonte" id="fonte" value="#{vulnerabilidadeController.selectedNew.fonte}" required="true"/>
+                    <b:inputText label="Data Criação" id="dataCriacao" value="#{vulnerabilidadeController.selectedNew.dataCriacao}" required="true">
+                        <f:convertDateTime pattern="dd/MM/yyyy"/>
+                    </b:inputText>
+                </b:panel>
                 <br />
-                <h:commandButton action="#{vulnerabilidadeController.create}" value="#{bundle.CreateVulnerabilidadeSaveLink}" />
+                <b:commandButton action="#{vulnerabilidadeController.create}" value="#{bundle.CreateUsuarioSaveLink}" />
             </h:form>
         </ui:define>
     </ui:decorate>

@@ -10,6 +10,7 @@ import java.util.ResourceBundle;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
@@ -17,13 +18,16 @@ import javax.faces.convert.FacesConverter;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
+import org.primefaces.event.RowEditEvent;
 import pucrs.br.bean.VulnerabilidadeFacade;
+import pucrs.br.entity.Empresa;
 
 @Named("vulnerabilidadeController")
 @SessionScoped
 public class VulnerabilidadeController implements Serializable {
 
     private Vulnerabilidade current;
+    private Vulnerabilidade newVul;
     private DataModel items = null;
     @EJB
     private pucrs.br.bean.VulnerabilidadeFacade ejbFacade;
@@ -40,6 +44,14 @@ public class VulnerabilidadeController implements Serializable {
         }
         return current;
     }
+    
+    public Vulnerabilidade getSelectedNew() {
+        if (newVul == null) {
+            newVul = new Vulnerabilidade();
+            selectedItemIndex = -1;
+        }
+        return newVul;
+    }
 
     private VulnerabilidadeFacade getFacade() {
         return ejbFacade;
@@ -47,7 +59,7 @@ public class VulnerabilidadeController implements Serializable {
 
     public PaginationHelper getPagination() {
         if (pagination == null) {
-            pagination = new PaginationHelper(10) {
+            pagination = new PaginationHelper(1000) {
 
                 @Override
                 public int getItemsCount() {
@@ -75,14 +87,14 @@ public class VulnerabilidadeController implements Serializable {
     }
 
     public String prepareCreate() {
-        current = new Vulnerabilidade();
+        newVul = new Vulnerabilidade();
         selectedItemIndex = -1;
         return "CreateVul";
     }
 
     public String create() {
         try {
-            getFacade().create(current);
+            getFacade().create(newVul);
             JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("VulnerabilidadeCreated"));
             return prepareCreate();
         } catch (Exception e) {
@@ -231,5 +243,15 @@ public class VulnerabilidadeController implements Serializable {
             }
         }
 
+    }
+    
+    public void onRowEdit(RowEditEvent event) {
+        current = ((Vulnerabilidade) event.getObject());
+        update();
+    }
+     
+    public void onRowCancel(RowEditEvent event) {
+        FacesMessage msg = new FacesMessage("Vulnerabilidade Cancelled", ((Vulnerabilidade) event.getObject()).getNome());
+        FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 }

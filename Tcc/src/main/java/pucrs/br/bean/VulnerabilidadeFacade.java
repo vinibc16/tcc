@@ -7,7 +7,9 @@ package pucrs.br.bean;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import pucrs.br.entity.Empresa;
 import pucrs.br.entity.Vulnerabilidade;
 
 /**
@@ -29,4 +31,16 @@ public class VulnerabilidadeFacade extends AbstractFacade<Vulnerabilidade> {
         super(Vulnerabilidade.class);
     }
     
+    public boolean existeVul(int idVul) {
+
+        try {
+            Vulnerabilidade vulnerabilidade = (Vulnerabilidade) em
+                    .createQuery(
+                            "SELECT u from Vulnerabilidade u where u.id_vulnerabilidade = :idVul")
+                    .setParameter("idVul", idVul).getSingleResult();
+            return vulnerabilidade != null;
+        } catch (NoResultException e) {
+            return false;
+        }
+    }
 }

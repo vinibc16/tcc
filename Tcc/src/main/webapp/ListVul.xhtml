@@ -1,76 +1,98 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
 
     <ui:decorate template="/template_admin.xhtml">
         <ui:define name="centro">
-            <h:form styleClass="jsfcrud_list_form">
-                <h:panelGroup id="messagePanel" layout="block">
-                    <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
-                </h:panelGroup>
-                <h:outputText escape="false" value="#{bundle.ListVulnerabilidadeEmpty}" rendered="#{vulnerabilidadeController.items.rowCount == 0}"/>
-                <h:panelGroup rendered="#{vulnerabilidadeController.items.rowCount > 0}">
-                    <h:outputText value="#{vulnerabilidadeController.pagination.pageFirstItem + 1}..#{vulnerabilidadeController.pagination.pageLastItem + 1}/#{vulnerabilidadeController.pagination.itemsCount}"/>&nbsp;
-                    <h:commandLink action="#{vulnerabilidadeController.previous}" value="#{bundle.Previous} #{vulnerabilidadeController.pagination.pageSize}" rendered="#{vulnerabilidadeController.pagination.hasPreviousPage}"/>&nbsp;
-                    <h:commandLink action="#{vulnerabilidadeController.next}" value="#{bundle.Next} #{vulnerabilidadeController.pagination.pageSize}" rendered="#{vulnerabilidadeController.pagination.hasNextPage}"/>&nbsp;
-                    <h:dataTable value="#{vulnerabilidadeController.items}" var="item" border="0" cellpadding="2" cellspacing="0" rowClasses="jsfcrud_odd_row,jsfcrud_even_row" rules="all" style="border:solid 1px">
-                        <h:column>
-                            <f:facet name="header">
-                                <h:outputText value="#{bundle.ListVulnerabilidadeTitle_idVulnerabilidade}"/>
+            <h:form id="form">
+                <p:dataTable id="vulnerabilidade" var="vul" value="#{vulnerabilidadeController.items}" editable="true" style="margin-bottom:20px"
+                             rows="10" paginator="true"
+                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
+                    
+                    <p:ajax event="rowEdit" listener="#{vulnerabilidadeController.onRowEdit}" update=":principal:msgs" />
+                    <p:ajax event="rowEditCancel" listener="#{vulnerabilidadeController.onRowCancel}" update=":principal:msgs" />
+
+                    <p:column headerText="Nome">
+                        <p:cellEditor>
+                            <f:facet name="output">
+                                <h:outputText value="#{vul.nome}" />
                             </f:facet>
-                            <h:outputText value="#{item.idVulnerabilidade}"/>
-                        </h:column>
-                        <h:column>
-                            <f:facet name="header">
-                                <h:outputText value="#{bundle.ListVulnerabilidadeTitle_nome}"/>
+                            <f:facet name="input">
+                                <p:inputText id="NomeInput" value="#{vul.nome}" style="width:100%"/>
                             </f:facet>
-                            <h:outputText value="#{item.nome}"/>
-                        </h:column>
-                        <h:column>
-                            <f:facet name="header">
-                                <h:outputText value="#{bundle.ListVulnerabilidadeTitle_descricao}"/>
+                        </p:cellEditor>
+                    </p:column>
+                    
+                    <p:column headerText="Descrição">
+                        <p:cellEditor>
+                            <f:facet name="output">
+                                <h:outputText value="#{vul.descricao}" />
                             </f:facet>
-                            <h:outputText value="#{item.descricao}"/>
-                        </h:column>
-                        <h:column>
-                            <f:facet name="header">
-                                <h:outputText value="#{bundle.ListVulnerabilidadeTitle_nível}"/>
+                            <f:facet name="input">
+                                <p:inputText id="DescricaoInput" value="#{vul.descricao}" style="width:100%"/>
                             </f:facet>
-                            <h:outputText value="#{item.nível}"/>
-                        </h:column>
-                        <h:column>
-                            <f:facet name="header">
-                                <h:outputText value="#{bundle.ListVulnerabilidadeTitle_acoes}"/>
+                        </p:cellEditor>
+                    </p:column>
+                    
+                    <p:column headerText="Nível">
+                        <p:cellEditor>
+                            <f:facet name="output">
+                                <h:outputText value="#{vul.nivel}" />
                             </f:facet>
-                            <h:outputText value="#{item.acoes}"/>
-                        </h:column>
-                        <h:column>
-                            <f:facet name="header">
-                                <h:outputText value="#{bundle.ListVulnerabilidadeTitle_fonte}"/>
+                            <f:facet name="input">
+                                <p:inputText id="NivelInput" value="#{vul.nivel}" style="width:100%"/>
                             </f:facet>
-                            <h:outputText value="#{item.fonte}"/>
-                        </h:column>
-                        <h:column>
-                            <f:facet name="header">
-                                <h:outputText value="#{bundle.ListVulnerabilidadeTitle_dataCriacao}"/>
+                        </p:cellEditor>
+                    </p:column>
+                    
+                    <p:column headerText="Ações">
+                        <p:cellEditor>
+                            <f:facet name="output">
+                                <h:outputText value="#{vul.acoes}" />
                             </f:facet>
-                            <h:outputText value="#{item.dataCriacao}">
-                                <f:convertDateTime pattern="MM/dd/yyyy" />
-                            </h:outputText>
-                        </h:column>
-                        <h:column>
-                            <f:facet name="header">
-                                <h:outputText value="&nbsp;"/>
+                            <f:facet name="input">
+                                <p:inputText id="AcoesInput" value="#{vul.acoes}" style="width:100%"/>
                             </f:facet>
-                            <h:commandLink action="#{vulnerabilidadeController.prepareEdit}" value="#{bundle.ListVulnerabilidadeEditLink}"/>
-                            <h:outputText value=" "/>
-                            <h:commandLink action="#{vulnerabilidadeController.destroy}" value="#{bundle.ListVulnerabilidadeDestroyLink}"/>
-                        </h:column>
-                    </h:dataTable>
-                </h:panelGroup>
+                        </p:cellEditor>
+                    </p:column>
+                    
+                    <p:column headerText="Fonte">
+                        <p:cellEditor>
+                            <f:facet name="output">
+                                <h:outputText value="#{vul.fonte}" />
+                            </f:facet>
+                            <f:facet name="input">
+                                <p:inputText id="FonteInput" value="#{vul.fonte}" style="width:100%"/>
+                            </f:facet>
+                        </p:cellEditor>
+                    </p:column>
+                    
+                    <p:column headerText="Data Criação">
+                        <p:cellEditor>
+                            <f:facet name="output">
+                                <h:outputText value="#{vul.dataCriacao}">
+                                    <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                </h:outputText>
+                            </f:facet>
+                            <f:facet name="input">
+                                <p:inputText id="DataCriacaoInput" value="#{vul.dataCriacao}" style="width:100%">
+                                    <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                </p:inputText>
+                            </f:facet>
+                        </p:cellEditor>
+                    </p:column>
+                    
+                    <p:column style="width:32px">
+                        <p:rowEditor />
+                    </p:column>
+                </p:dataTable>
+                <br />
+                <b:commandButton value="Criar Vulnerabilidade" action="CreateVul.jsf"/>
             </h:form>
         </ui:define>
     </ui:decorate>

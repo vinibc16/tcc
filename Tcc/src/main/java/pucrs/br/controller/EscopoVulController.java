@@ -72,7 +72,7 @@ public class EscopoVulController implements Serializable {
 
     public PaginationHelper getPagination() {
         if (pagination == null) {
-            pagination = new PaginationHelper(10) {
+            pagination = new PaginationHelper(1000) {
 
                 @Override
                 public int getItemsCount() {
@@ -151,7 +151,7 @@ public class EscopoVulController implements Serializable {
             current.getEscopoVulPK().setIdVulnerabilidade(current.getVulnerabilidade().getIdVulnerabilidade());
             getFacade().edit(current);
             JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("EscopoVulUpdated"));
-            return "ViewEscopoVul";
+            return "";
         } catch (Exception e) {
             JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
             return null;
@@ -321,20 +321,21 @@ public class EscopoVulController implements Serializable {
     }
     
     public String editEscopoVul(Escopo escopo) {
-        //lista.clear();
         recreateModel();
-        //current = (EscopoVul) getItems().getRowData();
-        //selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();        
         escopoPag = escopo;
         lista = getPagination2().createPageDataModel();
+        System.out.println("Id Escopo ->"+escopo.getEscopoPK().getIdEscopo());
         listaApontamento = getFacade().findAllfindByIdEscopo(escopo);
         System.out.println(""+listaApontamento.size());
-        //System.out.println(lista.size());
-        //for(int i=0;i<lista.size();i++) {
+        
+        /*for(int i=0;i<listaApontamento.size();i++) {
             //lista.get(i).setEscopo(escopo);
-            //System.out.println("Aqui ->"+lista.get(i).getEscopoVulPK().getIdEscopo());
-        //}
-        return "ListEscopoVul2";
+            System.out.println("Aqui Escopo ->"+listaApontamento.get(i).getEscopoVulPK().getIdEscopo());
+            System.out.println("Aqui Vul ->"+listaApontamento.get(i).getEscopoVulPK().getIdVulnerabilidade());
+            System.out.println("Aqui Impacto ->"+listaApontamento.get(i).getImpacto());
+            System.out.println("Aqui Probabilidade ->"+listaApontamento.get(i).getProbabilidade());
+        }*/
+        return "ListEscopoVul2.jsf";
     }
 
     public DataModel getLista() {
@@ -357,15 +358,15 @@ public class EscopoVulController implements Serializable {
     public String update2() {
         try {            
             for (int i = 0; i < listaApontamento.size(); i++) {
-                System.out.println("Impacto ->"+listaApontamento.get(i).getImpacto());                
-                System.out.println("PK ->"+listaApontamento.get(i).getEscopoVulPK());
                 current = new EscopoVul();
                 current.setEscopoVulPK(listaApontamento.get(i).getEscopoVulPK());
                 current.setImpacto(listaApontamento.get(i).getImpacto());
                 current.setProbabilidade(listaApontamento.get(i).getProbabilidade());
                 getFacade().edit(current);
             }
-            return "ViewEscopoVul";
+            FacesMessage msg = new FacesMessage("EscopoVul Edited");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+            return "ListEscopo.jsf";
         } catch (Exception e) {
             return null;
         }

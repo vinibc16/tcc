@@ -27,6 +27,7 @@ import javax.persistence.Persistence;
 import javax.persistence.Query;
 import org.primefaces.event.CellEditEvent;
 import org.primefaces.event.RowEditEvent;
+import pucrs.br.entity.Empresa;
 import pucrs.br.entity.GrupoUsuario;
 
 @Named("usuarioController")
@@ -34,6 +35,8 @@ import pucrs.br.entity.GrupoUsuario;
 public class UsuarioController implements Serializable {
 
     private Usuario current;
+    private Usuario logado;
+    private Usuario newUser;
     private DataModel items = null;
     @EJB
     private pucrs.br.bean.UsuarioFacade ejbFacade;
@@ -52,6 +55,22 @@ public class UsuarioController implements Serializable {
         }
         return current;
     }
+    
+    public Usuario getSelectedNew() {
+        if (newUser == null) {
+            newUser = new Usuario();
+            selectedItemIndex = -1;
+        }
+        return newUser;
+    }
+    
+    public Usuario getLogado() {
+        if (logado == null) {
+            logado = new Usuario();
+            selectedItemIndex = -1;
+        }
+        return logado;
+    }
 
     private UsuarioFacade getFacade() {
         return ejbFacade;
@@ -59,7 +78,7 @@ public class UsuarioController implements Serializable {
 
     public PaginationHelper getPagination() {
         if (pagination == null) {
-            pagination = new PaginationHelper(10) {
+            pagination = new PaginationHelper(1000) {
 
                 @Override
                 public int getItemsCount() {
@@ -87,15 +106,20 @@ public class UsuarioController implements Serializable {
     }
 
     public String prepareCreate() {
-        current = new Usuario();
+        newUser = new Usuario();
         selectedItemIndex = -1;
         return "CreateUsuario";
     }
 
     public String create() {
         try {
-            getFacade().create(current);
-            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("UsuarioCreated"));
+            if(getFacade().existeUsuario(newUser.getId())) {
+                FacesMessage msg = new FacesMessage("Usuário ja existe");
+                FacesContext.getCurrentInstance().addMessage(null, msg);
+            } else {
+                getFacade().create(newUser);
+                JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("UsuarioCreated"));
+            }
             return prepareCreate();
         } catch (Exception e) {
             JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
@@ -245,23 +269,20 @@ public class UsuarioController implements Serializable {
     }
     
     public String envia() {
-        current = ejbFacade.getUsuario(current.getId(), current.getSenha());
-        if (current == null) {
-            current = new Usuario();
-            setMenssagem("Erro no Login!");
-            FacesContext.getCurrentInstance().addMessage(
-                    null,
-                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Usuário não encontrado!",
-                            "Erro no Login!"));
+        logado = ejbFacade.getUsuario(logado.getId(), logado.getSenha());
+        if (logado == null) {
+            logado = new Usuario();
+            FacesMessage msg = new FacesMessage("Usuário ou senha inválidos");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
             return null;
         } else {
-            return "home";
+            return "home.jsf";
         }
     }
     
     public String login() {
-        System.out.println(current.getId());
-        if (current.getId() != null) {
+        System.out.println(logado.getId());
+        if (logado.getId() != null) {
             System.out.println("Aqui logado");
             return "usuarioLogado";
         }
@@ -269,7 +290,7 @@ public class UsuarioController implements Serializable {
     }
     
     public void logout() throws IOException {
-        current = null;
+        logado = null;
         FacesContext.getCurrentInstance().getExternalContext().redirect("index.jsf");
     }
     
@@ -290,9 +311,9 @@ public class UsuarioController implements Serializable {
     }
     
     public void logado() throws IOException {
-        if (current == null) {
+        if (logado == null) {
             FacesContext.getCurrentInstance().getExternalContext().redirect("login.jsf");
-        } else if (current.getId() == null) {
+        } else if (logado.getId() == null) {
             FacesContext.getCurrentInstance().getExternalContext().redirect("login.jsf");    
         } else {
             FacesContext.getCurrentInstance().getExternalContext().redirect("home.jsf");
@@ -300,11 +321,11 @@ public class UsuarioController implements Serializable {
     }
     
     public void redireciona() throws IOException {
-        if(current.getIdGrupo().getIdGrupo() == 1) {
+        if(logado.getIdGrupo().getIdGrupo() == 1) {
             FacesContext.getCurrentInstance().getExternalContext().redirect("admin.jsf");
-        } else if(current.getIdGrupo().getIdGrupo() == 2) {
+        } else if(logado.getIdGrupo().getIdGrupo() == 2) {
             FacesContext.getCurrentInstance().getExternalContext().redirect("gestor.jsf");
-        } else if(current.getIdGrupo().getIdGrupo() == 3) {
+        } else if(logado.getIdGrupo().getIdGrupo() == 3) {
             FacesContext.getCurrentInstance().getExternalContext().redirect("usuario.jsf");
         } 
     }

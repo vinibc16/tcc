@@ -8,31 +8,28 @@
 
     <ui:decorate template="/template_usuario.xhtml">
         <ui:define name="centro">
-            <h:panelGroup id="messagePanel" layout="block">
-                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
-            </h:panelGroup>
             <h:form>
-                <h:panelGrid columns="4">
-                    <h:outputText value="#{bundle.ViewEscopoLabel_escopoPK_idEscopo}"/>
-                    <h:outputText value="#{escopoController.selected.escopoPK.idEscopo}" title="#{bundle.ViewEscopoTitle_escopoPK_idEscopo}"/>
-                    <h:outputText value="#{bundle.ViewEscopoLabel_nome}"/>
-                    <h:outputText value="#{escopoController.selected.nome}" title="#{bundle.ViewEscopoTitle_nome}"/>
-                    <h:outputText value="#{bundle.ViewEscopoLabel_idResponsavel}"/>
-                    <h:outputText value="#{escopoController.selected.idResponsavel}" title="#{bundle.ViewEscopoTitle_idResponsavel}"/>
-                    <h:outputText value="#{bundle.ViewEscopoLabel_descricao}"/>
-                    <h:outputText value="#{escopoController.selected.descricao}" title="#{bundle.ViewEscopoTitle_descricao}"/>
-                    <h:outputText value="#{bundle.ViewEscopoLabel_dataCriacao}"/>
-                    <h:outputText value="#{escopoController.selected.dataCriacao}" title="#{bundle.ViewEscopoTitle_dataCriacao}">
+                <p:panelGrid columns="4">
+                    <p:outputLabel value="#{bundle.ViewEscopoLabel_escopoPK_idEscopo}"/>
+                    <p:outputLabel value="#{escopoController.selected.escopoPK.idEscopo}" title="#{bundle.ViewEscopoTitle_escopoPK_idEscopo}"/>
+                    <p:outputLabel value="#{bundle.ViewEscopoLabel_nome}"/>
+                    <p:outputLabel value="#{escopoController.selected.nome}" title="#{bundle.ViewEscopoTitle_nome}"/>
+                    <p:outputLabel value="#{bundle.ViewEscopoLabel_idResponsavel}"/>
+                    <p:outputLabel value="#{escopoController.selected.idResponsavel}" title="#{bundle.ViewEscopoTitle_idResponsavel}"/>
+                    <p:outputLabel value="#{bundle.ViewEscopoLabel_descricao}"/>
+                    <p:outputLabel value="#{escopoController.selected.descricao}" title="#{bundle.ViewEscopoTitle_descricao}"/>
+                    <p:outputLabel value="#{bundle.ViewEscopoLabel_dataCriacao}"/>
+                    <p:outputLabel value="#{escopoController.selected.dataCriacao}" title="#{bundle.ViewEscopoTitle_dataCriacao}">
                         <f:convertDateTime pattern="dd/MM/yyyy" />
-                    </h:outputText>
-                    <h:outputText value="#{bundle.ViewEscopoLabel_empresa}"/>
-                    <h:outputText value="#{escopoController.selected.empresa}" title="#{bundle.ViewEscopoTitle_empresa}"/>
-                </h:panelGrid>
+                    </p:outputLabel>
+                    <p:outputLabel value="#{bundle.ViewEscopoLabel_empresa}"/>
+                    <p:outputLabel value="#{escopoController.selected.empresa}" title="#{bundle.ViewEscopoTitle_empresa}"/>
+                </p:panelGrid>
                 <br />                
             </h:form>
             <h:form>
                 <p:dataTable id="checkboxVul" var="item" value="#{vulnerabilidadeController.items}" selection="#{escopoController.selectedVul}" rowKey="#{item.idVulnerabilidade}" style="margin-bottom:0">
-                    <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
+                    <p:column selectionMode="multiple" style="width:50px;text-align:center"/>
                     <p:column headerText="ID Vulnerabilidade">
                         <h:outputText value="#{item.idVulnerabilidade}"/>
                     </p:column>

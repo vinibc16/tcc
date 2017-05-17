@@ -3,32 +3,24 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:p="http://primefaces.org/ui"
-      xmlns:f="http://java.sun.com/jsf/core">
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:b="http://bootsfaces.net/ui">
     <ui:decorate template="/template_admin.xhtml">
         <ui:define name="centro">
-            <h:panelGroup id="messagePanel" layout="block">
-                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
-            </h:panelGroup>
             <h:form>
-                <h:panelGrid columns="2">
-                    <h:outputLabel value="#{bundle.CreateUsuarioLabel_id}" for="id" />
-                    <h:inputText id="id" value="#{usuarioController.selected.id}" title="#{bundle.CreateUsuarioTitle_id}" required="true" requiredMessage="#{bundle.CreateUsuarioRequiredMessage_id}"/>
-                    <h:outputLabel value="#{bundle.CreateUsuarioLabel_usuario}" for="usuario" />
-                    <h:inputText id="usuario" value="#{usuarioController.selected.usuario}" title="#{bundle.CreateUsuarioTitle_usuario}" required="true" requiredMessage="#{bundle.CreateUsuarioRequiredMessage_usuario}"/>
-                    <h:outputLabel value="#{bundle.CreateUsuarioLabel_senha}" for="senha" />
-                    <h:inputSecret id="senha" value="#{usuarioController.selected.senha}" title="#{bundle.CreateUsuarioTitle_senha}" required="true" requiredMessage="#{bundle.CreateUsuarioRequiredMessage_senha}"/>
-                    <h:outputLabel value="#{bundle.CreateUsuarioLabel_idEmpresa}" for="idEmpresa" />
-                    <h:selectOneMenu id="idEmpresa" value="#{usuarioController.selected.idEmpresa}" title="#{bundle.CreateUsuarioTitle_idEmpresa}" >
+                <b:panel>
+                    <b:inputText label="Id" id="id" value="#{usuarioController.selectedNew.id}" required="true"/>
+                    <b:inputText label="Usuário" id="usuario" value="#{usuarioController.selectedNew.usuario}" required="true"/>
+                    <b:inputText label="Senha" type="password" id="senha" value="#{usuarioController.selectedNew.senha}" required="true"/>
+                    <b:selectOneMenu label="Empresa" id="idEmpresa" value="#{usuarioController.selectedNew.idEmpresa}">
                         <f:selectItems value="#{empresaController.itemsAvailableSelectOne}"/>
-                    </h:selectOneMenu>
-                    <h:outputLabel value="#{bundle.CreateUsuarioLabel_idGrupo}" for="idGrupo" />
-                    <h:selectOneMenu id="idGrupo" value="#{usuarioController.selected.idGrupo}" title="#{bundle.CreateUsuarioTitle_idGrupo}" >
+                    </b:selectOneMenu>
+                    <b:selectOneMenu label="Grupo" id="idGrupo" value="#{usuarioController.selectedNew.idGrupo}">
                         <f:selectItems value="#{grupoUsuarioController.itemsAvailableSelectOne}"/>
-                    </h:selectOneMenu>
-                </h:panelGrid>
+                    </b:selectOneMenu>
+                </b:panel>
                 <br />
-                <h:commandButton action="#{usuarioController.create}" value="#{bundle.CreateUsuarioSaveLink}" />
+                <b:commandButton action="#{usuarioController.create}" value="#{bundle.CreateUsuarioSaveLink}" />
             </h:form>
         </ui:define>
     </ui:decorate>

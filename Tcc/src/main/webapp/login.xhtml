@@ -21,12 +21,12 @@
     <h:body styleClass="body-sigin">
         <b:container>
             <h:form styleClass="form-signin" prependId="false">
-                <b:inputText id="id" placeholder="Usuario" value="#{usuarioController.selected.id}" >
+                <b:inputText id="id" placeholder="Usuario" value="#{usuarioController.logado.id}" >
                     <f:facet name="prepend">
                         <b:icon name="user" />
                     </f:facet>
                 </b:inputText>
-                <b:inputText id="senha" placeholder="Password" type="password" value="#{usuarioController.selected.senha}">
+                <b:inputText id="senha" placeholder="Password" type="password" value="#{usuarioController.logado.senha}">
                     <f:facet name="prepend">
                         <b:iconAwesome name="key" />
                     </f:facet>

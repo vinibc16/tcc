@@ -13,6 +13,7 @@ import java.util.ResourceBundle;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
@@ -24,6 +25,10 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
+import org.primefaces.event.CellEditEvent;
+import org.primefaces.event.RowEditEvent;
+import org.primefaces.event.SelectEvent;
+import pucrs.br.entity.Empresa;
 import pucrs.br.entity.EscopoVul;
 import pucrs.br.entity.Vulnerabilidade;
 
@@ -32,6 +37,7 @@ import pucrs.br.entity.Vulnerabilidade;
 public class EscopoController implements Serializable {
 
     private Escopo current;
+    private Escopo escopoNew;
     private DataModel items = null;
     @EJB
     private pucrs.br.bean.EscopoFacade ejbFacade;
@@ -54,6 +60,15 @@ public class EscopoController implements Serializable {
         }
         return current;
     }
+    
+    public Escopo getSelectedNew() {
+        if (escopoNew == null) {
+            escopoNew = new Escopo();
+            escopoNew.setEscopoPK(new pucrs.br.entity.EscopoPK());
+            selectedItemIndex = -1;
+        }
+        return escopoNew;
+    }
 
     private EscopoFacade getFacade() {
         return ejbFacade;
@@ -61,7 +76,7 @@ public class EscopoController implements Serializable {
 
     public PaginationHelper getPagination() {
         if (pagination == null) {
-            pagination = new PaginationHelper(10) {
+            pagination = new PaginationHelper(1000) {
 
                 @Override
                 public int getItemsCount() {
@@ -96,16 +111,16 @@ public class EscopoController implements Serializable {
     }
 
     public String prepareCreate() {
-        current = new Escopo();
-        current.setEscopoPK(new pucrs.br.entity.EscopoPK());
+        escopoNew = new Escopo();
+        escopoNew.setEscopoPK(new pucrs.br.entity.EscopoPK());
         selectedItemIndex = -1;
         return "CreateEscopo";
     }
 
     public String create() {
         try {
-            current.getEscopoPK().setIdEmpresa(current.getEmpresa().getIdEmpresa());
-            getFacade().create(current);
+            escopoNew.getEscopoPK().setIdEmpresa(escopoNew.getEmpresa().getIdEmpresa());
+            getFacade().create(escopoNew);
             JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("EscopoCreated"));
             return prepareCreate();
         } catch (Exception e) {
@@ -271,6 +286,39 @@ public class EscopoController implements Serializable {
 
     public void setSelectedVul(List<Vulnerabilidade> selectedVul) {
         this.selectedVul = selectedVul;
+    }
+    
+    public void onRowEdit(RowEditEvent event) {
+        current = ((Escopo) event.getObject());
+        update();
+    }
+     
+    public void onRowCancel(RowEditEvent event) {
+        FacesMessage msg = new FacesMessage("Escopo Cancelled", ((Escopo) event.getObject()).getNome());
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+    
+    public void onCellEdit(CellEditEvent event) {
+        Object oldValue = event.getOldValue();
+        Object newValue = event.getNewValue();
+         
+        if(newValue != null && !newValue.equals(oldValue)) {
+            selectedItemIndex  = event.getRowIndex();
+            current = (Escopo)items.getRowData();
+            update();
+        }
+    }
+    
+    public String relatorio(Escopo escopo) {
+        current = (Escopo) getItems().getRowData();
+        selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
+        //Popular lista de vul
+        selectedVul.clear();
+        for(int i=0;i<current.getEscopoVulList().size();i++) {
+            System.out.println(current.getEscopoVulList().get(i).getVulnerabilidade());
+            selectedVul.add(current.getEscopoVulList().get(i).getVulnerabilidade());
+        }
+        return "relatorio.jsf";
     }
     
 }

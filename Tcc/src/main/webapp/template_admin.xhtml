@@ -4,6 +4,7 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:b="http://bootsfaces.net/ui"
+      xmlns:p="http://primefaces.org/ui"
       xmlns:ui="http://java.sun.com/jsf/facelets">
     <h:head>
         <title>Tcc</title>
@@ -27,6 +28,7 @@
         </h:form>
         <b:container>
             <h:form id="principal">
+                <p:growl id="msgs" showDetail="true"/>
                 <ui:insert name="centro"/>
             </h:form>
         </b:container>

@@ -11,11 +11,11 @@
             <h:form>
                 <p:dataTable id="escopoVul" var="item" value="#{escopoVulController.listaApontamento}" editable="true" editMode="cell" rowKey="#{item.escopoVulPK}" style="margin-bottom:0">
                     <p:ajax event="cellEdit" listener="#{escopoVulController.onCellEdit}" />
-                    <p:column headerText="ID Vulnerabilidade">
-                        <h:outputText value="#{item.escopoVulPK.idVulnerabilidade}"/>
-                    </p:column>
                     <p:column headerText="Escopo">
                         <h:outputText value="#{item.escopoVulPK.idEscopo}"/>
+                    </p:column>
+                    <p:column headerText="ID Vulnerabilidade">
+                        <h:outputText value="#{item.escopoVulPK.idVulnerabilidade}"/>
                     </p:column>
                     <p:column headerText="Impacto">
                         <h:selectOneMenu id="impacto" value="#{item.impacto}">
