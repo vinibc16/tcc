@@ -55,8 +55,7 @@ public class EscopoVul implements Serializable {
     @JoinColumn(name = "id_vulnerabilidade", referencedColumnName = "id_vulnerabilidade", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Vulnerabilidade vulnerabilidade;
-    private int risco;
-
+    
     public EscopoVul() {
     }
 
@@ -140,14 +139,6 @@ public class EscopoVul implements Serializable {
             return false;
         }
         return true;
-    }
-
-    public int getRisco() {
-        return risco;
-    }
-
-    public void setRisco(int risco) {
-        this.risco = risco;
     }
 
     @Override

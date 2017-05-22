@@ -9,8 +9,11 @@
         <title>Tcc</title>
         <style type="text/css">
             .body-sigin {
-                background-color: #31b0d5;
                 padding-top: 100px;
+                background-image:url(imagens/iot_bg.jpg);
+            }
+            .label {
+                background: #000;
             }
         </style>
     </h:head>
@@ -22,12 +25,13 @@
                     <b:navLink value="Responsáveis" href="ListResponsaveis.jsf"></b:navLink>
                     <b:navLink value="Escopos" href="ListEscopo.jsf"></b:navLink>
                     <b:navCommandLink value="Logout" actionListener="#{usuarioController.logout()}"></b:navCommandLink>
+                    <b:label value="#{usuarioController.logado.usuario}" styleClass="label"/>
                 </b:navbarLinks>
             </b:navBar>
         </h:form>
         <b:container>
             <h:form id="principal">
-                <p:growl id="msgs" showDetail="true"/>
+                <b:growl id="msgs" showDetail="true" />
                 <ui:insert name="centro"/>
             </h:form>
         </b:container>

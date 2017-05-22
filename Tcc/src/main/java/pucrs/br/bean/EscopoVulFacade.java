@@ -47,9 +47,6 @@ public class EscopoVulFacade extends AbstractFacade<EscopoVul> {
             if (row[4] != null) {
                 esc.setImpacto((int) row[4]);
             }
-            if (row[3] != null && row[4] != null) {
-                esc.setRisco((int) row[3] * (int) row[4]);
-            }
             ev.add(esc);
         }
         return ev;

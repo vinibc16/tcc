@@ -7,6 +7,7 @@ import pucrs.br.bean.EscopoFacade;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -21,6 +22,7 @@ import javax.faces.convert.FacesConverter;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -48,7 +50,8 @@ public class EscopoController implements Serializable {
     private EntityManagerFactory factory = Persistence
             .createEntityManagerFactory("pucrs_Tcc_war_1.0PU");
     private EntityManager em = factory.createEntityManager();
-
+    @Inject
+    private UsuarioController usuarioLogado;
     public EscopoController() {
     }
 
@@ -119,7 +122,8 @@ public class EscopoController implements Serializable {
 
     public String create() {
         try {
-            escopoNew.getEscopoPK().setIdEmpresa(escopoNew.getEmpresa().getIdEmpresa());
+            escopoNew.getEscopoPK().setIdEmpresa(usuarioLogado.getLogado().getIdEmpresa().getIdEmpresa());
+            escopoNew.setDataCriacao(new Date());
             getFacade().create(escopoNew);
             JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("EscopoCreated"));
             return prepareCreate();
@@ -321,4 +325,7 @@ public class EscopoController implements Serializable {
         return "relatorio.jsf";
     }
     
+    public boolean visibleRelatorio() {
+        return usuarioLogado.getLogado().getIdGrupo().getIdGrupo() == 2;
+    }
 }

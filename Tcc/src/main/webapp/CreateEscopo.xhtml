@@ -3,12 +3,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
       xmlns:b="http://bootsfaces.net/ui">
     <ui:decorate template="/template_usuario.xhtml">
         <ui:define name="centro">
             <h:form>
                 <b:panel>
-                    <b:inputText label="Id Escopo" id="idEscopo" value="#{escopoController.selectedNew.escopoPK.idEscopo}" required="true"/>
+                    <b:inputText label="Id Escopo" id="idEscopo" value="#{escopoController.selectedNew.escopoPK.idEscopo}" type="number" required="true"/>
                     <b:inputText label="Nome" id="nome" value="#{escopoController.selectedNew.nome}"/>
                     <b:inputText label="Responsável" id="responsavel" value="#{escopoController.selectedNew.idResponsavel}"/>
                     <b:inputText label="Descrição" id="descricao" value="#{escopoController.selectedNew.descricao}"/>

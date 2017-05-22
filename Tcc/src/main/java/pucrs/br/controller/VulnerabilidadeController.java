@@ -89,7 +89,7 @@ public class VulnerabilidadeController implements Serializable {
     public String prepareCreate() {
         newVul = new Vulnerabilidade();
         selectedItemIndex = -1;
-        return "CreateVul";
+        return "";
     }
 
     public String create() {

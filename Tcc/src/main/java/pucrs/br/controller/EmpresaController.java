@@ -34,6 +34,7 @@ public class EmpresaController implements Serializable {
     private int selectedItemIndex;
 
     public EmpresaController() {
+        System.out.println("Debug -> EmpresaController criada");
     }
 
     public Empresa getSelected() {
