@@ -372,6 +372,21 @@ public class EscopoVulController implements Serializable {
         }
     }
     
+    public String update3() {
+        try {            
+            for (int i = 0; i < listaApontamento.size(); i++) {
+                current = new EscopoVul();
+                current.setEscopoVulPK(listaApontamento.get(i).getEscopoVulPK());
+                getFacade().edit(current);
+            }
+            FacesMessage msg = new FacesMessage("EscopoVul Edited");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+            return "ListEscopo.jsf";
+        } catch (Exception e) {
+            return null;
+        }
+    }
+    
     public void onRowEdit(RowEditEvent event) {
         FacesMessage msg = new FacesMessage("EscopoVul Edited");
         FacesContext.getCurrentInstance().addMessage(null, msg);

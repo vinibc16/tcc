@@ -72,11 +72,11 @@
                         <p:commandButton icon="ui-icon-search" action="#{escopoVulController.editEscopoVul(esc)}"/>
                     </p:column>
                     
-                    <p:column headerText="Definir Aceite" style="width:100px;text-align: center">
+                    <p:column headerText="Definir Aceite" rendered="#{escopoController.visibleRelatorio()}" style="width:100px;text-align: center">
                         <p:commandButton icon="ui-icon-search" action="#"/>
-                    </p:column>
+                    </p:column> 
                     
-                    <p:column headerText="Relatório" style="width:100px;text-align: center">
+                    <p:column headerText="Relatório" rendered="#{escopoController.visibleRelatorio()}" style="width:100px;text-align: center">
                         <p:commandButton icon="ui-icon-search" action="#"/>
                     </p:column>
                 </p:dataTable>                
