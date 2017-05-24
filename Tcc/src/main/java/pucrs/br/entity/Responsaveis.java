@@ -6,7 +6,9 @@
 package pucrs.br.entity;
 
 import java.io.Serializable;
+import java.util.Collection;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,10 +16,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -43,6 +47,8 @@ public class Responsaveis implements Serializable {
     @Size(min = 1, max = 200)
     @Column(name = "nome")
     private String nome;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idResponsavel")
+    private Collection<Escopo> escopoCollection;
 
     public Responsaveis() {
     }
@@ -72,6 +78,15 @@ public class Responsaveis implements Serializable {
         this.nome = nome;
     }
 
+    @XmlTransient
+    public Collection<Escopo> getEscopoCollection() {
+        return escopoCollection;
+    }
+
+    public void setEscopoCollection(Collection<Escopo> escopoCollection) {
+        this.escopoCollection = escopoCollection;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -94,7 +109,7 @@ public class Responsaveis implements Serializable {
 
     @Override
     public String toString() {
-        return getNome();
+        return "pucrs.br.entity.Responsaveis[ idResponsavel=" + idResponsavel + " ]";
     }
     
 }

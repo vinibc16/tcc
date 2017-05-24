@@ -6,7 +6,7 @@
 package pucrs.br.entity;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -45,7 +45,7 @@ public class GrupoUsuario implements Serializable {
     @Column(name = "descricao")
     private String descricao;
     @OneToMany(mappedBy = "idGrupo")
-    private List<Usuario> usuarioList;
+    private Collection<Usuario> usuarioCollection;
 
     public GrupoUsuario() {
     }
@@ -76,12 +76,12 @@ public class GrupoUsuario implements Serializable {
     }
 
     @XmlTransient
-    public List<Usuario> getUsuarioList() {
-        return usuarioList;
+    public Collection<Usuario> getUsuarioCollection() {
+        return usuarioCollection;
     }
 
-    public void setUsuarioList(List<Usuario> usuarioList) {
-        this.usuarioList = usuarioList;
+    public void setUsuarioCollection(Collection<Usuario> usuarioCollection) {
+        this.usuarioCollection = usuarioCollection;
     }
 
     @Override
@@ -106,7 +106,7 @@ public class GrupoUsuario implements Serializable {
 
     @Override
     public String toString() {
-        return ""+getIdGrupo();
+        return "pucrs.br.entity.GrupoUsuario[ idGrupo=" + idGrupo + " ]";
     }
     
 }

@@ -1,10 +1,10 @@
 package pucrs.br.controller;
 
+import java.io.FileNotFoundException;
 import pucrs.br.entity.Escopo;
 import pucrs.br.controller.util.JsfUtil;
 import pucrs.br.controller.util.PaginationHelper;
 import pucrs.br.bean.EscopoFacade;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -30,9 +30,24 @@ import javax.persistence.Query;
 import org.primefaces.event.CellEditEvent;
 import org.primefaces.event.RowEditEvent;
 import org.primefaces.event.SelectEvent;
+import pucrs.br.bean.EscopoVulFacade;
 import pucrs.br.entity.Empresa;
 import pucrs.br.entity.EscopoVul;
 import pucrs.br.entity.Vulnerabilidade;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.PageSize;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
 
 @Named("escopoController")
 @SessionScoped
@@ -42,16 +57,19 @@ public class EscopoController implements Serializable {
     private Escopo escopoNew;
     private DataModel items = null;
     @EJB
-    private pucrs.br.bean.EscopoFacade ejbFacade;
+    private EscopoFacade ejbFacade;
+    @Inject
+    private EscopoVulController escopoVulContrl;
     private PaginationHelper pagination;
     private int selectedItemIndex;
     private List<Vulnerabilidade> selectedVul = new ArrayList<Vulnerabilidade>();
-    private pucrs.br.bean.EscopoVulFacade ejbFacadeEv;
     private EntityManagerFactory factory = Persistence
             .createEntityManagerFactory("pucrs_Tcc_war_1.0PU");
     private EntityManager em = factory.createEntityManager();
     @Inject
     private UsuarioController usuarioLogado;
+    private List<EscopoVul> escopovul = new ArrayList<EscopoVul>();
+    
     public EscopoController() {
     }
 
@@ -105,9 +123,10 @@ public class EscopoController implements Serializable {
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
         //Popular lista de vul
         selectedVul.clear();
-        for(int i=0;i<current.getEscopoVulList().size();i++) {
-            System.out.println(current.getEscopoVulList().get(i).getVulnerabilidade());
-            selectedVul.add(current.getEscopoVulList().get(i).getVulnerabilidade());
+        
+        escopovul = escopoVulContrl.findAllfindByIdEscopo(current);
+        for(int i=0;i<escopovul.size();i++) {
+            selectedVul.add(escopovul.get(i).getVulnerabilidade());
         }
         //selectedVul.addAll(current.getVulnerabilidadeCollection().toArray());
         return "ViewEscopo";
@@ -141,7 +160,7 @@ public class EscopoController implements Serializable {
 
     public String update() {
         try {
-            current.getEscopoPK().setIdEmpresa(current.getEmpresa().getIdEmpresa());
+            current.getEscopoPK().setIdEmpresa(current.getEscopoPK().getIdEmpresa());
             getFacade().edit(current);
             JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("EscopoUpdated"));
             return "ViewEscopo";
@@ -313,19 +332,37 @@ public class EscopoController implements Serializable {
         }
     }
     
-    public String relatorio(Escopo escopo) {
-        current = (Escopo) getItems().getRowData();
-        selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
-        //Popular lista de vul
-        selectedVul.clear();
-        for(int i=0;i<current.getEscopoVulList().size();i++) {
-            System.out.println(current.getEscopoVulList().get(i).getVulnerabilidade());
-            selectedVul.add(current.getEscopoVulList().get(i).getVulnerabilidade());
-        }
-        return "relatorio.jsf";
-    }
-    
     public boolean visibleRelatorio() {
         return usuarioLogado.getLogado().getIdGrupo().getIdGrupo() == 2;
     }
+
+    public List<EscopoVul> getEscopovul() {
+        return escopovul;
+    }
+
+    public void setEscopovul(List<EscopoVul> escopovul) {
+        this.escopovul = escopovul;
+    }
+    
+    public void gerarPdf() throws Exception {
+        String DEST = "results/relatorio.pdf";
+        File file = new File(DEST);
+        file.getParentFile().mkdirs();
+        createPdf(DEST);
+    }
+    
+    public void createPdf(String dest) throws IOException, DocumentException {
+        Document document = new Document();
+        PdfWriter.getInstance(document, new FileOutputStream(dest));
+        document.open();
+        PdfPTable table = new PdfPTable(2);
+        for(int aw = 0; aw < 8; aw++){
+            table.addCell("Id Vulnerabilidades ");
+            table.addCell("Descrição");
+        }
+        document.add(table);
+        document.close();
+        JsfUtil.addSuccessMessage("Arquivo exportado.");
+    }
+    
 }

@@ -11,7 +11,6 @@ import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -34,7 +33,9 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "EscopoVul.findByIdVulnerabilidade", query = "SELECT e FROM EscopoVul e WHERE e.escopoVulPK.idVulnerabilidade = :idVulnerabilidade"),
     @NamedQuery(name = "EscopoVul.findByDataLink", query = "SELECT e FROM EscopoVul e WHERE e.dataLink = :dataLink"),
     @NamedQuery(name = "EscopoVul.findByImpacto", query = "SELECT e FROM EscopoVul e WHERE e.impacto = :impacto"),
-    @NamedQuery(name = "EscopoVul.findByProbabilidade", query = "SELECT e FROM EscopoVul e WHERE e.probabilidade = :probabilidade")})
+    @NamedQuery(name = "EscopoVul.findByProbabilidade", query = "SELECT e FROM EscopoVul e WHERE e.probabilidade = :probabilidade"),
+    @NamedQuery(name = "EscopoVul.findByAceito", query = "SELECT e FROM EscopoVul e WHERE e.aceito = :aceito"),
+    @NamedQuery(name = "EscopoVul.findByRisco", query = "SELECT e FROM EscopoVul e WHERE e.risco = :risco")})
 public class EscopoVul implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -47,26 +48,22 @@ public class EscopoVul implements Serializable {
     private Integer impacto;
     @Column(name = "probabilidade")
     private Integer probabilidade;
-    @JoinColumns({
-        @JoinColumn(name = "id_empresa", referencedColumnName = "id_empresa", insertable = false, updatable = false),
-        @JoinColumn(name = "id_escopo", referencedColumnName = "id_escopo", insertable = false, updatable = false)})
+    @Column(name = "aceito")
+    private Integer aceito;
+    @Column(name = "risco")
+    private Integer risco;
+    @JoinColumn(name = "id_empresa", referencedColumnName = "id_empresa", insertable = false, updatable = false)
     @ManyToOne(optional = false)
-    private Escopo escopo;
+    private Empresa empresa;
     @JoinColumn(name = "id_vulnerabilidade", referencedColumnName = "id_vulnerabilidade", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Vulnerabilidade vulnerabilidade;
-    
+
     public EscopoVul() {
     }
 
     public EscopoVul(EscopoVulPK escopoVulPK) {
         this.escopoVulPK = escopoVulPK;
-    }
-    
-    public EscopoVul(EscopoVulPK escopoVulPK, int impacto, int probabilidade) {
-        this.escopoVulPK = escopoVulPK;
-        this.impacto = impacto;
-        this.probabilidade = probabilidade;
     }
 
     public EscopoVul(int idEmpresa, int idEscopo, int idVulnerabilidade) {
@@ -105,12 +102,28 @@ public class EscopoVul implements Serializable {
         this.probabilidade = probabilidade;
     }
 
-    public Escopo getEscopo() {
-        return escopo;
+    public Integer getAceito() {
+        return aceito;
     }
 
-    public void setEscopo(Escopo escopo) {
-        this.escopo = escopo;
+    public void setAceito(Integer aceito) {
+        this.aceito = aceito;
+    }
+
+    public Integer getRisco() {
+        return risco;
+    }
+
+    public void setRisco(Integer risco) {
+        this.risco = risco;
+    }
+
+    public Empresa getEmpresa() {
+        return empresa;
+    }
+
+    public void setEmpresa(Empresa empresa) {
+        this.empresa = empresa;
     }
 
     public Vulnerabilidade getVulnerabilidade() {

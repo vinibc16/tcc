@@ -13,6 +13,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import pucrs.br.entity.Escopo;
+import pucrs.br.entity.EscopoPK;
 import pucrs.br.entity.EscopoVul;
 import pucrs.br.entity.EscopoVulPK;
 
@@ -36,7 +37,7 @@ public class EscopoVulFacade extends AbstractFacade<EscopoVul> {
     }
     
     public List<EscopoVul> findAllfindByIdEscopo(Escopo escopo) {        
-        Query query = em.createNativeQuery("SELECT id_empresa, id_escopo, id_vulnerabilidade, impacto, probabilidade FROM escopo_vul e WHERE id_escopo = "+escopo.getEscopoPK().getIdEscopo());
+        Query query = em.createNativeQuery("SELECT id_empresa, id_escopo, id_vulnerabilidade, impacto, probabilidade FROM escopo_vul e WHERE id_escopo = "+escopo.getEscopoPK().getIdEscopo()+" and id_empresa = "+escopo.getEscopoPK().getIdEmpresa());
         List<Object[]> lista = query.getResultList();
         List<EscopoVul> ev = new ArrayList<>();
         for (Object[] row : lista) {
@@ -46,6 +47,9 @@ public class EscopoVulFacade extends AbstractFacade<EscopoVul> {
             }
             if (row[4] != null) {
                 esc.setImpacto((int) row[4]);
+            }
+            if (row[3] != null && row[4] != null) {
+                esc.setRisco((int)row[3] * (int)row[4]);
             }
             ev.add(esc);
         }

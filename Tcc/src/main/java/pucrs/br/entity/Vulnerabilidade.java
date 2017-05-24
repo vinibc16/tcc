@@ -6,8 +6,8 @@
 package pucrs.br.entity;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
-import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -80,7 +80,7 @@ public class Vulnerabilidade implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date dataCriacao;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "vulnerabilidade")
-    private List<EscopoVul> escopoVulList;
+    private Collection<EscopoVul> escopoVulCollection;
 
     public Vulnerabilidade() {
     }
@@ -156,12 +156,12 @@ public class Vulnerabilidade implements Serializable {
     }
 
     @XmlTransient
-    public List<EscopoVul> getEscopoVulList() {
-        return escopoVulList;
+    public Collection<EscopoVul> getEscopoVulCollection() {
+        return escopoVulCollection;
     }
 
-    public void setEscopoVulList(List<EscopoVul> escopoVulList) {
-        this.escopoVulList = escopoVulList;
+    public void setEscopoVulCollection(Collection<EscopoVul> escopoVulCollection) {
+        this.escopoVulCollection = escopoVulCollection;
     }
 
     @Override
@@ -186,7 +186,7 @@ public class Vulnerabilidade implements Serializable {
 
     @Override
     public String toString() {
-        return getNome();
+        return "pucrs.br.entity.Vulnerabilidade[ idVulnerabilidade=" + idVulnerabilidade + " ]";
     }
     
 }

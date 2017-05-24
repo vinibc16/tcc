@@ -73,11 +73,13 @@
                     </p:column>
                     
                     <p:column headerText="Definir Aceite" rendered="#{escopoController.visibleRelatorio()}" style="width:100px;text-align: center">
-                        <p:commandButton icon="ui-icon-search" action="#"/>
+                        <p:commandButton icon="ui-icon-search" action="#{escopoVulController.editAceite(esc)}"/>
                     </p:column> 
                     
                     <p:column headerText="Relatório" rendered="#{escopoController.visibleRelatorio()}" style="width:100px;text-align: center">
-                        <p:commandButton icon="ui-icon-search" action="#"/>
+                        <p:commandButton icon="ui-icon-search" ajax="false" onclick="Primefaces.monitorDownload(start, stop);">
+                        <p:fileDownload value="#{escopoController.gerarPdf()}"/>
+                        </p:commandButton>
                     </p:column>
                 </p:dataTable>                
                 <br />

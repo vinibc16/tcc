@@ -29,7 +29,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "Usuario.findAll", query = "SELECT u FROM Usuario u"),
     @NamedQuery(name = "Usuario.findById", query = "SELECT u FROM Usuario u WHERE u.id = :id"),
-    @NamedQuery(name = "Usuario.findByUsuario", query = "SELECT u FROM Usuario u WHERE u.usuario = :usuario"),
+    @NamedQuery(name = "Usuario.findByNome", query = "SELECT u FROM Usuario u WHERE u.nome = :nome"),
     @NamedQuery(name = "Usuario.findBySenha", query = "SELECT u FROM Usuario u WHERE u.senha = :senha")})
 public class Usuario implements Serializable {
 
@@ -43,15 +43,15 @@ public class Usuario implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 100)
-    @Column(name = "usuario")
-    private String usuario;
+    @Column(name = "nome")
+    private String nome;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 50)
     @Column(name = "senha")
     private String senha;
     @JoinColumn(name = "id_empresa", referencedColumnName = "id_empresa")
-    @ManyToOne
+    @ManyToOne(optional = false)
     private Empresa idEmpresa;
     @JoinColumn(name = "id_grupo", referencedColumnName = "id_grupo")
     @ManyToOne
@@ -64,9 +64,9 @@ public class Usuario implements Serializable {
         this.id = id;
     }
 
-    public Usuario(String id, String usuario, String senha) {
+    public Usuario(String id, String nome, String senha) {
         this.id = id;
-        this.usuario = usuario;
+        this.nome = nome;
         this.senha = senha;
     }
 
@@ -78,12 +78,12 @@ public class Usuario implements Serializable {
         this.id = id;
     }
 
-    public String getUsuario() {
-        return usuario;
+    public String getNome() {
+        return nome;
     }
 
-    public void setUsuario(String usuario) {
-        this.usuario = usuario;
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
     public String getSenha() {
@@ -132,7 +132,7 @@ public class Usuario implements Serializable {
 
     @Override
     public String toString() {
-        return getId();
+        return "pucrs.br.entity.Usuario[ id=" + id + " ]";
     }
     
 }

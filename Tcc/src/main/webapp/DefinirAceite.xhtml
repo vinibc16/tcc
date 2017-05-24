@@ -9,16 +9,14 @@
     <ui:decorate template="/template_usuario.xhtml">
         <ui:define name="centro">
             <h:form>
-                <p:dataTable id="escopoVul" var="item" value="#{escopoVulController.listaApontamento}" editable="true" editMode="cell" rowKey="#{item.escopoVulPK}" style="margin-bottom:0">
+                <p:dataTable id="defineaceite" var="item" value="#{escopoVulController.listaApontamento}" selection="#{escopoVulController.listaAceite}" rowKey="#{item.escopoVulPK}" style="margin-bottom:0">
                     <p:ajax event="cellEdit" listener="#{escopoVulController.onCellEdit}" />
-                    <p:column headerText="Escopo">
-                        <h:outputText value="#{item.escopoVulPK.idEscopo}"/>
-                    </p:column>
+                    <p:column selectionMode="multiple" style="width:50px;text-align:center"/>
                     <p:column headerText="ID Vulnerabilidade">
                         <h:outputText value="#{item.escopoVulPK.idVulnerabilidade}"/>
                     </p:column>
                     <f:facet name="footer">
-                        <p:commandButton process="escopoVul" value="Salvar" action="#{escopoVulController.update3}" />
+                        <p:commandButton process="defineaceite" value="Salvar" action="#{escopoVulController.update4(escopoVulController.listaAceite)}" />
                     </f:facet>
                 </p:dataTable>
             </h:form>    

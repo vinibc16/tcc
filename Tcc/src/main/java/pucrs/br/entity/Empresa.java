@@ -6,7 +6,7 @@
 package pucrs.br.entity;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -55,9 +55,9 @@ public class Empresa implements Serializable {
     @Column(name = "funcionarios")
     private Integer funcionarios;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "empresa")
-    private List<Escopo> escopoList;
-    @OneToMany(mappedBy = "idEmpresa")
-    private List<Usuario> usuarioList;
+    private Collection<EscopoVul> escopoVulCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idEmpresa")
+    private Collection<Usuario> usuarioCollection;
 
     public Empresa() {
     }
@@ -104,21 +104,21 @@ public class Empresa implements Serializable {
     }
 
     @XmlTransient
-    public List<Escopo> getEscopoList() {
-        return escopoList;
+    public Collection<EscopoVul> getEscopoVulCollection() {
+        return escopoVulCollection;
     }
 
-    public void setEscopoList(List<Escopo> escopoList) {
-        this.escopoList = escopoList;
+    public void setEscopoVulCollection(Collection<EscopoVul> escopoVulCollection) {
+        this.escopoVulCollection = escopoVulCollection;
     }
 
     @XmlTransient
-    public List<Usuario> getUsuarioList() {
-        return usuarioList;
+    public Collection<Usuario> getUsuarioCollection() {
+        return usuarioCollection;
     }
 
-    public void setUsuarioList(List<Usuario> usuarioList) {
-        this.usuarioList = usuarioList;
+    public void setUsuarioCollection(Collection<Usuario> usuarioCollection) {
+        this.usuarioCollection = usuarioCollection;
     }
 
     @Override
@@ -143,7 +143,7 @@ public class Empresa implements Serializable {
 
     @Override
     public String toString() {
-        return ""+getIdEmpresa();
+        return "pucrs.br.entity.Empresa[ idEmpresa=" + idEmpresa + " ]";
     }
     
 }
