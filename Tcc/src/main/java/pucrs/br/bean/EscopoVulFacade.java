@@ -26,6 +26,7 @@ public class EscopoVulFacade extends AbstractFacade<EscopoVul> {
 
     @PersistenceContext(unitName = "pucrs_Tcc_war_1.0PU")
     private EntityManager em;
+    private VulnerabilidadeFacade vulfac;
 
     @Override
     protected EntityManager getEntityManager() {
@@ -37,19 +38,23 @@ public class EscopoVulFacade extends AbstractFacade<EscopoVul> {
     }
     
     public List<EscopoVul> findAllfindByIdEscopo(Escopo escopo) {        
-        Query query = em.createNativeQuery("SELECT id_empresa, id_escopo, id_vulnerabilidade, impacto, probabilidade FROM escopo_vul e WHERE id_escopo = "+escopo.getEscopoPK().getIdEscopo()+" and id_empresa = "+escopo.getEscopoPK().getIdEmpresa());
+        Query query = em.createNativeQuery("SELECT id_empresa, id_escopo, id_vulnerabilidade, impacto, probabilidade, aceito FROM escopo_vul e WHERE id_escopo = "+escopo.getEscopoPK().getIdEscopo()+" and id_empresa = "+escopo.getEscopoPK().getIdEmpresa());
         List<Object[]> lista = query.getResultList();
         List<EscopoVul> ev = new ArrayList<>();
         for (Object[] row : lista) {
             EscopoVul esc = new EscopoVul(new EscopoVulPK((int)row[0], (int)row[1],(int)row[2]));
+            //esc.setVulnerabilidade(vulfac.findbyId((int)row[2]));
             if (row[3] != null) {
-                esc.setImpacto((int) row[3]);
+                esc.setImpacto((double) row[3]);
             }
             if (row[4] != null) {
-                esc.setImpacto((int) row[4]);
+                esc.setProbabilidade((double) row[4]);
             }
             if (row[3] != null && row[4] != null) {
-                esc.setRisco((int)row[3] * (int)row[4]);
+                esc.setRisco((double)row[3] * (double)row[4]);
+            }
+            if (row[5] != null) {
+                esc.setAceito((int)row[5]);
             }
             ev.add(esc);
         }

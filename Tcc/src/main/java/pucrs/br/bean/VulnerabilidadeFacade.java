@@ -5,11 +5,17 @@
  */
 package pucrs.br.bean;
 
+import java.util.ArrayList;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import pucrs.br.entity.Empresa;
+import pucrs.br.entity.Escopo;
+import pucrs.br.entity.EscopoVul;
+import pucrs.br.entity.EscopoVulPK;
 import pucrs.br.entity.Vulnerabilidade;
 
 /**
@@ -42,5 +48,10 @@ public class VulnerabilidadeFacade extends AbstractFacade<Vulnerabilidade> {
         } catch (NoResultException e) {
             return false;
         }
+    }
+    
+    public Vulnerabilidade findbyId(int idVul) {        
+        Query query = em.createNativeQuery("SELECT * FROM escopo_vul e WHERE id_vulnerabilidade = "+idVul);
+        return (Vulnerabilidade) query.getSingleResult();
     }
 }

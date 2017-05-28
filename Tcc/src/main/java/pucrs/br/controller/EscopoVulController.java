@@ -50,7 +50,7 @@ public class EscopoVulController implements Serializable {
     private DataModel lista = null;
     private List<EscopoVul> listaApontamento, listaAceite;
     private Escopo escopoPag = null;
-
+    
     public EscopoVulController() {
         listaApontamento = new ArrayList<>();
         System.out.println("EscopoVulController CRIADO!");
@@ -361,16 +361,22 @@ public class EscopoVulController implements Serializable {
 
     public void setListaApontamento(List<EscopoVul> listaApontamento) {
         this.listaApontamento = listaApontamento;
-    }
-    
+    }    
     
     public String update2() {
         try {            
             for (int i = 0; i < listaApontamento.size(); i++) {
-                current = new EscopoVul();
+                //current = new EscopoVul();
+                current = listaApontamento.get(i);
                 current.setEscopoVulPK(listaApontamento.get(i).getEscopoVulPK());
-                current.setImpacto(listaApontamento.get(i).getImpacto());
-                current.setProbabilidade(listaApontamento.get(i).getProbabilidade());
+                if (listaApontamento.get(i).getImpacto() != 0 && listaApontamento.get(i).getProbabilidade() != 0) {
+                    current.setImpacto(listaApontamento.get(i).getImpacto());
+                    current.setProbabilidade(listaApontamento.get(i).getProbabilidade());
+                    current.setRisco(listaApontamento.get(i).getImpacto()*listaApontamento.get(i).getProbabilidade());
+                }
+                if (listaApontamento.get(i).getAceito() != null) {
+                    current.setAceito(listaApontamento.get(i).getAceito());
+                }
                 getFacade().edit(current);
             }
             FacesMessage msg = new FacesMessage("EscopoVul Edited");
@@ -383,10 +389,10 @@ public class EscopoVulController implements Serializable {
     
     public String update3() {
         try {            
-            for (int i = 0; i < listaAceite.size(); i++) {
+            for (int i = 0; i < listaApontamento.size(); i++) {
                 current = new EscopoVul();
-                current.setEscopoVulPK(listaAceite.get(i).getEscopoVulPK());
-                current.setAceito(10);
+                current.setEscopoVulPK(listaApontamento.get(i).getEscopoVulPK());
+                current.setAceito(listaApontamento.get(i).getAceito());
                 getFacade().edit(current);
             }
             FacesMessage msg = new FacesMessage("EscopoVul Edited");
@@ -399,6 +405,8 @@ public class EscopoVulController implements Serializable {
     
     public String update4(List<EscopoVul> vul) {
         try {            
+            System.out.println("Lista1 ->"+vul.size());
+            System.out.println("Lista2 ->"+listaAceite.size());
             for (int i = 0; i < vul.size(); i++) {
                 current = new EscopoVul();
                 current.setEscopoVulPK(vul.get(i).getEscopoVulPK());

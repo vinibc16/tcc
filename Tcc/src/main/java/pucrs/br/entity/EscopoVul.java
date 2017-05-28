@@ -45,13 +45,13 @@ public class EscopoVul implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date dataLink;
     @Column(name = "impacto")
-    private Integer impacto;
+    private double impacto;
     @Column(name = "probabilidade")
-    private Integer probabilidade;
+    private double probabilidade;
     @Column(name = "aceito")
     private Integer aceito;
     @Column(name = "risco")
-    private Integer risco;
+    private double risco;
     @JoinColumn(name = "id_empresa", referencedColumnName = "id_empresa", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Empresa empresa;
@@ -86,19 +86,19 @@ public class EscopoVul implements Serializable {
         this.dataLink = dataLink;
     }
 
-    public Integer getImpacto() {
+    public double getImpacto() {
         return impacto;
     }
 
-    public void setImpacto(Integer impacto) {
+    public void setImpacto(double impacto) {
         this.impacto = impacto;
     }
 
-    public Integer getProbabilidade() {
+    public double getProbabilidade() {
         return probabilidade;
     }
 
-    public void setProbabilidade(Integer probabilidade) {
+    public void setProbabilidade(double probabilidade) {
         this.probabilidade = probabilidade;
     }
 
@@ -110,11 +110,11 @@ public class EscopoVul implements Serializable {
         this.aceito = aceito;
     }
 
-    public Integer getRisco() {
+    public double getRisco() {
         return risco;
     }
 
-    public void setRisco(Integer risco) {
+    public void setRisco(double risco) {
         this.risco = risco;
     }
 

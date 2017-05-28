@@ -19,24 +19,24 @@
                     </p:column>
                     <p:column headerText="Impacto">
                         <h:selectOneMenu id="impacto" value="#{item.impacto}">
-                            <f:selectItem itemLabel="Muito Baixo" itemValue="1"/>
-                            <f:selectItem itemLabel="Baixo" itemValue="2"/>
-                            <f:selectItem itemLabel="Médio" itemValue="3"/>
-                            <f:selectItem itemLabel="Alto" itemValue="4"/>
-                            <f:selectItem itemLabel="Crítico" itemValue="5"/>
+                            <f:selectItem itemLabel="Muito Baixo" itemValue="0.05"/>
+                            <f:selectItem itemLabel="Baixo" itemValue="0.1"/>
+                            <f:selectItem itemLabel="Médio" itemValue="0.2"/>
+                            <f:selectItem itemLabel="Alto" itemValue="0.4"/>
+                            <f:selectItem itemLabel="Crítico" itemValue="0.8"/>
                         </h:selectOneMenu>
                     </p:column>
                     <p:column headerText="Probabilidade">
                         <h:selectOneMenu id="probabilidade" value="#{item.probabilidade}">
-                            <f:selectItem itemLabel="Muito Baixo" itemValue="1"/>
-                            <f:selectItem itemLabel="Baixo" itemValue="2"/>
-                            <f:selectItem itemLabel="Médio" itemValue="3"/>
-                            <f:selectItem itemLabel="Alto" itemValue="4"/>
-                            <f:selectItem itemLabel="Crítico" itemValue="5"/>
+                            <f:selectItem itemLabel="Muito Baixo" itemValue="0.1"/>
+                            <f:selectItem itemLabel="Baixo" itemValue="0.3"/>
+                            <f:selectItem itemLabel="Médio" itemValue="0.5"/>
+                            <f:selectItem itemLabel="Alto" itemValue="0.7"/>
+                            <f:selectItem itemLabel="Crítico" itemValue="0.9"/>
                         </h:selectOneMenu>
                     </p:column>
                     <f:facet name="footer">
-                        <p:commandButton process="escopoVul" value="Salvar" action="#{escopoVulController.update2}" />
+                        <p:commandButton process="escopoVul" value="Salvar" action="#{escopoVulController.update2()}" />
                     </f:facet>
                 </p:dataTable>
             </h:form>    
