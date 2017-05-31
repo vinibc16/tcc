@@ -440,5 +440,8 @@ public class EscopoVulController implements Serializable {
         return ejbFacade.findAllfindByIdEscopo(escopo);
     }
     
-    
+    public List<EscopoVul> consultaRelatorio(Escopo escopo) {
+        return ejbFacade.consultaRelatorio(escopo);
+    }
+   
 }

@@ -42,10 +42,16 @@ import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import static com.sun.org.apache.xerces.internal.impl.XMLEntityManager.DEFAULT_BUFFER_SIZE;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import javax.faces.context.ExternalContext;
+import javax.servlet.http.HttpServletResponse;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 
@@ -58,8 +64,6 @@ public class EscopoController implements Serializable {
     private DataModel items = null;
     @EJB
     private EscopoFacade ejbFacade;
-    @Inject
-    private EscopoVulController escopoVulContrl;
     private PaginationHelper pagination;
     private int selectedItemIndex;
     private List<Vulnerabilidade> selectedVul = new ArrayList<Vulnerabilidade>();
@@ -69,6 +73,10 @@ public class EscopoController implements Serializable {
     @Inject
     private UsuarioController usuarioLogado;
     private List<EscopoVul> escopovul = new ArrayList<EscopoVul>();
+    @Inject
+    private EscopoVulController escopoVulContrl;
+    @Inject
+    private VulnerabilidadeController vulctrl;
     
     public EscopoController() {
     }
@@ -344,21 +352,24 @@ public class EscopoController implements Serializable {
         this.escopovul = escopovul;
     }
     
-    public void gerarPdf() throws Exception {
-        String DEST = "results/relatorio.pdf";
+    public void gerarPdf(Escopo esc) throws Exception {
+        long lDateTime = new Date().getTime();
+        String DEST = "results/relatorio"+lDateTime+".pdf";
         File file = new File(DEST);
         file.getParentFile().mkdirs();
-        createPdf(DEST);
+        createPdf(DEST,esc);
     }
     
-    public void createPdf(String dest) throws IOException, DocumentException {
+    public void createPdf(String dest, Escopo esc) throws IOException, DocumentException {
         Document document = new Document();
         PdfWriter.getInstance(document, new FileOutputStream(dest));
         document.open();
-        PdfPTable table = new PdfPTable(2);
-        for(int aw = 0; aw < 8; aw++){
-            table.addCell("Id Vulnerabilidades ");
-            table.addCell("Descrição");
+        PdfPTable table = new PdfPTable(3);
+        List<EscopoVul> escvul = escopoVulContrl.consultaRelatorio(esc);
+        for(int aw = 0; aw < escvul.size(); aw++){
+            table.addCell("Id Vulnerabilidade: "+escvul.get(aw).getEscopoVulPK().getIdVulnerabilidade());
+            table.addCell("Descrição: Desc a vul");
+            table.addCell("Risco: "+escvul.get(aw).getRisco());
         }
         document.add(table);
         document.close();

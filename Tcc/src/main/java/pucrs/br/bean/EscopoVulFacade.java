@@ -16,6 +16,7 @@ import pucrs.br.entity.Escopo;
 import pucrs.br.entity.EscopoPK;
 import pucrs.br.entity.EscopoVul;
 import pucrs.br.entity.EscopoVulPK;
+import pucrs.br.entity.Vulnerabilidade;
 
 /**
  *
@@ -60,5 +61,32 @@ public class EscopoVulFacade extends AbstractFacade<EscopoVul> {
         }
         return ev;
     }
+    
+    public List<EscopoVul> consultaRelatorio(Escopo escopo) {        
+        Query query = em.createNativeQuery("SELECT id_empresa, id_escopo, id_vulnerabilidade, impacto, probabilidade, aceito FROM escopo_vul e WHERE id_escopo = "+escopo.getEscopoPK().getIdEscopo()+
+                                           " and id_empresa = "+escopo.getEscopoPK().getIdEmpresa()+
+                                           " and aceito = 0");
+        List<Object[]> lista = query.getResultList();
+        List<EscopoVul> ev = new ArrayList<>();
+        for (Object[] row : lista) {
+            EscopoVul esc = new EscopoVul(new EscopoVulPK((int)row[0], (int)row[1],(int)row[2]));
+            //esc.setVulnerabilidade(vulfac.findbyId((int)row[2]));
+            if (row[3] != null) {
+                esc.setImpacto((double) row[3]);
+            }
+            if (row[4] != null) {
+                esc.setProbabilidade((double) row[4]);
+            }
+            if (row[3] != null && row[4] != null) {
+                esc.setRisco((double)row[3] * (double)row[4]);
+            }
+            if (row[5] != null) {
+                esc.setAceito((int)row[5]);
+            }
+            ev.add(esc);
+        }
+        return ev;
+    }
+    
     
 }
