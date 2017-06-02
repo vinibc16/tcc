@@ -16,6 +16,7 @@ import pucrs.br.entity.Empresa;
 import pucrs.br.entity.Escopo;
 import pucrs.br.entity.EscopoVul;
 import pucrs.br.entity.EscopoVulPK;
+import pucrs.br.entity.Usuario;
 import pucrs.br.entity.Vulnerabilidade;
 
 /**
@@ -53,5 +54,10 @@ public class VulnerabilidadeFacade extends AbstractFacade<Vulnerabilidade> {
     public Vulnerabilidade findbyId(int idVul) {        
         Query query = em.createNativeQuery("SELECT * FROM escopo_vul e WHERE id_vulnerabilidade = "+idVul);
         return (Vulnerabilidade) query.getSingleResult();
+    }
+    
+    public String getVulNome(int idVul) {
+        Query query = em.createNativeQuery("SELECT nome FROM vulnerabilidade WHERE id_vulnerabilidade = "+idVul);
+        return (String) query.getSingleResult();
     }
 }

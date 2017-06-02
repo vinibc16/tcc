@@ -38,8 +38,11 @@ import java.io.FileOutputStream;
 import java.io.OutputStream;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.*;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import static com.sun.org.apache.xerces.internal.impl.XMLEntityManager.DEFAULT_BUFFER_SIZE;
@@ -77,7 +80,7 @@ public class EscopoController implements Serializable {
     private EscopoVulController escopoVulContrl;
     @Inject
     private VulnerabilidadeController vulctrl;
-    
+
     public EscopoController() {
     }
 
@@ -89,7 +92,7 @@ public class EscopoController implements Serializable {
         }
         return current;
     }
-    
+
     public Escopo getSelectedNew() {
         if (escopoNew == null) {
             escopoNew = new Escopo();
@@ -114,16 +117,17 @@ public class EscopoController implements Serializable {
 
                 @Override
                 public DataModel createPageDataModel() {
-                    return new ListDataModel(getFacade().findRange(new int[]{getPageFirstItem(), getPageFirstItem() + getPageSize()}));
+                    return new ListDataModel(getFacade().findAllEscByUser(usuarioLogado.getLogado().getIdEmpresa().getIdEmpresa()));
+                    //return new ListDataModel(getFacade().findRange(new int[]{getPageFirstItem(), getPageFirstItem() + getPageSize()}));
                 }
             };
         }
         return pagination;
     }
 
-    public String prepareList() {
+    public void prepareList() throws IOException {
         recreateModel();
-        return "ListEscopo";
+        FacesContext.getCurrentInstance().getExternalContext().redirect("ListEscopo.jsf");
     }
 
     public String prepareView() {
@@ -131,9 +135,9 @@ public class EscopoController implements Serializable {
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
         //Popular lista de vul
         selectedVul.clear();
-        
+
         escopovul = escopoVulContrl.findAllfindByIdEscopo(current);
-        for(int i=0;i<escopovul.size();i++) {
+        for (int i = 0; i < escopovul.size(); i++) {
             selectedVul.add(escopovul.get(i).getVulnerabilidade());
         }
         //selectedVul.addAll(current.getVulnerabilidadeCollection().toArray());
@@ -318,28 +322,28 @@ public class EscopoController implements Serializable {
     public void setSelectedVul(List<Vulnerabilidade> selectedVul) {
         this.selectedVul = selectedVul;
     }
-    
+
     public void onRowEdit(RowEditEvent event) {
         current = ((Escopo) event.getObject());
         update();
     }
-     
+
     public void onRowCancel(RowEditEvent event) {
         FacesMessage msg = new FacesMessage("Escopo Cancelled", ((Escopo) event.getObject()).getNome());
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
-    
+
     public void onCellEdit(CellEditEvent event) {
         Object oldValue = event.getOldValue();
         Object newValue = event.getNewValue();
-         
-        if(newValue != null && !newValue.equals(oldValue)) {
-            selectedItemIndex  = event.getRowIndex();
-            current = (Escopo)items.getRowData();
+
+        if (newValue != null && !newValue.equals(oldValue)) {
+            selectedItemIndex = event.getRowIndex();
+            current = (Escopo) items.getRowData();
             update();
         }
     }
-    
+
     public boolean visibleRelatorio() {
         return usuarioLogado.getLogado().getIdGrupo().getIdGrupo() == 2;
     }
@@ -351,29 +355,78 @@ public class EscopoController implements Serializable {
     public void setEscopovul(List<EscopoVul> escopovul) {
         this.escopovul = escopovul;
     }
-    
+
     public void gerarPdf(Escopo esc) throws Exception {
         long lDateTime = new Date().getTime();
-        String DEST = "results/relatorio"+lDateTime+".pdf";
+        String DEST = "results/relatorio" + lDateTime + ".pdf";
         File file = new File(DEST);
         file.getParentFile().mkdirs();
-        createPdf(DEST,esc);
+        createPdf(DEST, esc);
     }
-    
+
     public void createPdf(String dest, Escopo esc) throws IOException, DocumentException {
         Document document = new Document();
+        Font boldFont = new Font(Font.FontFamily.TIMES_ROMAN, 16, Font.BOLD);
         PdfWriter.getInstance(document, new FileOutputStream(dest));
         document.open();
-        PdfPTable table = new PdfPTable(3);
+        PdfPTable table = new PdfPTable(2);
         List<EscopoVul> escvul = escopoVulContrl.consultaRelatorio(esc);
-        for(int aw = 0; aw < escvul.size(); aw++){
-            table.addCell("Id Vulnerabilidade: "+escvul.get(aw).getEscopoVulPK().getIdVulnerabilidade());
-            table.addCell("Descrição: Desc a vul");
-            table.addCell("Risco: "+escvul.get(aw).getRisco());
+        int idvul;
+        PdfPCell cell;
+
+        cell = new PdfPCell(new Phrase("Vulnerabilidade", boldFont));
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table.addCell(cell);
+        cell = new PdfPCell(new Phrase("Risco", boldFont));
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table.addCell(cell);
+        for (int aw = 0; aw < escvul.size(); aw++) {
+            idvul = escvul.get(aw).getEscopoVulPK().getIdVulnerabilidade();
+            table.addCell(vulctrl.getVulNome(idvul));
+            table.addCell(recuperaRisco(escvul.get(aw).getRisco()));
         }
         document.add(table);
         document.close();
         JsfUtil.addSuccessMessage("Arquivo exportado.");
     }
     
+    public String recuperaRisco(double risco) {
+        if (round(risco,2) == 0.05 || 
+            round(risco,2) == 0.04 ||
+            round(risco,2) == 0.03 ||
+            round(risco,2) == 0.02 ||
+            round(risco,2) == 0.01 ) {
+            return "Baixo";
+        } else if (round(risco,2) == 0.09 ||
+                   round(risco,2) == 0.07 ||
+                   round(risco,2) == 0.14 ||
+                   round(risco,2) == 0.10 ||
+                   round(risco,2) == 0.06 ||
+                   round(risco,2) == 0.12 ||
+                   round(risco,2) == 0.08 ) {
+            return "Moderado";
+        } else if (round(risco,2) == 0.18 ||
+                   round(risco,2) == 0.36 ||
+                   round(risco,2) == 0.72 ||
+                   round(risco,2) == 0.28 ||
+                   round(risco,2) == 0.56 ||
+                   round(risco,2) == 0.20 ||
+                   round(risco,2) == 0.40 ||
+                   round(risco,2) == 0.24 ){
+            return "Alto";
+        } else {
+            return "Risco não encontrado ->"+round(risco,2);
+        }
+    }
+
+    public static double round(double value, int places) {
+        if (places < 0) {
+            throw new IllegalArgumentException();
+        }
+
+        long factor = (long) Math.pow(10, places);
+        value = value * factor;
+        long tmp = Math.round(value);
+        return (double) tmp / factor;
+    }
 }

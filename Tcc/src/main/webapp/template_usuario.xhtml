@@ -24,9 +24,9 @@
         <h:form>
             <b:navBar brand="Inicio" brandHref="home.jsf" fixed="top" inverse="true">
                 <b:navbarLinks>
-                    <b:navLink value="Vulnerabilidades" href="ListVulUser.jsf"></b:navLink>
-                    <b:navLink value="Responsáveis" href="ListResponsaveis.jsf"></b:navLink>
-                    <b:navLink value="Escopos" href="ListEscopo.jsf"></b:navLink>
+                    <b:navCommandLink value="Vulnerabilidades" actionListener="#{vulnerabilidadeController.prepareListUser()}"></b:navCommandLink>
+                    <b:navCommandLink value="Responsáveis" actionListener="#{responsaveisController.prepareList()}"></b:navCommandLink>
+                    <b:navCommandLink value="Escopos" actionListener="#{escopoController.prepareList()}"></b:navCommandLink>
                     <b:navCommandLink value="Logout" actionListener="#{usuarioController.logout()}"></b:navCommandLink>
                     <b:label value="#{usuarioController.logado.nome}" styleClass="label"/>
                 </b:navbarLinks>

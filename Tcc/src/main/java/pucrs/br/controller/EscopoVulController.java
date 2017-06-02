@@ -1,5 +1,6 @@
 package pucrs.br.controller;
 
+import java.io.IOException;
 import pucrs.br.entity.EscopoVul;
 import pucrs.br.controller.util.JsfUtil;
 import pucrs.br.controller.util.PaginationHelper;
@@ -115,9 +116,9 @@ public class EscopoVulController implements Serializable {
         return pagination;
     }
 
-    public String prepareList() {
+    public void prepareList() throws IOException {
         recreateModel();
-        return "ListEscopoVul";
+        FacesContext.getCurrentInstance().getExternalContext().redirect("ListEscopoVul.jsf");
     }
 
     public String prepareView() {

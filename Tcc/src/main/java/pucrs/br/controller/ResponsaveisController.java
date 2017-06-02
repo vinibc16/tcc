@@ -1,5 +1,6 @@
 package pucrs.br.controller;
 
+import java.io.IOException;
 import pucrs.br.entity.Responsaveis;
 import pucrs.br.controller.util.JsfUtil;
 import pucrs.br.controller.util.PaginationHelper;
@@ -74,9 +75,9 @@ public class ResponsaveisController implements Serializable {
         return pagination;
     }
 
-    public String prepareList() {
+    public void prepareList() throws IOException {
         recreateModel();
-        return "ListResponsaveis";
+        FacesContext.getCurrentInstance().getExternalContext().redirect("ListResponsaveis.jsf");
     }
 
     public String prepareView() {

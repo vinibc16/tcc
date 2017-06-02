@@ -5,10 +5,16 @@
  */
 package pucrs.br.bean;
 
+import java.util.ArrayList;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import pucrs.br.entity.Escopo;
+import pucrs.br.entity.EscopoPK;
+import pucrs.br.entity.EscopoVul;
+import pucrs.br.entity.EscopoVulPK;
 
 /**
  *
@@ -29,4 +35,9 @@ public class EscopoFacade extends AbstractFacade<Escopo> {
         super(Escopo.class);
     }
     
+    public List<Escopo> findAllEscByUser(int idEmpresa) {        
+        return em.createQuery("SELECT u FROM Escopo u WHERE u.escopoPK.idEmpresa = :idEmpresa")
+                .setParameter("idEmpresa", idEmpresa)
+                .getResultList();
+    }
 }

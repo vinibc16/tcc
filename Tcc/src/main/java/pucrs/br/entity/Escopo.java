@@ -140,7 +140,7 @@ public class Escopo implements Serializable {
 
     @Override
     public String toString() {
-        return "pucrs.br.entity.Escopo[ escopoPK=" + escopoPK + " ]";
+        return getNome();
     }
     
 }

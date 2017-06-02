@@ -9,12 +9,16 @@
     <ui:composition template="/template_usuario.xhtml">
         <ui:define name="centro">
             <h:form id="form">
-                <p:dataTable id="escopo" var="esc" value="#{escopoController.items}" 
-                             editable="true" editMode="cell" widgetVar="cellEscop"
-                             rows="10" paginator="true"    
+                <p:dataTable id="escopo" 
+                             var="esc" 
+                             value="#{escopoController.items}" 
+                             editable="true" 
+                             rows="10" 
+                             paginator="true"    
                              paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
                     
-                    <p:ajax event="cellEdit" listener="#{escopoController.onCellEdit}" update=":principal:msgs" />
+                    <p:ajax event="rowEdit" listener="#{usuarioController.onRowEdit}" update=":principal:msgs" />
+                    <p:ajax event="rowEditCancel" listener="#{usuarioController.onRowCancel}" update=":principal:msgs" />
                     
                     <p:column headerText="Nome">
                         <p:cellEditor>

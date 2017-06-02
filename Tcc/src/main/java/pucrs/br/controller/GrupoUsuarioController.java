@@ -6,6 +6,7 @@ import pucrs.br.controller.util.PaginationHelper;
 import pucrs.br.bean.GrupoUsuarioFacade;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.ResourceBundle;
 import javax.ejb.EJB;
 import javax.inject.Named;
@@ -230,6 +231,10 @@ public class GrupoUsuarioController implements Serializable {
             }
         }
 
+    }
+    
+    public List<GrupoUsuario> findAll() {
+        return ejbFacade.findAll();
     }
 
 }

@@ -186,7 +186,7 @@ public class Vulnerabilidade implements Serializable {
 
     @Override
     public String toString() {
-        return "pucrs.br.entity.Vulnerabilidade[ idVulnerabilidade=" + idVulnerabilidade + " ]";
+        return getNome();
     }
     
 }

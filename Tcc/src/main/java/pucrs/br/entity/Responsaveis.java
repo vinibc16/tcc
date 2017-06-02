@@ -109,7 +109,7 @@ public class Responsaveis implements Serializable {
 
     @Override
     public String toString() {
-        return "pucrs.br.entity.Responsaveis[ idResponsavel=" + idResponsavel + " ]";
+        return getNome();
     }
     
 }

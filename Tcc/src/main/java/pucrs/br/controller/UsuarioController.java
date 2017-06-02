@@ -20,6 +20,7 @@ import javax.faces.convert.FacesConverter;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.NoResultException;
@@ -43,8 +44,7 @@ public class UsuarioController implements Serializable {
     private pucrs.br.bean.UsuarioFacade ejbFacade;
     private PaginationHelper pagination;
     private int selectedItemIndex;
-    private String menssagem = null;
-    
+    private String menssagem = null;    
 
     public UsuarioController() {
     }
@@ -95,9 +95,9 @@ public class UsuarioController implements Serializable {
         return pagination;
     }
 
-    public String prepareList() {
+    public void prepareList() throws IOException {
         recreateModel();
-        return "ListUsuario";
+        FacesContext.getCurrentInstance().getExternalContext().redirect("ListUsuario.jsf");
     }
 
     public String prepareView() {
@@ -118,6 +118,12 @@ public class UsuarioController implements Serializable {
                 FacesMessage msg = new FacesMessage("Usuário ja existe");
                 FacesContext.getCurrentInstance().addMessage(null, msg);
             } else {
+                newUser.setIdEmpresa(logado.getIdEmpresa());
+                System.out.println("ID ->"+newUser.getId());
+                System.out.println("Empresa ->"+newUser.getIdEmpresa());
+                System.out.println("Grupo ->"+newUser.getIdGrupo());
+                System.out.println("Nome ->"+newUser.getNome());
+                System.out.println("Senha ->"+newUser.getSenha());
                 getFacade().create(newUser);
                 JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("UsuarioCreated"));
             }

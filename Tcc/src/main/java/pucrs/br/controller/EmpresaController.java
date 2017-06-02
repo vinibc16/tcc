@@ -1,11 +1,13 @@
 package pucrs.br.controller;
 
+import java.io.IOException;
 import pucrs.br.entity.Empresa;
 import pucrs.br.controller.util.JsfUtil;
 import pucrs.br.controller.util.PaginationHelper;
 import pucrs.br.bean.EmpresaFacade;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.ResourceBundle;
 import javax.ejb.EJB;
 import javax.inject.Named;
@@ -75,9 +77,9 @@ public class EmpresaController implements Serializable {
         return pagination;
     }
 
-    public String prepareList() {
+    public void prepareList() throws IOException {
         recreateModel();
-        return "ListEmpresa";
+        FacesContext.getCurrentInstance().getExternalContext().redirect("ListEmpresa.jsf");
     }
 
     public String prepareView() {
@@ -254,5 +256,9 @@ public class EmpresaController implements Serializable {
         FacesMessage msg = new FacesMessage("Empresa Cancelled", ((Empresa) event.getObject()).getNome());
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
-
+    
+    public List<Empresa> findAll() {
+        return ejbFacade.findAll();
+    }
+    
 }

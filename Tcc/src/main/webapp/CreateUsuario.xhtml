@@ -10,13 +10,15 @@
             <h:form>
                 <b:panel>
                     <b:inputText label="Id" id="id" value="#{usuarioController.selectedNew.id}" required="true"/>
-                    <b:inputText label="Usuário" id="usuario" value="#{usuarioController.selectedNew.usuario}" required="true"/>
+                    <b:inputText label="Nome" id="usuario" value="#{usuarioController.selectedNew.nome}" required="true"/>
                     <b:inputText label="Senha" type="password" id="senha" value="#{usuarioController.selectedNew.senha}" required="true"/>
                     <b:selectOneMenu label="Empresa" id="idEmpresa" value="#{usuarioController.selectedNew.idEmpresa}">
-                        <f:selectItems value="#{empresaController.itemsAvailableSelectOne}"/>
+                        <f:selectItems value="#{empresaController.findAll()}" var="emp"
+                                       itemLabel="#{emp.nome}" itemValue="#{emp}"/>
                     </b:selectOneMenu>
                     <b:selectOneMenu label="Grupo" id="idGrupo" value="#{usuarioController.selectedNew.idGrupo}">
-                        <f:selectItems value="#{grupoUsuarioController.itemsAvailableSelectOne}"/>
+                        <f:selectItems value="#{grupoUsuarioController.findAll()}" var="grupo"
+                                       itemLabel="#{grupo.descricao}" itemValue="#{grupo}"/>
                     </b:selectOneMenu>
                 </b:panel>
                 <br />

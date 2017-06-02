@@ -1,5 +1,6 @@
 package pucrs.br.controller;
 
+import java.io.IOException;
 import pucrs.br.entity.Vulnerabilidade;
 import pucrs.br.controller.util.JsfUtil;
 import pucrs.br.controller.util.PaginationHelper;
@@ -75,9 +76,14 @@ public class VulnerabilidadeController implements Serializable {
         return pagination;
     }
 
-    public String prepareList() {
+    public void prepareList() throws IOException {
         recreateModel();
-        return "ListVul";
+        FacesContext.getCurrentInstance().getExternalContext().redirect("ListVul.jsf");
+    }
+    
+    public void prepareListUser() throws IOException {
+        recreateModel();
+        FacesContext.getCurrentInstance().getExternalContext().redirect("ListVulUser.jsf");
     }
 
     public String prepareView() {
@@ -253,5 +259,9 @@ public class VulnerabilidadeController implements Serializable {
     public void onRowCancel(RowEditEvent event) {
         FacesMessage msg = new FacesMessage("Vulnerabilidade Cancelled", ((Vulnerabilidade) event.getObject()).getNome());
         FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+    
+    public String getVulNome(int idVul) {
+        return ejbFacade.getVulNome(idVul);
     }
 }

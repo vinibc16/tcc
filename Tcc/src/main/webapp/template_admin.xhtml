@@ -19,16 +19,16 @@
         <h:form>
             <b:navBar brand="Inicio" brandHref="home.jsf" fixed="top" inverse="true">
                 <b:navbarLinks>
-                    <b:navLink value="Usuarios" href="ListUsuario.jsf"></b:navLink>
-                    <b:navLink value="Empresas" href="ListEmpresa.jsf"></b:navLink>
-                    <b:navLink value="Vulnerabilidades" href="ListVul.jsf"></b:navLink>
+                    <b:navCommandLink value="Usuários" actionListener="#{usuarioController.prepareList()}"></b:navCommandLink>
+                    <b:navCommandLink value="Empresas" actionListener="#{empresaController.prepareList()}"></b:navCommandLink>
+                    <b:navCommandLink value="Vulnerabilidades" actionListener="#{vulnerabilidadeController.prepareList()}"></b:navCommandLink>
                     <b:navCommandLink value="Logout" actionListener="#{usuarioController.logout()}"></b:navCommandLink>
                 </b:navbarLinks>
             </b:navBar>
         </h:form>
         <b:container>
             <h:form id="principal">
-                <p:growl id="msgs" showDetail="true"/>
+                <b:growl id="msgs" showDetail="true"/>
                 <ui:insert name="centro"/>
             </h:form>
         </b:container>
