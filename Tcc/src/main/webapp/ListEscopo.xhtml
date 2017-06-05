@@ -17,8 +17,8 @@
                              paginator="true"    
                              paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
                     
-                    <p:ajax event="rowEdit" listener="#{usuarioController.onRowEdit}" update=":principal:msgs" />
-                    <p:ajax event="rowEditCancel" listener="#{usuarioController.onRowCancel}" update=":principal:msgs" />
+                    <p:ajax event="rowEdit" listener="#{escopoController.onRowEdit}" update=":principal:msgs" />
+                    <p:ajax event="rowEditCancel" listener="#{escopoController.onRowCancel}" update=":principal:msgs" />
                     
                     <p:column headerText="Nome">
                         <p:cellEditor>
@@ -69,21 +69,24 @@
                     </p:column>
                     
                     <p:column headerText="Associar Vul" style="width:100px;text-align: center">
-                        <p:commandButton icon="ui-icon-search" action="#{escopoController.prepareView}"/>
+                        <p:commandButton icon="ui-icon-pencil" action="#{escopoController.prepareView}"/>
                     </p:column>
                     
                     <p:column headerText="Definir Risco" style="width:100px;text-align: center">
-                        <p:commandButton icon="ui-icon-search" action="#{escopoVulController.editEscopoVul(esc)}"/>
+                        <p:commandButton icon="ui-icon-pencil" action="#{escopoVulController.editEscopoVul(esc)}"/>
                     </p:column>
                     
                     <p:column headerText="Definir Aceite" rendered="#{escopoController.visibleRelatorio()}" style="width:100px;text-align: center">
-                        <p:commandButton icon="ui-icon-search" action="#{escopoVulController.editAceite(esc)}"/>
+                        <p:commandButton icon="ui-icon-pencil" action="#{escopoVulController.editAceite(esc)}"/>
                     </p:column> 
                     
                     <p:column headerText="Relatório" rendered="#{escopoController.visibleRelatorio()}" style="width:100px;text-align: center">
-                        <p:commandButton icon="ui-icon-search" ajax="false" >
+                        <p:commandButton icon="ui-icon-document" ajax="false" >
                             <p:fileDownload value="#{escopoController.gerarPdf(esc)}"/>
                         </p:commandButton>
+                    </p:column>
+                    <p:column style="width:32px">
+                        <p:rowEditor />
                     </p:column>
                 </p:dataTable>                
                 <br />

@@ -279,8 +279,6 @@ public class UsuarioController implements Serializable {
         logado = ejbFacade.getUsuario(logado.getId(), logado.getSenha());
         if (logado == null) {
             logado = new Usuario();
-            FacesMessage msg = new FacesMessage("Usuário ou senha inválidos");
-            FacesContext.getCurrentInstance().addMessage(null, msg);
             return null;
         } else {
             return "home.jsf";
