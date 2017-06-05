@@ -19,6 +19,7 @@ import javax.faces.convert.FacesConverter;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
+import javax.inject.Inject;
 import org.primefaces.event.RowEditEvent;
 import pucrs.br.bean.VulnerabilidadeFacade;
 import pucrs.br.entity.Empresa;
@@ -34,6 +35,8 @@ public class VulnerabilidadeController implements Serializable {
     private pucrs.br.bean.VulnerabilidadeFacade ejbFacade;
     private PaginationHelper pagination;
     private int selectedItemIndex;
+    @Inject
+    private UsuarioController usuario;
 
     public VulnerabilidadeController() {
     }
@@ -100,6 +103,7 @@ public class VulnerabilidadeController implements Serializable {
 
     public String create() {
         try {
+            newVul.setIdEmpresa(usuario.getLogado().getIdEmpresa());
             getFacade().create(newVul);
             JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("VulnerabilidadeCreated"));
             return prepareCreate();

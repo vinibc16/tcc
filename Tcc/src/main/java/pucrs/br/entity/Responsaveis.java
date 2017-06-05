@@ -14,6 +14,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -35,6 +37,10 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Responsaveis.findByIdResponsavel", query = "SELECT r FROM Responsaveis r WHERE r.idResponsavel = :idResponsavel"),
     @NamedQuery(name = "Responsaveis.findByNome", query = "SELECT r FROM Responsaveis r WHERE r.nome = :nome")})
 public class Responsaveis implements Serializable {
+
+    @JoinColumn(name = "id_empresa", referencedColumnName = "id_empresa")
+    @ManyToOne(optional = false)
+    private Empresa idEmpresa;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -109,7 +115,15 @@ public class Responsaveis implements Serializable {
 
     @Override
     public String toString() {
-        return getNome();
+        return ""+getIdResponsavel();
+    }
+
+    public Empresa getIdEmpresa() {
+        return idEmpresa;
+    }
+
+    public void setIdEmpresa(Empresa idEmpresa) {
+        this.idEmpresa = idEmpresa;
     }
     
 }

@@ -38,6 +38,14 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Empresa.findByFuncionarios", query = "SELECT e FROM Empresa e WHERE e.funcionarios = :funcionarios")})
 public class Empresa implements Serializable {
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "empresa")
+    private Collection<Escopo> escopoCollection;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idEmpresa")
+    private Collection<Responsaveis> responsaveisCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idEmpresa")
+    private Collection<Vulnerabilidade> vulnerabilidadeCollection;
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -144,6 +152,33 @@ public class Empresa implements Serializable {
     @Override
     public String toString() {
         return ""+getIdEmpresa();
+    }
+
+    @XmlTransient
+    public Collection<Responsaveis> getResponsaveisCollection() {
+        return responsaveisCollection;
+    }
+
+    public void setResponsaveisCollection(Collection<Responsaveis> responsaveisCollection) {
+        this.responsaveisCollection = responsaveisCollection;
+    }
+
+    @XmlTransient
+    public Collection<Vulnerabilidade> getVulnerabilidadeCollection() {
+        return vulnerabilidadeCollection;
+    }
+
+    public void setVulnerabilidadeCollection(Collection<Vulnerabilidade> vulnerabilidadeCollection) {
+        this.vulnerabilidadeCollection = vulnerabilidadeCollection;
+    }
+
+    @XmlTransient
+    public Collection<Escopo> getEscopoCollection() {
+        return escopoCollection;
+    }
+
+    public void setEscopoCollection(Collection<Escopo> escopoCollection) {
+        this.escopoCollection = escopoCollection;
     }
     
 }

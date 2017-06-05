@@ -7,6 +7,7 @@ import pucrs.br.controller.util.PaginationHelper;
 import pucrs.br.bean.ResponsaveisFacade;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.ResourceBundle;
 import javax.ejb.EJB;
 import javax.inject.Named;
@@ -19,8 +20,10 @@ import javax.faces.convert.FacesConverter;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
+import javax.inject.Inject;
 import org.primefaces.event.RowEditEvent;
 import pucrs.br.entity.Empresa;
+import pucrs.br.entity.Escopo;
 
 @Named("responsaveisController")
 @SessionScoped
@@ -33,6 +36,8 @@ public class ResponsaveisController implements Serializable {
     private pucrs.br.bean.ResponsaveisFacade ejbFacade;
     private PaginationHelper pagination;
     private int selectedItemIndex;
+    @Inject
+    private UsuarioController usuario;
 
     public ResponsaveisController() {
     }
@@ -68,7 +73,8 @@ public class ResponsaveisController implements Serializable {
 
                 @Override
                 public DataModel createPageDataModel() {
-                    return new ListDataModel(getFacade().findRange(new int[]{getPageFirstItem(), getPageFirstItem() + getPageSize()}));
+                    //return new ListDataModel(getFacade().findRange(new int[]{getPageFirstItem(), getPageFirstItem() + getPageSize()}));
+                    return new ListDataModel(getFacade().findAllRespByUser(usuario.getLogado().getIdEmpresa().getIdEmpresa()));
                 }
             };
         }
@@ -94,6 +100,7 @@ public class ResponsaveisController implements Serializable {
 
     public String create() {
         try {
+            newResp.setIdEmpresa(usuario.getLogado().getIdEmpresa());
             getFacade().create(newResp);
             JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("ResponsaveisCreated"));
             return prepareCreate();
@@ -255,4 +262,7 @@ public class ResponsaveisController implements Serializable {
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 
+    public List<Responsaveis> findAll() {
+        return ejbFacade.findAll();
+    }
 }

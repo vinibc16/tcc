@@ -4,7 +4,7 @@
       xmlns:p="http://primefaces.org/ui">
     <ui:decorate template="/template_usuario.xhtml">
         <ui:define name="centro">
-            <h:outputLabel value="Login efetuado com sucesso! Bem vindo ao sistema GESTOR!"/>
+            <p:chart type="bar" model="#{graficocontroller.bar}" style="height:300px; color: white"/>
         </ui:define>
     </ui:decorate>
 </html>

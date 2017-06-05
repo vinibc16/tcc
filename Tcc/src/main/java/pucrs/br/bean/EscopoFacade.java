@@ -15,6 +15,7 @@ import pucrs.br.entity.Escopo;
 import pucrs.br.entity.EscopoPK;
 import pucrs.br.entity.EscopoVul;
 import pucrs.br.entity.EscopoVulPK;
+import pucrs.br.entity.Grafico;
 
 /**
  *
@@ -39,5 +40,27 @@ public class EscopoFacade extends AbstractFacade<Escopo> {
         return em.createQuery("SELECT u FROM Escopo u WHERE u.escopoPK.idEmpresa = :idEmpresa")
                 .setParameter("idEmpresa", idEmpresa)
                 .getResultList();
+    }
+    
+    public Escopo findbyId(int idEmpresa,int idEscopo) {        
+        Escopo esc = (Escopo) em.createQuery("SELECT u FROM Escopo u WHERE u.escopoPK.idEmpresa = :idEmpresa and u.escopoPK.idEscopo = :idEscopo")
+                .setParameter("idEscopo", idEscopo)
+                .setParameter("idEmpresa", idEmpresa)
+                .getSingleResult();
+        return esc;
+    }
+    
+    public List<Grafico> findResultGrafico(int idEmpresa) {
+        Query query = em.createNativeQuery("select id_escopo, "
+                                        + "round(sum(risco) / (select count(1) from escopo_vul t where t.id_escopo = p.id_escopo and t.id_empresa = p.id_empresa),2) "
+                                        + "from escopo_vul p "
+                                        + "where id_empresa = "+idEmpresa
+                                        + " group by id_escopo");
+        List<Object[]> lista = query.getResultList();
+        List<Grafico> grafico = new ArrayList<>();
+        for (Object[] row : lista) {
+            grafico.add(new Grafico(findbyId(idEmpresa,(int)row[0]), (double)row[1]));
+        }
+        return grafico;
     }
 }

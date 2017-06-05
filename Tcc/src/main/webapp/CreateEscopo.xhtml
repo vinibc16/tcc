@@ -11,7 +11,10 @@
                 <b:panel>
                     <b:inputText label="Id Escopo" id="idEscopo" value="#{escopoController.selectedNew.escopoPK.idEscopo}" type="number" required="true"/>
                     <b:inputText label="Nome" id="nome" value="#{escopoController.selectedNew.nome}"/>
-                    <b:inputText label="Responsável" id="responsavel" value="#{escopoController.selectedNew.idResponsavel}"/>
+                    <b:selectOneMenu label="Responsável" id="idResponsavel" value="#{escopoController.selectedNew.idResponsavel}">
+                        <f:selectItems value="#{responsaveisController.findAll()}" var="resp"
+                                       itemLabel="#{resp.nome}" itemValue="#{resp}"/>
+                    </b:selectOneMenu>
                     <b:inputText label="Descrição" id="descricao" value="#{escopoController.selectedNew.descricao}"/>
                 </b:panel>
                 <br />

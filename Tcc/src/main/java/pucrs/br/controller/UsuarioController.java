@@ -109,7 +109,7 @@ public class UsuarioController implements Serializable {
     public String prepareCreate() {
         newUser = new Usuario();
         selectedItemIndex = -1;
-        return "CreateUsuario";
+        return "ListUsuario";
     }
 
     public String create() {
@@ -118,7 +118,7 @@ public class UsuarioController implements Serializable {
                 FacesMessage msg = new FacesMessage("Usuário ja existe");
                 FacesContext.getCurrentInstance().addMessage(null, msg);
             } else {
-                newUser.setIdEmpresa(logado.getIdEmpresa());
+                //newUser.setIdEmpresa(logado.getIdEmpresa());
                 System.out.println("ID ->"+newUser.getId());
                 System.out.println("Empresa ->"+newUser.getIdEmpresa());
                 System.out.println("Grupo ->"+newUser.getIdGrupo());

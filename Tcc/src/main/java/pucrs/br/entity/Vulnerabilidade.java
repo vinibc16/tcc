@@ -15,6 +15,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -43,6 +45,10 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Vulnerabilidade.findByFonte", query = "SELECT v FROM Vulnerabilidade v WHERE v.fonte = :fonte"),
     @NamedQuery(name = "Vulnerabilidade.findByDataCriacao", query = "SELECT v FROM Vulnerabilidade v WHERE v.dataCriacao = :dataCriacao")})
 public class Vulnerabilidade implements Serializable {
+
+    @JoinColumn(name = "id_empresa", referencedColumnName = "id_empresa")
+    @ManyToOne(optional = false)
+    private Empresa idEmpresa;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -187,6 +193,14 @@ public class Vulnerabilidade implements Serializable {
     @Override
     public String toString() {
         return getNome();
+    }
+
+    public Empresa getIdEmpresa() {
+        return idEmpresa;
+    }
+
+    public void setIdEmpresa(Empresa idEmpresa) {
+        this.idEmpresa = idEmpresa;
     }
     
 }

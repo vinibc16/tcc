@@ -57,6 +57,7 @@ import javax.faces.context.ExternalContext;
 import javax.servlet.http.HttpServletResponse;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
+import pucrs.br.entity.Grafico;
 
 @Named("escopoController")
 @SessionScoped
@@ -428,5 +429,13 @@ public class EscopoController implements Serializable {
         value = value * factor;
         long tmp = Math.round(value);
         return (double) tmp / factor;
+    }
+    
+    public List<Escopo> findAll() {
+        return ejbFacade.findAll();
+    }
+    
+    public List<Grafico> findResultGrafico() {
+        return ejbFacade.findResultGrafico(usuarioLogado.getLogado().getIdEmpresa().getIdEmpresa());
     }
 }

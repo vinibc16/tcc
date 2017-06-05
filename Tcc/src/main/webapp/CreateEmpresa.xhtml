@@ -10,7 +10,7 @@
                 <b:panel>
                     <b:inputText label="Nome" id="nome" value="#{empresaController.selectedNew.nome}" required="true"/>
                     <b:inputText label="Razão Social" id="razaoSocial" value="#{empresaController.selectedNew.razaoSocial}"/>
-                    <b:inputText label="Funcionários" id="funcionarios" value="#{empresaController.selectedNew.funcionarios}"/>
+                    <b:inputText label="Funcionários" type="number" id="funcionarios" value="#{empresaController.selectedNew.funcionarios}"/>
                 </b:panel>
                 <br />
                 <b:commandButton action="#{empresaController.create}" value="#{bundle.CreateUsuarioSaveLink}" />

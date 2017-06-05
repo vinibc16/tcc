@@ -38,6 +38,10 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Escopo.findByDataCriacao", query = "SELECT e FROM Escopo e WHERE e.dataCriacao = :dataCriacao")})
 public class Escopo implements Serializable {
 
+    @JoinColumn(name = "id_empresa", referencedColumnName = "id_empresa", insertable = false, updatable = false)
+    @ManyToOne(optional = false)
+    private Empresa empresa;
+
     private static final long serialVersionUID = 1L;
     @EmbeddedId
     protected EscopoPK escopoPK;
@@ -141,6 +145,14 @@ public class Escopo implements Serializable {
     @Override
     public String toString() {
         return getNome();
+    }
+
+    public Empresa getEmpresa() {
+        return empresa;
+    }
+
+    public void setEmpresa(Empresa empresa) {
+        this.empresa = empresa;
     }
     
 }

@@ -12,11 +12,11 @@
                 <b:panel>
                     <b:inputText label="Nome" id="nome" value="#{vulnerabilidadeController.selectedNew.nome}" required="true"/>
                     <b:inputText label="Descrição" id="descricao" value="#{vulnerabilidadeController.selectedNew.descricao}" required="true"/>
-                    <b:inputText label="Nível" id="nivel" value="#{vulnerabilidadeController.selectedNew.nivel}" required="true"/>
+                    <b:inputText label="Nível" type="number" id="nivel" value="#{vulnerabilidadeController.selectedNew.nivel}" required="true"/>
                     <b:inputText label="Ações" id="acoes" value="#{vulnerabilidadeController.selectedNew.acoes}" required="true"/>
                     <b:inputText label="Fonte" id="fonte" value="#{vulnerabilidadeController.selectedNew.fonte}" required="true"/>
-                    <b:inputText label="Data Criação" id="dataCriacao" value="#{vulnerabilidadeController.selectedNew.dataCriacao}" required="true">
-                        <f:convertDateTime pattern="dd/MM/yyyy"/>
+                    <b:inputText label="Data Criação" type="date" id="dataCriacao" value="#{vulnerabilidadeController.selectedNew.dataCriacao}" required="true">
+                        <f:convertDateTime pattern="yyyy-mm-dd"/>
                     </b:inputText>
                 </b:panel>
                 <br />
