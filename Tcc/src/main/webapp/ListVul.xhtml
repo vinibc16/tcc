@@ -4,95 +4,59 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:b="http://bootsfaces.net/ui"
-      xmlns:f="http://java.sun.com/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:b="http://bootsfaces.net/ui">
 
     <ui:decorate template="/template_admin.xhtml">
         <ui:define name="centro">
-            <h:form id="form">
-                <p:dataTable id="vulnerabilidade" var="vul" value="#{vulnerabilidadeController.items}" editable="true" style="margin-bottom:20px"
-                             rows="10" paginator="true"
-                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
-                    
-                    <p:ajax event="rowEdit" listener="#{vulnerabilidadeController.onRowEdit}" update=":principal:msgs" />
-                    <p:ajax event="rowEditCancel" listener="#{vulnerabilidadeController.onRowCancel}" update=":principal:msgs" />
-
+            <h:form id="formListVul">
+                <b:commandButton value="Criar Vulnerabilidade" action="CreateVul.jsf"/>
+                <br />
+                <br />
+                <p:dataTable id="tableVul" 
+                             var="vul" 
+                             value="#{vulnerabilidadeController.items}" 
+                             rows="10" 
+                             paginator="true"    
+                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"> 
                     <p:column headerText="Nome">
-                        <p:cellEditor>
-                            <f:facet name="output">
-                                <h:outputText value="#{vul.nome}" />
-                            </f:facet>
-                            <f:facet name="input">
-                                <p:inputText id="NomeInput" value="#{vul.nome}" style="width:100%"/>
-                            </f:facet>
-                        </p:cellEditor>
-                    </p:column>
-                    
-                    <p:column headerText="Descrição">
-                        <p:cellEditor>
-                            <f:facet name="output">
-                                <h:outputText value="#{vul.descricao}" />
-                            </f:facet>
-                            <f:facet name="input">
-                                <p:inputText id="DescricaoInput" value="#{vul.descricao}" style="width:100%"/>
-                            </f:facet>
-                        </p:cellEditor>
-                    </p:column>
-                    
-                    <p:column headerText="Nível">
-                        <p:cellEditor>
-                            <f:facet name="output">
-                                <h:outputText value="#{vul.nivel}" />
-                            </f:facet>
-                            <f:facet name="input">
-                                <p:inputText id="NivelInput" value="#{vul.nivel}" style="width:100%"/>
-                            </f:facet>
-                        </p:cellEditor>
-                    </p:column>
-                    
-                    <p:column headerText="Ações">
-                        <p:cellEditor>
-                            <f:facet name="output">
-                                <h:outputText value="#{vul.acoes}" />
-                            </f:facet>
-                            <f:facet name="input">
-                                <p:inputText id="AcoesInput" value="#{vul.acoes}" style="width:100%"/>
-                            </f:facet>
-                        </p:cellEditor>
-                    </p:column>
-                    
+                        <h:outputText value="#{vul.nome}" />
+                    </p:column>                    
                     <p:column headerText="Fonte">
-                        <p:cellEditor>
-                            <f:facet name="output">
-                                <h:outputText value="#{vul.fonte}" />
-                            </f:facet>
-                            <f:facet name="input">
-                                <p:inputText id="FonteInput" value="#{vul.fonte}" style="width:100%"/>
-                            </f:facet>
-                        </p:cellEditor>
+                        <h:outputText value="#{vul.fonte}" />
                     </p:column>
-                    
-                    <p:column headerText="Data Criação">
-                        <p:cellEditor>
-                            <f:facet name="output">
-                                <h:outputText value="#{vul.dataCriacao}">
-                                    <f:convertDateTime pattern="dd/MM/yyyy"/>
-                                </h:outputText>
-                            </f:facet>
-                            <f:facet name="input">
-                                <p:inputText id="DataCriacaoInput" value="#{vul.dataCriacao}" style="width:100%">
-                                    <f:convertDateTime pattern="dd/MM/yyyy"/>
-                                </p:inputText>
-                            </f:facet>
-                        </p:cellEditor>
+                    <p:column style="width:65px;text-align: center">
+                        <p:commandButton update=":principal:formListVul:vulDetail" oncomplete="PF('vulDialog').show()" icon="ui-icon-search" title="Detalhes">
+                            <f:setPropertyActionListener value="#{vul}" target="#{vulnerabilidadeController.selecionado}" />
+                        </p:commandButton>
                     </p:column>
-                    
-                    <p:column style="width:32px">
-                        <p:rowEditor />
+                    <p:column style="width:65px;text-align: center">
+                        <p:commandButton update=":principal:formListVul:tableVul" icon="ui-icon-pencil" actionListener="#{vulnerabilidadeController.prepareEdit()}" title="Editar">
+                            <f:setPropertyActionListener value="#{vul}" target="#{vulnerabilidadeController.selecionado}" />
+                        </p:commandButton>
+                    </p:column>
+                    <p:column style="width:65px;text-align: center">
+                        <p:commandButton update=":principal:formListVul:tableVul" icon="ui-icon-close" actionListener="#{vulnerabilidadeController.destroy()}" title="Deletar">
+                            <f:setPropertyActionListener value="#{vul}" target="#{vulnerabilidadeController.selecionado}" />
+                        </p:commandButton>
                     </p:column>
                 </p:dataTable>
-                <br />
-                <b:commandButton value="Criar Vulnerabilidade" action="CreateVul.jsf"/>
+                <p:dialog header="Detalhes" widgetVar="vulDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                    <p:outputPanel id="vulDetail" style="text-align:center;">
+                        <p:panelGrid  columns="2" rendered="#{not empty vulnerabilidadeController.selecionado}" columnClasses="value,value">
+                            <h:outputText value="Descrição:"/>
+                            <h:outputText value="#{vulnerabilidadeController.selecionado.descricao}"/>
+
+                            <h:outputText value="Nível:" />
+                            <h:outputText value="#{vulnerabilidadeController.selecionado.nivel}" />
+
+                            <h:outputText value="Data Criação:" />
+                            <h:outputText value="#{vulnerabilidadeController.selecionado.dataCriacao}">
+                                <f:convertDateTime pattern="DD/MM/YYYY"/>
+                            </h:outputText>
+                        </p:panelGrid>
+                    </p:outputPanel>
+                </p:dialog>
             </h:form>
         </ui:define>
     </ui:decorate>

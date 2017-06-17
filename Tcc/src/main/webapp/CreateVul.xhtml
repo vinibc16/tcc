@@ -20,7 +20,8 @@
                     </b:inputText>
                 </b:panel>
                 <br />
-                <b:commandButton action="#{vulnerabilidadeController.create}" value="#{bundle.CreateUsuarioSaveLink}" />
+                <b:commandButton action="#{vulnerabilidadeController.create}" value="Salvar" />
+                <b:commandButton action="#{vulnerabilidadeController.prepareList()}" value="Cancelar" style="margin-left: 10px;"/>
             </h:form>
         </ui:define>
     </ui:decorate>

@@ -81,9 +81,7 @@
                     </p:column> 
                     
                     <p:column headerText="Relatório" rendered="#{escopoController.visibleRelatorio()}" style="width:100px;text-align: center">
-                        <p:commandButton icon="ui-icon-document" ajax="false" >
-                            <p:fileDownload value="#{escopoController.gerarPdf(esc)}"/>
-                        </p:commandButton>
+                        <p:commandButton icon="ui-icon-document" ajax="false" action="#{escopoController.gerarPdf(esc)}" />
                     </p:column>
                     <p:column style="width:32px">
                         <p:rowEditor />

@@ -8,20 +8,18 @@
       xmlns:f="http://java.sun.com/jsf/core">
     <ui:decorate template="/template_admin.xhtml">
         <ui:define name="centro">
-            <h:form id="form">
+            <h:form id="formUser">
+                <b:commandButton value="Criar Usuario" action="CreateUsuario.jsf"/>
+                <br />
+                <br />
                 <p:dataTable id="usuarios" 
                              var="user" 
                              value="#{usuarioController.items}" 
-                             style="margin-bottom:20px"
                              rows="10" 
                              paginator="true" 
-                             editable="true"
                              paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
                     
-                    <p:ajax event="rowEdit" listener="#{usuarioController.onRowEdit}" update=":principal:msgs" />
-                    <p:ajax event="rowEditCancel" listener="#{usuarioController.onRowCancel}" update=":principal:msgs" />
-
-                    <p:column headerText="Usuario">
+                   <p:column headerText="Usuario">
                         <p:cellEditor>
                             <f:facet name="output">
                                 <h:outputText value="#{user.nome}" />
@@ -38,17 +36,29 @@
                                 <h:outputText value="#{user.senha}" />
                             </f:facet>
                             <f:facet name="input">
-                                <p:inputText id="SenhaInput" value="#{user.senha}" style="width:100%"/>
+                                <p:inputText id="SenhaInput" value="#{user.senha}" style="width:100%" type="password"/>
                             </f:facet>
                         </p:cellEditor>
                     </p:column>
-                    
-                    <p:column style="width:32px">
-                        <p:rowEditor />
+                    <p:column style="width:65px;text-align: center">
+                        <p:commandButton update=":principal:formUser:userDetail" oncomplete="PF('userDialog').show()" icon="ui-icon-search" title="Detalhes">
+                            <f:setPropertyActionListener value="#{user}" target="#{usuarioController.selected}" />
+                        </p:commandButton>
+                    </p:column>
+                    <p:column style="width:65px;text-align: center">
+                        <p:commandButton update=":principal:formUser:usuarios" icon="ui-icon-close" actionListener="#{usuarioController.destroy()}" title="Deletar">
+                            <f:setPropertyActionListener value="#{user}" target="#{usuarioController.selected}" />
+                        </p:commandButton>
                     </p:column>
                 </p:dataTable>
-                <br />
-                <b:commandButton value="Criar Usuario" action="CreateUsuario.jsf"/>
+                <p:dialog header="Detalhes" widgetVar="userDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                    <p:outputPanel id="userDetail" style="text-align:center;">
+                        <p:panelGrid  columns="2" rendered="#{not empty vulnerabilidadeController.selected}" columnClasses="value,value">
+                            <h:outputText value="Descrição:"/>
+                            <h:outputText value=""/>
+                        </p:panelGrid>
+                    </p:outputPanel>
+                </p:dialog>
             </h:form>
         </ui:define>
     </ui:decorate>

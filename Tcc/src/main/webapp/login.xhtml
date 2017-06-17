@@ -31,7 +31,8 @@
                         <b:iconAwesome name="key" />
                     </f:facet>
                 </b:inputText>
-                <b:commandButton action="#{usuarioController.envia()}" look="primary btn-block" value="Sign In" icon="log-in" size="lg"/>
+                <b:label id="msg" value="#{usuarioController.menssagem}" style="background: transparent; color: red"/>
+                <b:commandButton action="#{usuarioController.envia()}" look="primary btn-block" value="Logar" icon="log-in" size="lg"/>
             </h:form>
         </b:container>
     </h:body>

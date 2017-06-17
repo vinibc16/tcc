@@ -8,21 +8,25 @@
       xmlns:f="http://java.sun.com/jsf/core">
     <ui:composition template="/template_admin.xhtml">
         <ui:define name="centro">
-            <h:form id="form">
-                <p:dataTable id="empresas" var="emp" value="#{empresaController.items}" editable="true" style="margin-bottom:20px"
-                             rows="10" paginator="true"
+            <h:form id="formEmp">
+                <b:commandButton value="Criar Empresa" action="CreateEmpresa.jsf"/>
+                <br />
+                <br />
+                <p:dataTable id="empresas" 
+                             var="emp" 
+                             value="#{empresaController.items}" 
+                             rows="10" 
+                             paginator="true"
                              paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
                     
-                    <p:ajax event="rowEdit" listener="#{empresaController.onRowEdit}" update=":principal:msgs" />
-                    <p:ajax event="rowEditCancel" listener="#{empresaController.onRowCancel}" update=":principal:msgs" />
-
-                    <p:column headerText="Nome">
+                    
+                    <p:column headerText="Nome" style="width:200px">
                         <p:cellEditor>
                             <f:facet name="output">
                                 <h:outputText value="#{emp.nome}" />
                             </f:facet>
                             <f:facet name="input">
-                                <p:inputText id="NomeInput" value="#{emp.nome}" style="width:100%"/>
+                                <p:inputText id="NomeInput" value="#{emp.nome}"/>
                             </f:facet>
                         </p:cellEditor>
                     </p:column>
@@ -33,29 +37,41 @@
                                 <h:outputText value="#{emp.razaoSocial}" />
                             </f:facet>
                             <f:facet name="input">
-                                <p:inputText id="RazaoSocialInput" value="#{emp.razaoSocial}" style="width:100%"/>
+                                <p:inputText id="RazaoSocialInput" value="#{emp.razaoSocial}"/>
                             </f:facet>
                         </p:cellEditor>
                     </p:column>
                     
-                    <p:column headerText="Funcionarios">
+                    <p:column headerText="Funcionarios" style="width:120px">
                         <p:cellEditor>
                             <f:facet name="output">
                                 <h:outputText value="#{emp.funcionarios}" />
                             </f:facet>
                             <f:facet name="input">
-                                <p:inputText id="FuncionariosInput" value="#{emp.funcionarios}" style="width:100%"/>
+                                <p:inputText id="FuncionariosInput" value="#{emp.funcionarios}"/>
                             </f:facet>
                         </p:cellEditor>
                     </p:column>
                     
-                    <p:column style="width:32px">
-                        <p:rowEditor />
+                    <p:column style="width:65px;text-align: center">
+                        <p:commandButton update=":principal:formEmp:empDetail" oncomplete="PF('empDialog').show()" icon="ui-icon-search" title="Detalhes">
+                            <f:setPropertyActionListener value="#{emp}" target="#{empresaController.selected}" />
+                        </p:commandButton>
+                    </p:column>
+                    <p:column style="width:65px;text-align: center">
+                        <p:commandButton update=":principal:formEmp:empresas" icon="ui-icon-close" actionListener="#{empresaController.destroy()}" title="Deletar">
+                            <f:setPropertyActionListener value="#{emp}" target="#{empresaController.selected}" />
+                        </p:commandButton>
                     </p:column>
                 </p:dataTable>
-                <br />
-                <br />
-                <b:commandButton value="Criar Empresa" action="CreateEmpresa.jsf"/>
+                <p:dialog header="Detalhes" widgetVar="empDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                    <p:outputPanel id="empDetail" style="text-align:center;">
+                        <p:panelGrid  columns="2" rendered="#{not empty empresaController.selected}" columnClasses="value,value">
+                            <h:outputText value="Descrição:"/>
+                            <h:outputText value=""/>
+                        </p:panelGrid>
+                    </p:outputPanel>
+                </p:dialog>
             </h:form>
         </ui:define>
     </ui:composition>

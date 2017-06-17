@@ -30,6 +30,7 @@ public class VulnerabilidadeController implements Serializable {
 
     private Vulnerabilidade current;
     private Vulnerabilidade newVul;
+    private Vulnerabilidade selecionado;
     private DataModel items = null;
     @EJB
     private pucrs.br.bean.VulnerabilidadeFacade ejbFacade;
@@ -41,6 +42,15 @@ public class VulnerabilidadeController implements Serializable {
     public VulnerabilidadeController() {
     }
 
+    public Vulnerabilidade getSelecionado() {
+        System.out.println("Selecionado ->"+selecionado);
+        return selecionado;
+    }
+
+    public void setSelecionado(Vulnerabilidade selecionado) {
+        this.selecionado = selecionado;
+    }
+    
     public Vulnerabilidade getSelected() {
         if (current == null) {
             current = new Vulnerabilidade();
@@ -81,6 +91,7 @@ public class VulnerabilidadeController implements Serializable {
 
     public void prepareList() throws IOException {
         recreateModel();
+        updateCurrentItem();
         FacesContext.getCurrentInstance().getExternalContext().redirect("ListVul.jsf");
     }
     
@@ -113,10 +124,10 @@ public class VulnerabilidadeController implements Serializable {
         }
     }
 
-    public String prepareEdit() {
+    public void prepareEdit() throws IOException {
         current = (Vulnerabilidade) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
-        return "EditVul";
+        FacesContext.getCurrentInstance().getExternalContext().redirect("EditVul.jsf");
     }
 
     public String update() {

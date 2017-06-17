@@ -27,6 +27,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
 import javax.ws.rs.BeanParam;
+import net.bootsfaces.utils.FacesMessages;
 import org.primefaces.event.CellEditEvent;
 import org.primefaces.event.RowEditEvent;
 import pucrs.br.entity.Empresa;
@@ -279,6 +280,7 @@ public class UsuarioController implements Serializable {
         logado = ejbFacade.getUsuario(logado.getId(), logado.getSenha());
         if (logado == null) {
             logado = new Usuario();
+            FacesMessages.error("Usuário ou senha inválidos.");
             return null;
         } else {
             return "home.jsf";
@@ -316,6 +318,7 @@ public class UsuarioController implements Serializable {
     }
     
     public void logado() throws IOException {
+        setMenssagem(null);
         if (logado == null) {
             FacesContext.getCurrentInstance().getExternalContext().redirect("login.jsf");
         } else if (logado.getId() == null) {
