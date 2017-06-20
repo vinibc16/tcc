@@ -35,12 +35,9 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Responsaveis.findAll", query = "SELECT r FROM Responsaveis r"),
     @NamedQuery(name = "Responsaveis.findByIdResponsavel", query = "SELECT r FROM Responsaveis r WHERE r.idResponsavel = :idResponsavel"),
-    @NamedQuery(name = "Responsaveis.findByNome", query = "SELECT r FROM Responsaveis r WHERE r.nome = :nome")})
+    @NamedQuery(name = "Responsaveis.findByNome", query = "SELECT r FROM Responsaveis r WHERE r.nome = :nome"),
+    @NamedQuery(name = "Responsaveis.findByEMail", query = "SELECT r FROM Responsaveis r WHERE r.eMail = :eMail")})
 public class Responsaveis implements Serializable {
-
-    @JoinColumn(name = "id_empresa", referencedColumnName = "id_empresa")
-    @ManyToOne(optional = false)
-    private Empresa idEmpresa;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -53,8 +50,17 @@ public class Responsaveis implements Serializable {
     @Size(min = 1, max = 200)
     @Column(name = "nome")
     private String nome;
+    // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="E-mail inválido")//if the field contains email address consider using this annotation to enforce field validation
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 200)
+    @Column(name = "e_mail")
+    private String eMail;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idResponsavel")
     private Collection<Escopo> escopoCollection;
+    @JoinColumn(name = "id_empresa", referencedColumnName = "id_empresa")
+    @ManyToOne(optional = false)
+    private Empresa idEmpresa;
 
     public Responsaveis() {
     }
@@ -63,9 +69,10 @@ public class Responsaveis implements Serializable {
         this.idResponsavel = idResponsavel;
     }
 
-    public Responsaveis(Integer idResponsavel, String nome) {
+    public Responsaveis(Integer idResponsavel, String nome, String eMail) {
         this.idResponsavel = idResponsavel;
         this.nome = nome;
+        this.eMail = eMail;
     }
 
     public Integer getIdResponsavel() {
@@ -84,6 +91,14 @@ public class Responsaveis implements Serializable {
         this.nome = nome;
     }
 
+    public String getEMail() {
+        return eMail;
+    }
+
+    public void setEMail(String eMail) {
+        this.eMail = eMail;
+    }
+
     @XmlTransient
     public Collection<Escopo> getEscopoCollection() {
         return escopoCollection;
@@ -91,6 +106,14 @@ public class Responsaveis implements Serializable {
 
     public void setEscopoCollection(Collection<Escopo> escopoCollection) {
         this.escopoCollection = escopoCollection;
+    }
+
+    public Empresa getIdEmpresa() {
+        return idEmpresa;
+    }
+
+    public void setIdEmpresa(Empresa idEmpresa) {
+        this.idEmpresa = idEmpresa;
     }
 
     @Override
@@ -115,15 +138,7 @@ public class Responsaveis implements Serializable {
 
     @Override
     public String toString() {
-        return ""+getIdResponsavel();
-    }
-
-    public Empresa getIdEmpresa() {
-        return idEmpresa;
-    }
-
-    public void setIdEmpresa(Empresa idEmpresa) {
-        this.idEmpresa = idEmpresa;
+        return "pucrs.br.entity.Responsaveis[ idResponsavel=" + idResponsavel + " ]";
     }
     
 }

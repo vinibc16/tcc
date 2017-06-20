@@ -30,7 +30,10 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Usuario.findAll", query = "SELECT u FROM Usuario u"),
     @NamedQuery(name = "Usuario.findById", query = "SELECT u FROM Usuario u WHERE u.id = :id"),
     @NamedQuery(name = "Usuario.findByNome", query = "SELECT u FROM Usuario u WHERE u.nome = :nome"),
-    @NamedQuery(name = "Usuario.findBySenha", query = "SELECT u FROM Usuario u WHERE u.senha = :senha")})
+    @NamedQuery(name = "Usuario.findBySenha", query = "SELECT u FROM Usuario u WHERE u.senha = :senha"),
+    @NamedQuery(name = "Usuario.findByTelefone", query = "SELECT u FROM Usuario u WHERE u.telefone = :telefone"),
+    @NamedQuery(name = "Usuario.findByEMail", query = "SELECT u FROM Usuario u WHERE u.eMail = :eMail"),
+    @NamedQuery(name = "Usuario.findByRamal", query = "SELECT u FROM Usuario u WHERE u.ramal = :ramal")})
 public class Usuario implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -50,6 +53,18 @@ public class Usuario implements Serializable {
     @Size(min = 1, max = 50)
     @Column(name = "senha")
     private String senha;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "telefone")
+    private int telefone;
+    // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="E-mail inválido")//if the field contains email address consider using this annotation to enforce field validation
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 200)
+    @Column(name = "e_mail")
+    private String eMail;
+    @Column(name = "ramal")
+    private Integer ramal;
     @JoinColumn(name = "id_empresa", referencedColumnName = "id_empresa")
     @ManyToOne(optional = false)
     private Empresa idEmpresa;
@@ -64,10 +79,12 @@ public class Usuario implements Serializable {
         this.id = id;
     }
 
-    public Usuario(String id, String nome, String senha) {
+    public Usuario(String id, String nome, String senha, int telefone, String eMail) {
         this.id = id;
         this.nome = nome;
         this.senha = senha;
+        this.telefone = telefone;
+        this.eMail = eMail;
     }
 
     public String getId() {
@@ -92,6 +109,30 @@ public class Usuario implements Serializable {
 
     public void setSenha(String senha) {
         this.senha = senha;
+    }
+
+    public int getTelefone() {
+        return telefone;
+    }
+
+    public void setTelefone(int telefone) {
+        this.telefone = telefone;
+    }
+
+    public String getEMail() {
+        return eMail;
+    }
+
+    public void setEMail(String eMail) {
+        this.eMail = eMail;
+    }
+
+    public Integer getRamal() {
+        return ramal;
+    }
+
+    public void setRamal(Integer ramal) {
+        this.ramal = ramal;
     }
 
     public Empresa getIdEmpresa() {
@@ -132,7 +173,7 @@ public class Usuario implements Serializable {
 
     @Override
     public String toString() {
-        return getNome();
+        return "pucrs.br.entity.Usuario[ id=" + id + " ]";
     }
     
 }

@@ -35,16 +35,14 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Empresa.findByIdEmpresa", query = "SELECT e FROM Empresa e WHERE e.idEmpresa = :idEmpresa"),
     @NamedQuery(name = "Empresa.findByNome", query = "SELECT e FROM Empresa e WHERE e.nome = :nome"),
     @NamedQuery(name = "Empresa.findByRazaoSocial", query = "SELECT e FROM Empresa e WHERE e.razaoSocial = :razaoSocial"),
-    @NamedQuery(name = "Empresa.findByFuncionarios", query = "SELECT e FROM Empresa e WHERE e.funcionarios = :funcionarios")})
+    @NamedQuery(name = "Empresa.findByFuncionarios", query = "SELECT e FROM Empresa e WHERE e.funcionarios = :funcionarios"),
+    @NamedQuery(name = "Empresa.findByEndereco", query = "SELECT e FROM Empresa e WHERE e.endereco = :endereco"),
+    @NamedQuery(name = "Empresa.findByMissao", query = "SELECT e FROM Empresa e WHERE e.missao = :missao"),
+    @NamedQuery(name = "Empresa.findByVisao", query = "SELECT e FROM Empresa e WHERE e.visao = :visao"),
+    @NamedQuery(name = "Empresa.findBySegmento", query = "SELECT e FROM Empresa e WHERE e.segmento = :segmento"),
+    @NamedQuery(name = "Empresa.findByCnpj", query = "SELECT e FROM Empresa e WHERE e.cnpj = :cnpj"),
+    @NamedQuery(name = "Empresa.findByTelefone", query = "SELECT e FROM Empresa e WHERE e.telefone = :telefone")})
 public class Empresa implements Serializable {
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "empresa")
-    private Collection<Escopo> escopoCollection;
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idEmpresa")
-    private Collection<Responsaveis> responsaveisCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idEmpresa")
-    private Collection<Vulnerabilidade> vulnerabilidadeCollection;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -57,13 +55,43 @@ public class Empresa implements Serializable {
     @Size(min = 1, max = 100)
     @Column(name = "nome")
     private String nome;
-    @Size(max = 500)
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 500)
     @Column(name = "razao_social")
     private String razaoSocial;
     @Column(name = "funcionarios")
     private Integer funcionarios;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "empresa")
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 2000)
+    @Column(name = "endereco")
+    private String endereco;
+    @Size(max = 2000)
+    @Column(name = "missao")
+    private String missao;
+    @Size(max = 2000)
+    @Column(name = "visao")
+    private String visao;
+    @Size(max = 200)
+    @Column(name = "segmento")
+    private String segmento;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "cnpj")
+    private int cnpj;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "telefone")
+    private int telefone;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idEmpresa")
     private Collection<EscopoVul> escopoVulCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idEmpresa")
+    private Collection<Escopo> escopoCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idEmpresa")
+    private Collection<Responsaveis> responsaveisCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idEmpresa")
+    private Collection<Vulnerabilidade> vulnerabilidadeCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idEmpresa")
     private Collection<Usuario> usuarioCollection;
 
@@ -74,9 +102,13 @@ public class Empresa implements Serializable {
         this.idEmpresa = idEmpresa;
     }
 
-    public Empresa(Integer idEmpresa, String nome) {
+    public Empresa(Integer idEmpresa, String nome, String razaoSocial, String endereco, int cnpj, int telefone) {
         this.idEmpresa = idEmpresa;
         this.nome = nome;
+        this.razaoSocial = razaoSocial;
+        this.endereco = endereco;
+        this.cnpj = cnpj;
+        this.telefone = telefone;
     }
 
     public Integer getIdEmpresa() {
@@ -111,6 +143,54 @@ public class Empresa implements Serializable {
         this.funcionarios = funcionarios;
     }
 
+    public String getEndereco() {
+        return endereco;
+    }
+
+    public void setEndereco(String endereco) {
+        this.endereco = endereco;
+    }
+
+    public String getMissao() {
+        return missao;
+    }
+
+    public void setMissao(String missao) {
+        this.missao = missao;
+    }
+
+    public String getVisao() {
+        return visao;
+    }
+
+    public void setVisao(String visao) {
+        this.visao = visao;
+    }
+
+    public String getSegmento() {
+        return segmento;
+    }
+
+    public void setSegmento(String segmento) {
+        this.segmento = segmento;
+    }
+
+    public int getCnpj() {
+        return cnpj;
+    }
+
+    public void setCnpj(int cnpj) {
+        this.cnpj = cnpj;
+    }
+
+    public int getTelefone() {
+        return telefone;
+    }
+
+    public void setTelefone(int telefone) {
+        this.telefone = telefone;
+    }
+
     @XmlTransient
     public Collection<EscopoVul> getEscopoVulCollection() {
         return escopoVulCollection;
@@ -118,6 +198,33 @@ public class Empresa implements Serializable {
 
     public void setEscopoVulCollection(Collection<EscopoVul> escopoVulCollection) {
         this.escopoVulCollection = escopoVulCollection;
+    }
+
+    @XmlTransient
+    public Collection<Escopo> getEscopoCollection() {
+        return escopoCollection;
+    }
+
+    public void setEscopoCollection(Collection<Escopo> escopoCollection) {
+        this.escopoCollection = escopoCollection;
+    }
+
+    @XmlTransient
+    public Collection<Responsaveis> getResponsaveisCollection() {
+        return responsaveisCollection;
+    }
+
+    public void setResponsaveisCollection(Collection<Responsaveis> responsaveisCollection) {
+        this.responsaveisCollection = responsaveisCollection;
+    }
+
+    @XmlTransient
+    public Collection<Vulnerabilidade> getVulnerabilidadeCollection() {
+        return vulnerabilidadeCollection;
+    }
+
+    public void setVulnerabilidadeCollection(Collection<Vulnerabilidade> vulnerabilidadeCollection) {
+        this.vulnerabilidadeCollection = vulnerabilidadeCollection;
     }
 
     @XmlTransient
@@ -151,34 +258,7 @@ public class Empresa implements Serializable {
 
     @Override
     public String toString() {
-        return ""+getIdEmpresa();
-    }
-
-    @XmlTransient
-    public Collection<Responsaveis> getResponsaveisCollection() {
-        return responsaveisCollection;
-    }
-
-    public void setResponsaveisCollection(Collection<Responsaveis> responsaveisCollection) {
-        this.responsaveisCollection = responsaveisCollection;
-    }
-
-    @XmlTransient
-    public Collection<Vulnerabilidade> getVulnerabilidadeCollection() {
-        return vulnerabilidadeCollection;
-    }
-
-    public void setVulnerabilidadeCollection(Collection<Vulnerabilidade> vulnerabilidadeCollection) {
-        this.vulnerabilidadeCollection = vulnerabilidadeCollection;
-    }
-
-    @XmlTransient
-    public Collection<Escopo> getEscopoCollection() {
-        return escopoCollection;
-    }
-
-    public void setEscopoCollection(Collection<Escopo> escopoCollection) {
-        this.escopoCollection = escopoCollection;
+        return ""+idEmpresa;
     }
     
 }

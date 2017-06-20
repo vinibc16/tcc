@@ -20,10 +20,6 @@ public class EscopoVulPK implements Serializable {
 
     @Basic(optional = false)
     @NotNull
-    @Column(name = "id_empresa")
-    private int idEmpresa;
-    @Basic(optional = false)
-    @NotNull
     @Column(name = "id_escopo")
     private int idEscopo;
     @Basic(optional = false)
@@ -34,18 +30,9 @@ public class EscopoVulPK implements Serializable {
     public EscopoVulPK() {
     }
 
-    public EscopoVulPK(int idEmpresa, int idEscopo, int idVulnerabilidade) {
-        this.idEmpresa = idEmpresa;
+    public EscopoVulPK(int idEscopo, int idVulnerabilidade) {
         this.idEscopo = idEscopo;
         this.idVulnerabilidade = idVulnerabilidade;
-    }
-
-    public int getIdEmpresa() {
-        return idEmpresa;
-    }
-
-    public void setIdEmpresa(int idEmpresa) {
-        this.idEmpresa = idEmpresa;
     }
 
     public int getIdEscopo() {
@@ -67,7 +54,6 @@ public class EscopoVulPK implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (int) idEmpresa;
         hash += (int) idEscopo;
         hash += (int) idVulnerabilidade;
         return hash;
@@ -80,9 +66,6 @@ public class EscopoVulPK implements Serializable {
             return false;
         }
         EscopoVulPK other = (EscopoVulPK) object;
-        if (this.idEmpresa != other.idEmpresa) {
-            return false;
-        }
         if (this.idEscopo != other.idEscopo) {
             return false;
         }
@@ -94,7 +77,7 @@ public class EscopoVulPK implements Serializable {
 
     @Override
     public String toString() {
-        return "pucrs.br.entity.EscopoVulPK[ idEmpresa=" + idEmpresa + ", idEscopo=" + idEscopo + ", idVulnerabilidade=" + idVulnerabilidade + " ]";
+        return "pucrs.br.entity.EscopoVulPK[ idEscopo=" + idEscopo + ", idVulnerabilidade=" + idVulnerabilidade + " ]";
     }
     
 }

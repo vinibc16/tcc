@@ -12,9 +12,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import pucrs.br.entity.Escopo;
-import pucrs.br.entity.EscopoPK;
-import pucrs.br.entity.EscopoVul;
-import pucrs.br.entity.EscopoVulPK;
 import pucrs.br.entity.Grafico;
 
 /**
@@ -37,15 +34,14 @@ public class EscopoFacade extends AbstractFacade<Escopo> {
     }
     
     public List<Escopo> findAllEscByUser(int idEmpresa) {        
-        return em.createQuery("SELECT u FROM Escopo u WHERE u.escopoPK.idEmpresa = :idEmpresa")
+        return em.createQuery("SELECT u FROM Escopo u WHERE u.idEmpresa = :idEmpresa")
                 .setParameter("idEmpresa", idEmpresa)
                 .getResultList();
     }
     
-    public Escopo findbyId(int idEmpresa,int idEscopo) {        
-        Escopo esc = (Escopo) em.createQuery("SELECT u FROM Escopo u WHERE u.escopoPK.idEmpresa = :idEmpresa and u.escopoPK.idEscopo = :idEscopo")
+    public Escopo findbyId(int idEscopo) {        
+        Escopo esc = (Escopo) em.createQuery("SELECT u FROM Escopo u WHERE u.idEscopo = :idEscopo")
                 .setParameter("idEscopo", idEscopo)
-                .setParameter("idEmpresa", idEmpresa)
                 .getSingleResult();
         return esc;
     }
@@ -59,7 +55,7 @@ public class EscopoFacade extends AbstractFacade<Escopo> {
         List<Object[]> lista = query.getResultList();
         List<Grafico> grafico = new ArrayList<>();
         for (Object[] row : lista) {
-            grafico.add(new Grafico(findbyId(idEmpresa,(int)row[0]), (double)row[1]));
+            grafico.add(new Grafico(findbyId((int)row[0]), (double)row[1]));
         }
         return grafico;
     }

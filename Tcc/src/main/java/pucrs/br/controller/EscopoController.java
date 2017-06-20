@@ -88,7 +88,6 @@ public class EscopoController implements Serializable {
     public Escopo getSelected() {
         if (current == null) {
             current = new Escopo();
-            current.setEscopoPK(new pucrs.br.entity.EscopoPK());
             selectedItemIndex = -1;
         }
         return current;
@@ -97,7 +96,6 @@ public class EscopoController implements Serializable {
     public Escopo getSelectedNew() {
         if (escopoNew == null) {
             escopoNew = new Escopo();
-            escopoNew.setEscopoPK(new pucrs.br.entity.EscopoPK());
             selectedItemIndex = -1;
         }
         return escopoNew;
@@ -147,14 +145,13 @@ public class EscopoController implements Serializable {
 
     public String prepareCreate() {
         escopoNew = new Escopo();
-        escopoNew.setEscopoPK(new pucrs.br.entity.EscopoPK());
         selectedItemIndex = -1;
         return "CreateEscopo";
     }
 
     public String create() {
         try {
-            escopoNew.getEscopoPK().setIdEmpresa(usuarioLogado.getLogado().getIdEmpresa().getIdEmpresa());
+            escopoNew.setIdEmpresa(usuarioLogado.getLogado().getIdEmpresa());
             escopoNew.setDataCriacao(new Date());
             getFacade().create(escopoNew);
             JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("EscopoCreated"));
@@ -173,7 +170,7 @@ public class EscopoController implements Serializable {
 
     public String update() {
         try {
-            current.getEscopoPK().setIdEmpresa(current.getEscopoPK().getIdEmpresa());
+            //current.setIdEmpresa(current.getIdEmpresa());
             getFacade().edit(current);
             JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("EscopoUpdated"));
             return "ViewEscopo";
@@ -264,7 +261,7 @@ public class EscopoController implements Serializable {
         return JsfUtil.getSelectItems(ejbFacade.findAll(), true);
     }
 
-    public Escopo getEscopo(pucrs.br.entity.EscopoPK id) {
+    public Escopo getEscopo(int id) {
         return ejbFacade.find(id);
     }
 
@@ -284,20 +281,15 @@ public class EscopoController implements Serializable {
             return controller.getEscopo(getKey(value));
         }
 
-        pucrs.br.entity.EscopoPK getKey(String value) {
-            pucrs.br.entity.EscopoPK key;
-            String values[] = value.split(SEPARATOR_ESCAPED);
-            key = new pucrs.br.entity.EscopoPK();
-            key.setIdEmpresa(Integer.parseInt(values[0]));
-            key.setIdEscopo(Integer.parseInt(values[1]));
+        java.lang.Integer getKey(String value) {
+            java.lang.Integer key;
+            key = Integer.valueOf(value);
             return key;
         }
 
-        String getStringKey(pucrs.br.entity.EscopoPK value) {
+        String getStringKey(java.lang.Integer value) {
             StringBuilder sb = new StringBuilder();
-            sb.append(value.getIdEmpresa());
-            sb.append(SEPARATOR);
-            sb.append(value.getIdEscopo());
+            sb.append(value);
             return sb.toString();
         }
 
@@ -308,7 +300,7 @@ public class EscopoController implements Serializable {
             }
             if (object instanceof Escopo) {
                 Escopo o = (Escopo) object;
-                return getStringKey(o.getEscopoPK());
+                return getStringKey(o.getIdEscopo());
             } else {
                 throw new IllegalArgumentException("object " + object + " is of type " + object.getClass().getName() + "; expected type: " + Escopo.class.getName());
             }

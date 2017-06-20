@@ -9,17 +9,12 @@
     <ui:composition template="/template_admin.xhtml">
         <ui:define name="centro">
             <h:form id="formEmp">
-                <b:commandButton value="Criar Empresa" action="CreateEmpresa.jsf"/>
-                <br />
-                <br />
                 <p:dataTable id="empresas" 
                              var="emp" 
                              value="#{empresaController.items}" 
                              rows="10" 
                              paginator="true"
                              paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
-                    
-                    
                     <p:column headerText="Nome" style="width:200px">
                         <p:cellEditor>
                             <f:facet name="output">
@@ -42,19 +37,13 @@
                         </p:cellEditor>
                     </p:column>
                     
-                    <p:column headerText="Funcionarios" style="width:120px">
-                        <p:cellEditor>
-                            <f:facet name="output">
-                                <h:outputText value="#{emp.funcionarios}" />
-                            </f:facet>
-                            <f:facet name="input">
-                                <p:inputText id="FuncionariosInput" value="#{emp.funcionarios}"/>
-                            </f:facet>
-                        </p:cellEditor>
-                    </p:column>
-                    
                     <p:column style="width:65px;text-align: center">
-                        <p:commandButton update=":principal:formEmp:empDetail" oncomplete="PF('empDialog').show()" icon="ui-icon-search" title="Detalhes">
+                        <p:commandButton actionListener="#{empresaController.prepareView()}" icon="ui-icon-search" title="Detalhes">
+                            <f:setPropertyActionListener value="#{emp}" target="#{empresaController.selected}" />
+                        </p:commandButton>
+                    </p:column>
+                    <p:column style="width:65px;text-align: center">
+                        <p:commandButton update=":principal:formEmp:empresas" icon="ui-icon-pencil" actionListener="#{empresaController.prepareEdit()}" title="Editar">
                             <f:setPropertyActionListener value="#{emp}" target="#{empresaController.selected}" />
                         </p:commandButton>
                     </p:column>
@@ -64,14 +53,8 @@
                         </p:commandButton>
                     </p:column>
                 </p:dataTable>
-                <p:dialog header="Detalhes" widgetVar="empDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
-                    <p:outputPanel id="empDetail" style="text-align:center;">
-                        <p:panelGrid  columns="2" rendered="#{not empty empresaController.selected}" columnClasses="value,value">
-                            <h:outputText value="Descrição:"/>
-                            <h:outputText value=""/>
-                        </p:panelGrid>
-                    </p:outputPanel>
-                </p:dialog>
+                <br />
+                <b:commandButton value="Criar Empresa" action="#{empresaController.prepareCreate()}"/>
             </h:form>
         </ui:define>
     </ui:composition>

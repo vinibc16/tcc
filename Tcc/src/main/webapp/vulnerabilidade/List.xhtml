@@ -4,21 +4,19 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:b="http://bootsfaces.net/ui">
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
 
-    <ui:decorate template="/template_admin.xhtml">
+    <ui:decorate template="/template_usuario.xhtml">
         <ui:define name="centro">
             <h:form id="formListVul">
-                <b:commandButton value="Criar Vulnerabilidade" action="CreateVul.jsf"/>
-                <br />
-                <br />
                 <p:dataTable id="tableVul" 
                              var="vul" 
                              value="#{vulnerabilidadeController.items}" 
                              rows="10" 
                              paginator="true"    
                              paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"> 
+                    
                     <p:column headerText="Nome">
                         <h:outputText value="#{vul.nome}" />
                     </p:column>                    
@@ -26,37 +24,24 @@
                         <h:outputText value="#{vul.fonte}" />
                     </p:column>
                     <p:column style="width:65px;text-align: center">
-                        <p:commandButton update=":principal:formListVul:vulDetail" oncomplete="PF('vulDialog').show()" icon="ui-icon-search" title="Detalhes">
-                            <f:setPropertyActionListener value="#{vul}" target="#{vulnerabilidadeController.selecionado}" />
+                        <p:commandButton actionListener="#{vulnerabilidadeController.prepareView()}" icon="ui-icon-search" title="Detalhes">
+                            <f:setPropertyActionListener value="#{vul}" target="#{vulnerabilidadeController.selected}" />
                         </p:commandButton>
                     </p:column>
                     <p:column style="width:65px;text-align: center">
                         <p:commandButton update=":principal:formListVul:tableVul" icon="ui-icon-pencil" actionListener="#{vulnerabilidadeController.prepareEdit()}" title="Editar">
-                            <f:setPropertyActionListener value="#{vul}" target="#{vulnerabilidadeController.selecionado}" />
+                            <f:setPropertyActionListener value="#{vul}" target="#{vulnerabilidadeController.selected}" />
                         </p:commandButton>
                     </p:column>
                     <p:column style="width:65px;text-align: center">
                         <p:commandButton update=":principal:formListVul:tableVul" icon="ui-icon-close" actionListener="#{vulnerabilidadeController.destroy()}" title="Deletar">
-                            <f:setPropertyActionListener value="#{vul}" target="#{vulnerabilidadeController.selecionado}" />
+                            <f:setPropertyActionListener value="#{vul}" target="#{vulnerabilidadeController.selected}" />
                         </p:commandButton>
                     </p:column>
                 </p:dataTable>
-                <p:dialog header="Detalhes" widgetVar="vulDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
-                    <p:outputPanel id="vulDetail" style="text-align:center;">
-                        <p:panelGrid  columns="2" rendered="#{not empty vulnerabilidadeController.selecionado}" columnClasses="value,value">
-                            <h:outputText value="Descrição:"/>
-                            <h:outputText value="#{vulnerabilidadeController.selecionado.descricao}"/>
-
-                            <h:outputText value="Nível:" />
-                            <h:outputText value="#{vulnerabilidadeController.selecionado.nivel}" />
-
-                            <h:outputText value="Data Criação:" />
-                            <h:outputText value="#{vulnerabilidadeController.selecionado.dataCriacao}">
-                                <f:convertDateTime pattern="DD/MM/YYYY"/>
-                            </h:outputText>
-                        </p:panelGrid>
-                    </p:outputPanel>
-                </p:dialog>
+                <br />
+                <b:commandButton value="Criar Vulnerabilidade" action="#{vulnerabilidadeController.prepareCreate()}"/>
+                <b:commandButton value="Importar Vulnerabilidades" action="#" style="margin-left: 10px;"/>
             </h:form>
         </ui:define>
     </ui:decorate>

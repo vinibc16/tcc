@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:b="http://bootsfaces.net/ui">
+
+    <ui:decorate template="/template_usuario.xhtml">
+        <ui:define name="centro">
+            <h:form>
+                <b:panel>
+                    <b:inputText label="Nome" id="nome" value="#{vulnerabilidadeController.selected.nome}" required="true"/>
+                    <b:inputText label="Descrição" id="descricao" value="#{vulnerabilidadeController.selected.descricao}" required="true"/>
+                    <b:inputText label="Nível" type="number" id="nivel" value="#{vulnerabilidadeController.selected.nivel}" required="true"/>
+                    <b:inputText label="Ações" id="acoes" value="#{vulnerabilidadeController.selected.acoes}" required="true"/>
+                    <b:inputText label="Fonte" id="fonte" value="#{vulnerabilidadeController.selected.fonte}" required="true"/>
+                    <b:inputText label="Consequência" id="consequencia" value="#{vulnerabilidadeController.selected.consequencia}"/>
+                </b:panel>
+                <br />
+                <b:commandButton action="#{vulnerabilidadeController.create}" value="Salvar" />
+                <b:commandButton action="#{vulnerabilidadeController.prepareList()}" value="Cancelar" style="margin-left: 10px;"/>
+            </h:form>
+        </ui:define>
+    </ui:decorate>
+
+</html>

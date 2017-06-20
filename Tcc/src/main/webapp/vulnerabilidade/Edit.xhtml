@@ -6,7 +6,7 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:b="http://bootsfaces.net/ui">
 
-    <ui:decorate template="/template_admin.xhtml">
+    <ui:decorate template="/template_usuario.xhtml">
         <ui:define name="centro">
             <h:form id="editVul">
                 <b:panel>
@@ -15,6 +15,7 @@
                     <b:inputText label="Nível" type="number" id="nivel" value="#{vulnerabilidadeController.selected.nivel}" required="true"/>
                     <b:inputText label="Ações" id="acoes" value="#{vulnerabilidadeController.selected.acoes}" required="true"/>
                     <b:inputText label="Fonte" id="fonte" value="#{vulnerabilidadeController.selected.fonte}" required="true"/>
+                    <b:inputText label="Consequência" id="consequencia" value="#{vulnerabilidadeController.selected.consequencia}"/>
                 </b:panel>
                 <b:commandButton action="#{vulnerabilidadeController.update}" value="Salvar"/>
                 <b:commandButton action="#{vulnerabilidadeController.prepareList()}" value="Cancelar" style="margin-left: 10px;"/>

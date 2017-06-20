@@ -6,34 +6,25 @@ import pucrs.br.controller.util.JsfUtil;
 import pucrs.br.controller.util.PaginationHelper;
 import pucrs.br.bean.EscopoVulFacade;
 
-import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
-import java.util.List;
 import java.util.ResourceBundle;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
 import pucrs.br.entity.Escopo;
-import pucrs.br.entity.EscopoPK;
 import pucrs.br.entity.EscopoVulPK;
 import pucrs.br.entity.Vulnerabilidade;
 import java.io.Serializable;
 import java.util.List;
-import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import org.primefaces.event.CellEditEvent;
 import org.primefaces.event.RowEditEvent;
@@ -137,7 +128,7 @@ public class EscopoVulController implements Serializable {
     public String create() {
         try {
             current.getEscopoVulPK().setIdEscopo(current.getEscopoVulPK().getIdEscopo());
-            current.getEscopoVulPK().setIdEmpresa(current.getEscopoVulPK().getIdEmpresa());
+            current.setIdEmpresa(current.getIdEmpresa());
             current.getEscopoVulPK().setIdVulnerabilidade(current.getVulnerabilidade().getIdVulnerabilidade());
             getFacade().create(current);
             JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("EscopoVulCreated"));
@@ -271,7 +262,6 @@ public class EscopoVulController implements Serializable {
             pucrs.br.entity.EscopoVulPK key;
             String values[] = value.split(SEPARATOR_ESCAPED);
             key = new pucrs.br.entity.EscopoVulPK();
-            key.setIdEmpresa(Integer.parseInt(values[0]));
             key.setIdEscopo(Integer.parseInt(values[1]));
             key.setIdVulnerabilidade(Integer.parseInt(values[2]));
             return key;
@@ -279,8 +269,6 @@ public class EscopoVulController implements Serializable {
 
         String getStringKey(pucrs.br.entity.EscopoVulPK value) {
             StringBuilder sb = new StringBuilder();
-            sb.append(value.getIdEmpresa());
-            sb.append(SEPARATOR);
             sb.append(value.getIdEscopo());
             sb.append(SEPARATOR);
             sb.append(value.getIdVulnerabilidade());
@@ -316,8 +304,7 @@ public class EscopoVulController implements Serializable {
             ev.setDataLink(resultdate);
             
             EscopoVulPK evpk = new EscopoVulPK();
-            evpk.setIdEmpresa(escopo.getEscopoPK().getIdEmpresa());
-            evpk.setIdEscopo(escopo.getEscopoPK().getIdEscopo());
+            evpk.setIdEscopo(escopo.getIdEscopo());
             evpk.setIdVulnerabilidade(vul.get(i).getIdVulnerabilidade());
             ev.setEscopoVulPK(evpk);
             
@@ -332,7 +319,6 @@ public class EscopoVulController implements Serializable {
         recreateModel();
         escopoPag = escopo;
         lista = getPagination2().createPageDataModel();
-        System.out.println("Id Escopo ->"+escopo.getEscopoPK().getIdEscopo());
         listaApontamento = getFacade().findAllfindByIdEscopo(escopo);
         System.out.println(""+listaApontamento.size());
         return "ListEscopoVul2.jsf";
@@ -342,7 +328,6 @@ public class EscopoVulController implements Serializable {
         recreateModel();
         escopoPag = escopo;
         lista = getPagination2().createPageDataModel();
-        System.out.println("Id Escopo ->"+escopo.getEscopoPK().getIdEscopo());
         listaApontamento = getFacade().findAllfindByIdEscopo(escopo);
         System.out.println(""+listaApontamento.size());
         return "DefinirAceite.jsf";

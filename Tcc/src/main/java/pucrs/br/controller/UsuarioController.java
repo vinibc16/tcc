@@ -5,7 +5,6 @@ import pucrs.br.entity.Usuario;
 import pucrs.br.controller.util.JsfUtil;
 import pucrs.br.controller.util.PaginationHelper;
 import pucrs.br.bean.UsuarioFacade;
-
 import java.io.Serializable;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -20,18 +19,8 @@ import javax.faces.convert.FacesConverter;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
-import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.NoResultException;
-import javax.persistence.Persistence;
-import javax.persistence.Query;
-import javax.ws.rs.BeanParam;
-import net.bootsfaces.utils.FacesMessages;
-import org.primefaces.event.CellEditEvent;
 import org.primefaces.event.RowEditEvent;
-import pucrs.br.entity.Empresa;
-import pucrs.br.entity.GrupoUsuario;
+import pucrs.br.entity.Responsaveis;
 
 @Named("usuarioController")
 @SessionScoped
@@ -39,7 +28,6 @@ public class UsuarioController implements Serializable {
 
     private Usuario current;
     private Usuario logado;
-    private Usuario newUser;
     private DataModel items = null;
     @EJB
     private pucrs.br.bean.UsuarioFacade ejbFacade;
@@ -57,14 +45,10 @@ public class UsuarioController implements Serializable {
         }
         return current;
     }
-    
-    public Usuario getSelectedNew() {
-        if (newUser == null) {
-            newUser = new Usuario();
-            selectedItemIndex = -1;
-        }
-        return newUser;
-    }
+
+    public void setSelected(Usuario current) {
+        this.current = current;
+    }    
     
     public Usuario getLogado() {
         if (logado == null) {
@@ -98,67 +82,59 @@ public class UsuarioController implements Serializable {
 
     public void prepareList() throws IOException {
         recreateModel();
-        FacesContext.getCurrentInstance().getExternalContext().redirect("ListUsuario.jsf");
+        FacesContext.getCurrentInstance().getExternalContext().redirect("/Tcc/usuario/List.jsf");
     }
 
-    public String prepareView() {
+    public void prepareView() throws IOException {
         current = (Usuario) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
-        return "ViewUsuario";
+        FacesContext.getCurrentInstance().getExternalContext().redirect("/Tcc/usuario/View.jsf");
     }
 
-    public String prepareCreate() {
-        newUser = new Usuario();
+    public void prepareCreate() throws IOException {
+        current = new Usuario();
         selectedItemIndex = -1;
-        return "ListUsuario";
+        FacesContext.getCurrentInstance().getExternalContext().redirect("/Tcc/usuario/Create.jsf");
     }
 
-    public String create() {
+    public void create() {
         try {
-            if(getFacade().existeUsuario(newUser.getId())) {
+            if(getFacade().existeUsuario(current.getId())) {
                 FacesMessage msg = new FacesMessage("Usuário ja existe");
                 FacesContext.getCurrentInstance().addMessage(null, msg);
             } else {
-                //newUser.setIdEmpresa(logado.getIdEmpresa());
-                System.out.println("ID ->"+newUser.getId());
-                System.out.println("Empresa ->"+newUser.getIdEmpresa());
-                System.out.println("Grupo ->"+newUser.getIdGrupo());
-                System.out.println("Nome ->"+newUser.getNome());
-                System.out.println("Senha ->"+newUser.getSenha());
-                getFacade().create(newUser);
-                JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("UsuarioCreated"));
+                getFacade().create(current);
+                JsfUtil.addSuccessMessage("Usuário criado.");
             }
-            return prepareCreate();
+            prepareList();
         } catch (Exception e) {
-            JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
-            return null;
+            JsfUtil.addErrorMessage(e, "Erro ao criar usuário.");
         }
     }
 
-    public String prepareEdit() {
+    public void prepareEdit() throws IOException {
         current = (Usuario) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
-        return "EditUsuario";
+        FacesContext.getCurrentInstance().getExternalContext().redirect("/Tcc/usuario/Edit.jsf");
     }
 
-    public String update() {
+    public void update() {
         try {
             getFacade().edit(current);
-            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("UsuarioUpdated"));
-            return "ListUsuario";
+            JsfUtil.addSuccessMessage("Usuário atualizado");
+            prepareList();
         } catch (Exception e) {
-            JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
-            return null;
+            JsfUtil.addErrorMessage(e, "Erro ao atualizar usuário");
         }
     }
 
-    public String destroy() {
+    public void destroy() throws IOException {
         current = (Usuario) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
         performDestroy();
         recreatePagination();
         recreateModel();
-        return "ListUsuario";
+        prepareList();
     }
 
     public String destroyAndView() {
@@ -177,9 +153,9 @@ public class UsuarioController implements Serializable {
     private void performDestroy() {
         try {
             getFacade().remove(current);
-            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("UsuarioDeleted"));
+            JsfUtil.addSuccessMessage("Usuário deletado");
         } catch (Exception e) {
-            JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
+            JsfUtil.addErrorMessage(e, "Erro ao deletar usuário");
         }
     }
 
@@ -276,39 +252,21 @@ public class UsuarioController implements Serializable {
         }
     }
     
-    public String envia() {
+    public void envia() throws IOException {
         logado = ejbFacade.getUsuario(logado.getId(), logado.getSenha());
         if (logado == null) {
             logado = new Usuario();
-            FacesMessages.error("Usuário ou senha inválidos.");
-            return null;
+            setMenssagem("Usuário ou senha incorretos.");
         } else {
-            return "home.jsf";
+            FacesContext.getCurrentInstance().getExternalContext().redirect("/Tcc/home.jsf");
         }
-    }
-    
-    public String login() {
-        System.out.println(logado.getId());
-        if (logado.getId() != null) {
-            System.out.println("Aqui logado");
-            return "usuarioLogado";
-        }
-        return "login";
     }
     
     public void logout() throws IOException {
         logado = null;
-        FacesContext.getCurrentInstance().getExternalContext().redirect("index.jsf");
+        FacesContext.getCurrentInstance().getExternalContext().redirect("/Tcc/index.jsf");
     }
     
-    public String inicio() {
-        return "index";
-    }
-    
-    public String admin() {
-        return "admin";
-    }
-
     public String getMenssagem() {
         return menssagem;
     }
@@ -320,31 +278,21 @@ public class UsuarioController implements Serializable {
     public void logado() throws IOException {
         setMenssagem(null);
         if (logado == null) {
-            FacesContext.getCurrentInstance().getExternalContext().redirect("login.jsf");
+            FacesContext.getCurrentInstance().getExternalContext().redirect("/Tcc/login.jsf");
         } else if (logado.getId() == null) {
-            FacesContext.getCurrentInstance().getExternalContext().redirect("login.jsf");    
+            FacesContext.getCurrentInstance().getExternalContext().redirect("/Tcc/login.jsf");    
         } else {
-            FacesContext.getCurrentInstance().getExternalContext().redirect("home.jsf");
+            FacesContext.getCurrentInstance().getExternalContext().redirect("/Tcc/home.jsf");
         }
     }
     
     public void redireciona() throws IOException {
         if(logado.getIdGrupo().getIdGrupo() == 1) {
-            FacesContext.getCurrentInstance().getExternalContext().redirect("admin.jsf");
+            FacesContext.getCurrentInstance().getExternalContext().redirect("/Tcc/admin.jsf");
         } else if(logado.getIdGrupo().getIdGrupo() == 2) {
-            FacesContext.getCurrentInstance().getExternalContext().redirect("gestor.jsf");
+            FacesContext.getCurrentInstance().getExternalContext().redirect("/Tcc/gestor.jsf");
         } else if(logado.getIdGrupo().getIdGrupo() == 3) {
-            FacesContext.getCurrentInstance().getExternalContext().redirect("usuario.jsf");
+            FacesContext.getCurrentInstance().getExternalContext().redirect("/Tcc/usuario.jsf");
         } 
-    }
-    
-    public void onRowEdit(RowEditEvent event) {
-        current = ((Usuario) event.getObject());
-        update();
-    }
-     
-    public void onRowCancel(RowEditEvent event) {
-        FacesMessage msg = new FacesMessage("Usuario Cancelled", ((Usuario) event.getObject()).getId());
-        FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 }

@@ -1,11 +1,14 @@
 package pucrs.br.controller;
 
 import java.io.IOException;
-import pucrs.br.entity.Vulnerabilidade;
+import pucrs.br.entity.VulnerabilidadeAdmin;
 import pucrs.br.controller.util.JsfUtil;
 import pucrs.br.controller.util.PaginationHelper;
+import pucrs.br.bean.VulnerabilidadeAdminFacade;
+
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
@@ -16,44 +19,40 @@ import javax.faces.convert.FacesConverter;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
-import javax.inject.Inject;
-import pucrs.br.bean.VulnerabilidadeFacade;
 
-@Named("vulnerabilidadeController")
+@Named("vulnerabilidadeAdminController")
 @SessionScoped
-public class VulnerabilidadeController implements Serializable {
+public class VulnerabilidadeAdminController implements Serializable {
 
-    private Vulnerabilidade current;
+    private VulnerabilidadeAdmin current;
     private DataModel items = null;
     @EJB
-    private pucrs.br.bean.VulnerabilidadeFacade ejbFacade;
+    private pucrs.br.bean.VulnerabilidadeAdminFacade ejbFacade;
     private PaginationHelper pagination;
     private int selectedItemIndex;
-    @Inject
-    private UsuarioController usuario;
 
-    public VulnerabilidadeController() {
+    public VulnerabilidadeAdminController() {
     }
 
-    public Vulnerabilidade getSelected() {
+    public VulnerabilidadeAdmin getSelected() {
         if (current == null) {
-            current = new Vulnerabilidade();
+            current = new VulnerabilidadeAdmin();
             selectedItemIndex = -1;
         }
         return current;
     }
 
-    public void setSelected(Vulnerabilidade current) {
+    public void setSelected(VulnerabilidadeAdmin current) {
         this.current = current;
     }
     
-    private VulnerabilidadeFacade getFacade() {
+    private VulnerabilidadeAdminFacade getFacade() {
         return ejbFacade;
     }
 
     public PaginationHelper getPagination() {
         if (pagination == null) {
-            pagination = new PaginationHelper(1000) {
+            pagination = new PaginationHelper(10) {
 
                 @Override
                 public int getItemsCount() {
@@ -62,8 +61,7 @@ public class VulnerabilidadeController implements Serializable {
 
                 @Override
                 public DataModel createPageDataModel() {
-                    return new ListDataModel(getFacade().findAllVulByUser(usuario.getLogado().getIdEmpresa()));
-                    //return new ListDataModel(getFacade().findRange(new int[]{getPageFirstItem(), getPageFirstItem() + getPageSize()}));
+                    return new ListDataModel(getFacade().findRange(new int[]{getPageFirstItem(), getPageFirstItem() + getPageSize()}));
                 }
             };
         }
@@ -72,37 +70,36 @@ public class VulnerabilidadeController implements Serializable {
 
     public void prepareList() throws IOException {
         recreateModel();
-        FacesContext.getCurrentInstance().getExternalContext().redirect("/Tcc/vulnerabilidade/List.jsf");
+        FacesContext.getCurrentInstance().getExternalContext().redirect("/Tcc/vulAdmin/List.jsf");
     }
-    
+
     public void prepareView() throws IOException {
-        current = (Vulnerabilidade) getItems().getRowData();
+        current = (VulnerabilidadeAdmin) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
-        FacesContext.getCurrentInstance().getExternalContext().redirect("/Tcc/vulnerabilidade/View.jsf");
+        FacesContext.getCurrentInstance().getExternalContext().redirect("/Tcc/vulAdmin/View.jsf");
     }
 
     public void prepareCreate() throws IOException {
-        current = new Vulnerabilidade();
+        current = new VulnerabilidadeAdmin();
         selectedItemIndex = -1;
-        FacesContext.getCurrentInstance().getExternalContext().redirect("/Tcc/vulnerabilidade/Create.jsf");
+        FacesContext.getCurrentInstance().getExternalContext().redirect("/Tcc/vulAdmin/Create.jsf");
     }
 
     public void create() {
         try {
-            current.setIdEmpresa(usuario.getLogado().getIdEmpresa());
             current.setDataCriacao(new Date());
             getFacade().create(current);
-            JsfUtil.addSuccessMessage("Vulnerabilidade criada");
+            JsfUtil.addSuccessMessage("Vulnerabilidade Criada");
             prepareList();
         } catch (Exception e) {
-            JsfUtil.addErrorMessage(e, "Erro ao criar vulnerabilidade");
+            JsfUtil.addErrorMessage(e, "Erro na criação da Vulnerabilidade");
         }
     }
 
     public void prepareEdit() throws IOException {
-        current = (Vulnerabilidade) getItems().getRowData();
+        current = (VulnerabilidadeAdmin) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
-        FacesContext.getCurrentInstance().getExternalContext().redirect("/Tcc/vulnerabilidade/Edit.jsf");
+        FacesContext.getCurrentInstance().getExternalContext().redirect("/Tcc/vulAdmin/Edit.jsf");
     }
 
     public void update() {
@@ -111,12 +108,12 @@ public class VulnerabilidadeController implements Serializable {
             JsfUtil.addSuccessMessage("Vulnerabilidade atualizada");
             prepareList();
         } catch (Exception e) {
-            JsfUtil.addErrorMessage(e, "Erro ao atualizar vulnerabilidade");
+            JsfUtil.addErrorMessage(e, "Erro na atualização da Vulnerabilidade");
         }
     }
 
     public void destroy() throws IOException {
-        current = (Vulnerabilidade) getItems().getRowData();
+        current = (VulnerabilidadeAdmin) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
         performDestroy();
         recreatePagination();
@@ -129,20 +126,20 @@ public class VulnerabilidadeController implements Serializable {
         recreateModel();
         updateCurrentItem();
         if (selectedItemIndex >= 0) {
-            return "ViewVul";
+            return "ViewVulAdmin";
         } else {
             // all items were removed - go back to list
             recreateModel();
-            return "ListVul";
+            return "ListVulAdmin";
         }
     }
 
     private void performDestroy() {
         try {
             getFacade().remove(current);
-            JsfUtil.addSuccessMessage("Vulnerabilidade deletada");
+            JsfUtil.addSuccessMessage("Vulnerabilidade deletada.");
         } catch (Exception e) {
-            JsfUtil.addErrorMessage(e, "Erro ao deletar vulnerabilidade");
+            JsfUtil.addErrorMessage(e, "Erro em deletar a vulnerabilidade");
         }
     }
 
@@ -179,13 +176,13 @@ public class VulnerabilidadeController implements Serializable {
     public String next() {
         getPagination().nextPage();
         recreateModel();
-        return "ListVul";
+        return "ListVulAdmin";
     }
 
     public String previous() {
         getPagination().previousPage();
         recreateModel();
-        return "ListVul";
+        return "ListVulAdmin";
     }
 
     public SelectItem[] getItemsAvailableSelectMany() {
@@ -196,21 +193,21 @@ public class VulnerabilidadeController implements Serializable {
         return JsfUtil.getSelectItems(ejbFacade.findAll(), true);
     }
 
-    public Vulnerabilidade getVulnerabilidade(java.lang.Integer id) {
+    public VulnerabilidadeAdmin getVulnerabilidadeAdmin(java.lang.Integer id) {
         return ejbFacade.find(id);
     }
 
-    @FacesConverter(forClass = Vulnerabilidade.class)
-    public static class VulnerabilidadeControllerConverter implements Converter {
+    @FacesConverter(forClass = VulnerabilidadeAdmin.class)
+    public static class VulnerabilidadeAdminControllerConverter implements Converter {
 
         @Override
         public Object getAsObject(FacesContext facesContext, UIComponent component, String value) {
             if (value == null || value.length() == 0) {
                 return null;
             }
-            VulnerabilidadeController controller = (VulnerabilidadeController) facesContext.getApplication().getELResolver().
-                    getValue(facesContext.getELContext(), null, "vulnerabilidadeController");
-            return controller.getVulnerabilidade(getKey(value));
+            VulnerabilidadeAdminController controller = (VulnerabilidadeAdminController) facesContext.getApplication().getELResolver().
+                    getValue(facesContext.getELContext(), null, "vulnerabilidadeAdminController");
+            return controller.getVulnerabilidadeAdmin(getKey(value));
         }
 
         java.lang.Integer getKey(String value) {
@@ -230,25 +227,17 @@ public class VulnerabilidadeController implements Serializable {
             if (object == null) {
                 return null;
             }
-            if (object instanceof Vulnerabilidade) {
-                Vulnerabilidade o = (Vulnerabilidade) object;
+            if (object instanceof VulnerabilidadeAdmin) {
+                VulnerabilidadeAdmin o = (VulnerabilidadeAdmin) object;
                 return getStringKey(o.getIdVulnerabilidade());
             } else {
-                throw new IllegalArgumentException("object " + object + " is of type " + object.getClass().getName() + "; expected type: " + Vulnerabilidade.class.getName());
+                throw new IllegalArgumentException("object " + object + " is of type " + object.getClass().getName() + "; expected type: " + VulnerabilidadeAdmin.class.getName());
             }
         }
 
     }
-    
-    public void insert(Vulnerabilidade vul) {
-        try {
-            getFacade().create(vul);
-        } catch (Exception e) {
-            JsfUtil.addErrorMessage(e, "Erro interno");
-        }
-    }
-    
-    public String getVulNome(int idVul) {
-        return ejbFacade.getVulNome(idVul);
+
+    public List<VulnerabilidadeAdmin> findAll() {
+        return ejbFacade.findAll();
     }
 }

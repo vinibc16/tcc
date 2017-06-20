@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:b="http://bootsfaces.net/ui">
+    <ui:decorate template="/template_admin.xhtml">
+        <ui:define name="centro">
+            <h:form>
+                <b:panel>
+                    <b:inputText label="Nome" id="nome" value="#{empresaController.selected.nome}" required="true"/>
+                    <b:inputText label="Razão Social" id="razaosocal" value="#{empresaController.selected.razaoSocial}" required="true"/>
+                    <b:inputText label="Funcionários" type="number" id="funcionarios" value="#{empresaController.selected.funcionarios}"/>
+                    <b:inputText label="Endereço" id="endereco" value="#{empresaController.selected.endereco}" required="true"/>
+                    <b:inputText label="Missão" id="missao" value="#{empresaController.selected.missao}"/>
+                    <b:inputText label="Visão" id="visao" value="#{empresaController.selected.visao}"/>
+                    <b:inputText label="Segmento" id="segmento" value="#{empresaController.selected.segmento}"/>
+                    <b:inputText label="CNPJ" type="number" id="cnpj" value="#{empresaController.selected.cnpj}" required="true"/>
+                    <b:inputText label="Telefone" type="number" id="telefone" value="#{empresaController.selected.telefone}" required="true"/>
+                </b:panel>
+                <br />
+                <b:commandButton action="#{empresaController.create}" value="Salvar" />
+                <b:commandButton action="#{empresaController.prepareList()}" value="Cancelar" style="margin-left: 10px;"/>
+            </h:form>
+        </ui:define>
+    </ui:decorate>
+
+</html>

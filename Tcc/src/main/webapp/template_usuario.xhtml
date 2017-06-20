@@ -10,7 +10,7 @@
         <style type="text/css">
             .body-sigin {
                 padding-top: 100px;
-                background-image:url(imagens/iot_bg.jpg);
+                background-image:url(/Tcc/imagens/iot_bg.jpg);
             }
             .label {
                 background: transparent;
@@ -22,9 +22,9 @@
     </h:head>
     <h:body styleClass="body-sigin">
         <h:form>
-            <b:navBar brand="Inicio" brandHref="home.jsf" fixed="top" inverse="true">
+            <b:navBar brand="Inicio" brandHref="/Tcc/home.jsf" fixed="top" inverse="true">
                 <b:navbarLinks>
-                    <b:navCommandLink value="Vulnerabilidades" actionListener="#{vulnerabilidadeController.prepareListUser()}"></b:navCommandLink>
+                    <b:navCommandLink value="Vulnerabilidades" actionListener="#{vulnerabilidadeController.prepareList()}"></b:navCommandLink>
                     <b:navCommandLink value="Responsáveis" actionListener="#{responsaveisController.prepareList()}"></b:navCommandLink>
                     <b:navCommandLink value="Escopos" actionListener="#{escopoController.prepareList()}"></b:navCommandLink>
                     <b:navCommandLink value="Logout" actionListener="#{usuarioController.logout()}"></b:navCommandLink>

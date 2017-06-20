@@ -11,7 +11,7 @@
             <h:form>
                 <p:panelGrid columns="4">
                     <p:outputLabel value="#{bundle.ViewEscopoLabel_escopoPK_idEscopo}"/>
-                    <p:outputLabel value="#{escopoController.selected.escopoPK.idEscopo}" title="#{bundle.ViewEscopoTitle_escopoPK_idEscopo}"/>
+                    <p:outputLabel value="#{escopoController.selected.idEscopo}" title="#{bundle.ViewEscopoTitle_escopoPK_idEscopo}"/>
                     <p:outputLabel value="#{bundle.ViewEscopoLabel_nome}"/>
                     <p:outputLabel value="#{escopoController.selected.nome}" title="#{bundle.ViewEscopoTitle_nome}"/>
                     <p:outputLabel value="#{bundle.ViewEscopoLabel_idResponsavel}"/>
@@ -23,7 +23,7 @@
                         <f:convertDateTime pattern="dd/MM/yyyy" />
                     </p:outputLabel>
                     <p:outputLabel value="#{bundle.ViewEscopoLabel_empresa}"/>
-                    <p:outputLabel value="#{escopoController.selected.escopoPK.idEmpresa}" title="#{bundle.ViewEscopoTitle_empresa}"/>
+                    <p:outputLabel value="#{escopoController.selected.idEmpresa}" title="#{bundle.ViewEscopoTitle_empresa}"/>
                 </p:panelGrid>
                 <br />                
             </h:form>

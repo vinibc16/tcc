@@ -3,15 +3,19 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
       xmlns:b="http://bootsfaces.net/ui">
+
     <ui:decorate template="/template_usuario.xhtml">
         <ui:define name="centro">
             <h:form>
                 <b:panel>
-                    <b:inputText label="Nome" id="nome" value="#{responsaveisController.selectedNew.nome}" required="true"/>
+                    <b:inputText label="Nome" id="nome" value="#{responsaveisController.selected.nome}" required="true"/>
+                    <b:inputText label="E-mail" id="email" value="#{responsaveisController.selected.EMail}" required="true"/>
                 </b:panel>
                 <br />
-                <b:commandButton action="#{responsaveisController.create}" value="#{bundle.CreateUsuarioSaveLink}" />
+                <b:commandButton action="#{responsaveisController.create}" value="Salvar" />
+                <b:commandButton action="#{responsaveisController.prepareList()}" value="Cancelar" style="margin-left: 10px;"/>
             </h:form>
         </ui:define>
     </ui:decorate>

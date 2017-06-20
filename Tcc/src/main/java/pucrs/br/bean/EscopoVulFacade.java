@@ -5,7 +5,6 @@
  */
 package pucrs.br.bean;
 
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -13,10 +12,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import pucrs.br.entity.Escopo;
-import pucrs.br.entity.EscopoPK;
 import pucrs.br.entity.EscopoVul;
 import pucrs.br.entity.EscopoVulPK;
-import pucrs.br.entity.Vulnerabilidade;
 
 /**
  *
@@ -39,11 +36,11 @@ public class EscopoVulFacade extends AbstractFacade<EscopoVul> {
     }
     
     public List<EscopoVul> findAllfindByIdEscopo(Escopo escopo) {        
-        Query query = em.createNativeQuery("SELECT id_empresa, id_escopo, id_vulnerabilidade, impacto, probabilidade, aceito FROM escopo_vul e WHERE id_escopo = "+escopo.getEscopoPK().getIdEscopo()+" and id_empresa = "+escopo.getEscopoPK().getIdEmpresa());
+        Query query = em.createNativeQuery("SELECT id_empresa, id_escopo, id_vulnerabilidade, impacto, probabilidade, aceito FROM escopo_vul e WHERE id_escopo = "+escopo.getIdEscopo());
         List<Object[]> lista = query.getResultList();
         List<EscopoVul> ev = new ArrayList<>();
         for (Object[] row : lista) {
-            EscopoVul esc = new EscopoVul(new EscopoVulPK((int)row[0], (int)row[1],(int)row[2]));
+            EscopoVul esc = new EscopoVul(new EscopoVulPK((int)row[1],(int)row[2]));
             //esc.setVulnerabilidade(vulfac.findbyId((int)row[2]));
             if (row[3] != null) {
                 esc.setImpacto((double) row[3]);
@@ -63,13 +60,12 @@ public class EscopoVulFacade extends AbstractFacade<EscopoVul> {
     }
     
     public List<EscopoVul> consultaRelatorio(Escopo escopo) {        
-        Query query = em.createNativeQuery("SELECT id_empresa, id_escopo, id_vulnerabilidade, impacto, probabilidade, aceito FROM escopo_vul e WHERE id_escopo = "+escopo.getEscopoPK().getIdEscopo()+
-                                           " and id_empresa = "+escopo.getEscopoPK().getIdEmpresa()+
+        Query query = em.createNativeQuery("SELECT id_empresa, id_escopo, id_vulnerabilidade, impacto, probabilidade, aceito FROM escopo_vul e WHERE id_escopo = "+escopo.getIdEscopo()+
                                            " and aceito = 0");
         List<Object[]> lista = query.getResultList();
         List<EscopoVul> ev = new ArrayList<>();
         for (Object[] row : lista) {
-            EscopoVul esc = new EscopoVul(new EscopoVulPK((int)row[0], (int)row[1],(int)row[2]));
+            EscopoVul esc = new EscopoVul(new EscopoVulPK((int)row[1],(int)row[2]));
             //esc.setVulnerabilidade(vulfac.findbyId((int)row[2]));
             if (row[3] != null) {
                 esc.setImpacto((double) row[3]);

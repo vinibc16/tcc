@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:decorate template="/template_usuario.xhtml">
+        <ui:define name="centro">
+            <h:form id="formListResp">
+                <p:dataTable id="tableResp" 
+                             var="resp" 
+                             value="#{responsaveisController.items}" 
+                             rows="10" 
+                             paginator="true"    
+                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"> 
+                    
+                    <p:column headerText="Nome">
+                        <h:outputText value="#{resp.nome}" />
+                    </p:column>                    
+                    <p:column style="width:65px;text-align: center">
+                        <p:commandButton actionListener="#{responsaveisController.prepareView()}" icon="ui-icon-search" title="Detalhes">
+                            <f:setPropertyActionListener value="#{resp}" target="#{responsaveisController.selected}" />
+                        </p:commandButton>
+                    </p:column>
+                    <p:column style="width:65px;text-align: center">
+                        <p:commandButton update=":principal:formListResp:tableResp" icon="ui-icon-pencil" actionListener="#{responsaveisController.prepareEdit()}" title="Editar">
+                            <f:setPropertyActionListener value="#{resp}" target="#{responsaveisController.selected}" />
+                        </p:commandButton>
+                    </p:column>
+                    <p:column style="width:65px;text-align: center">
+                        <p:commandButton update=":principal:formListResp:tableResp" icon="ui-icon-close" actionListener="#{responsaveisController.destroy()}" title="Deletar">
+                            <f:setPropertyActionListener value="#{resp}" target="#{responsaveisController.selected}" />
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+                <br />
+                <b:commandButton value="Criar Responsável" action="#{responsaveisController.prepareCreate()}"/>
+            </h:form>
+        </ui:define>
+    </ui:decorate>
+
+</html>

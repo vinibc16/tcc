@@ -5,7 +5,6 @@ import pucrs.br.entity.Responsaveis;
 import pucrs.br.controller.util.JsfUtil;
 import pucrs.br.controller.util.PaginationHelper;
 import pucrs.br.bean.ResponsaveisFacade;
-
 import java.io.Serializable;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -22,15 +21,12 @@ import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
 import javax.inject.Inject;
 import org.primefaces.event.RowEditEvent;
-import pucrs.br.entity.Empresa;
-import pucrs.br.entity.Escopo;
 
 @Named("responsaveisController")
 @SessionScoped
 public class ResponsaveisController implements Serializable {
 
     private Responsaveis current;
-    private Responsaveis newResp;
     private DataModel items = null;
     @EJB
     private pucrs.br.bean.ResponsaveisFacade ejbFacade;
@@ -49,15 +45,11 @@ public class ResponsaveisController implements Serializable {
         }
         return current;
     }
-    
-    public Responsaveis getSelectedNew() {
-        if (newResp == null) {
-            newResp = new Responsaveis();
-            selectedItemIndex = -1;
-        }
-        return newResp;
-    }
 
+    public void setSelected(Responsaveis current) {
+        this.current = current;
+    }
+    
     private ResponsaveisFacade getFacade() {
         return ejbFacade;
     }
@@ -83,57 +75,56 @@ public class ResponsaveisController implements Serializable {
 
     public void prepareList() throws IOException {
         recreateModel();
-        FacesContext.getCurrentInstance().getExternalContext().redirect("ListResponsaveis.jsf");
+        FacesContext.getCurrentInstance().getExternalContext().redirect("/Tcc/responsaveis/List.jsf");
     }
 
-    public String prepareView() {
+    public void prepareView() throws IOException {
         current = (Responsaveis) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
-        return "ViewResponsaveis";
+        FacesContext.getCurrentInstance().getExternalContext().redirect("/Tcc/responsaveis/View.jsf");
     }
 
-    public String prepareCreate() {
-        newResp = new Responsaveis();
+    public void prepareCreate() throws IOException {
+        current = new Responsaveis();
         selectedItemIndex = -1;
-        return "CreateResponsaveis";
+        FacesContext.getCurrentInstance().getExternalContext().redirect("/Tcc/responsaveis/Create.jsf");
     }
 
-    public String create() {
+    public void create() {
         try {
-            newResp.setIdEmpresa(usuario.getLogado().getIdEmpresa());
-            getFacade().create(newResp);
-            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("ResponsaveisCreated"));
-            return prepareCreate();
+            current.setIdEmpresa(usuario.getLogado().getIdEmpresa());
+            getFacade().create(current);
+            JsfUtil.addSuccessMessage("Responsável criado");
+            prepareList();
         } catch (Exception e) {
-            JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
-            return null;
+            JsfUtil.addErrorMessage(e, "Erro ao criar responsável");
         }
     }
 
-    public String prepareEdit() {
+    public void prepareEdit() throws IOException {
         current = (Responsaveis) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
-        return "EditResponsaveis";
+        FacesContext.getCurrentInstance().getExternalContext().redirect("/Tcc/responsaveis/Edit.jsf");
     }
 
     public String update() {
         try {
             getFacade().edit(current);
-            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("ResponsaveisUpdated"));
+            JsfUtil.addSuccessMessage("Responsável atualizado");
             return "ViewResponsaveis";
         } catch (Exception e) {
-            JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
+            JsfUtil.addErrorMessage(e, "Erro ao atualizar responsável");
             return null;
         }
     }
 
-    public String destroy() {
+    public void destroy() throws IOException {
         current = (Responsaveis) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
         performDestroy();
         recreatePagination();
         recreateModel();
-        return "ListResponsaveis";
+        prepareList();
     }
 
     public String destroyAndView() {
@@ -152,9 +143,9 @@ public class ResponsaveisController implements Serializable {
     private void performDestroy() {
         try {
             getFacade().remove(current);
-            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("ResponsaveisDeleted"));
+            JsfUtil.addSuccessMessage("Responsável deletado");
         } catch (Exception e) {
-            JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
+            JsfUtil.addErrorMessage(e, "Erro ao deletar responsável");
         }
     }
 
@@ -252,16 +243,6 @@ public class ResponsaveisController implements Serializable {
 
     }
     
-    public void onRowEdit(RowEditEvent event) {
-        current = ((Responsaveis) event.getObject());
-        update();
-    }
-     
-    public void onRowCancel(RowEditEvent event) {
-        FacesMessage msg = new FacesMessage("Responsaveis Cancelled", ((Responsaveis) event.getObject()).getNome());
-        FacesContext.getCurrentInstance().addMessage(null, msg);
-    }
-
     public List<Responsaveis> findAll() {
         return ejbFacade.findAll();
     }

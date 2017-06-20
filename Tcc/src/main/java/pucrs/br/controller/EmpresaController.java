@@ -5,14 +5,12 @@ import pucrs.br.entity.Empresa;
 import pucrs.br.controller.util.JsfUtil;
 import pucrs.br.controller.util.PaginationHelper;
 import pucrs.br.bean.EmpresaFacade;
-
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.ResourceBundle;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
-import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
@@ -20,23 +18,26 @@ import javax.faces.convert.FacesConverter;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
-import org.primefaces.event.RowEditEvent;
-import pucrs.br.entity.Usuario;
+import javax.inject.Inject;
+import pucrs.br.entity.Vulnerabilidade;
+import pucrs.br.entity.VulnerabilidadeAdmin;
 
 @Named("empresaController")
 @SessionScoped
 public class EmpresaController implements Serializable {
 
     private Empresa current;
-    private Empresa newEmpresa;
     private DataModel items = null;
     @EJB
     private pucrs.br.bean.EmpresaFacade ejbFacade;
     private PaginationHelper pagination;
     private int selectedItemIndex;
+    @Inject
+    private VulnerabilidadeAdminController vulAdminController;
+    @Inject
+    private VulnerabilidadeController vulController;
 
     public EmpresaController() {
-        System.out.println("Debug -> EmpresaController criada");
     }
 
     public Empresa getSelected() {
@@ -46,15 +47,11 @@ public class EmpresaController implements Serializable {
         }
         return current;
     }
-    
-    public Empresa getSelectedNew() {
-        if (newEmpresa == null) {
-            newEmpresa = new Empresa();
-            selectedItemIndex = -1;
-        }
-        return newEmpresa;
-    }
 
+    public void setSelected(Empresa current) {
+        this.current = current;
+    }
+    
     private EmpresaFacade getFacade() {
         return ejbFacade;
     }
@@ -79,56 +76,55 @@ public class EmpresaController implements Serializable {
 
     public void prepareList() throws IOException {
         recreateModel();
-        FacesContext.getCurrentInstance().getExternalContext().redirect("ListEmpresa.jsf");
+        FacesContext.getCurrentInstance().getExternalContext().redirect("/Tcc/empresa/List.jsf");
     }
 
-    public String prepareView() {
+    public void prepareView() throws IOException {
         current = (Empresa) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
-        return "ViewEmpresa";
+        FacesContext.getCurrentInstance().getExternalContext().redirect("/Tcc/empresa/View.jsf");
     }
 
-    public String prepareCreate() {
-        newEmpresa = new Empresa();
+    public void prepareCreate() throws IOException {
+        current = new Empresa();
         selectedItemIndex = -1;
-        return "CreateEmpresa";
+        FacesContext.getCurrentInstance().getExternalContext().redirect("/Tcc/empresa/Create.jsf");
     }
 
-    public String create() {
+    public void create() {
         try {
-            getFacade().create(newEmpresa);
-            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("EmpresaCreated"));
-            return prepareCreate();
+            getFacade().create(current);
+            JsfUtil.addSuccessMessage("Empresa criada.");
+            createVulsEmp();
+            prepareList();
         } catch (Exception e) {
-            JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
-            return null;
+            JsfUtil.addErrorMessage(e, "Erro ao criar empresa.");
         }
     }
 
-    public String prepareEdit() {
+    public void prepareEdit() throws IOException {
         current = (Empresa) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
-        return "EditEmpresa";
+        FacesContext.getCurrentInstance().getExternalContext().redirect("/Tcc/empresa/Edit.jsf");
     }
 
-    public String update() {
+    public void update() {
         try {
             getFacade().edit(current);
-            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("EmpresaUpdated"));
-            return "ViewEmpresa";
+            JsfUtil.addSuccessMessage("Empresa atualizada.");
+            prepareList();
         } catch (Exception e) {
-            JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
-            return null;
+            JsfUtil.addErrorMessage(e, "Erro ao atualizar empresa.");
         }
     }
 
-    public String destroy() {
+    public void destroy() throws IOException {
         current = (Empresa) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
         performDestroy();
         recreatePagination();
         recreateModel();
-        return "ListEmpresa";
+        prepareList();
     }
 
     public String destroyAndView() {
@@ -147,9 +143,9 @@ public class EmpresaController implements Serializable {
     private void performDestroy() {
         try {
             getFacade().remove(current);
-            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("EmpresaDeleted"));
+            JsfUtil.addSuccessMessage("Empresa deletada");
         } catch (Exception e) {
-            JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
+            JsfUtil.addErrorMessage(e, "Erro ao deletar empresa");
         }
     }
 
@@ -247,18 +243,24 @@ public class EmpresaController implements Serializable {
 
     }
     
-    public void onRowEdit(RowEditEvent event) {
-        current = ((Empresa) event.getObject());
-        update();
-    }
-     
-    public void onRowCancel(RowEditEvent event) {
-        FacesMessage msg = new FacesMessage("Empresa Cancelled", ((Empresa) event.getObject()).getNome());
-        FacesContext.getCurrentInstance().addMessage(null, msg);
-    }
-    
     public List<Empresa> findAll() {
         return ejbFacade.findAll();
     }
     
+    public void createVulsEmp() {
+        List<VulnerabilidadeAdmin> lista = new ArrayList<VulnerabilidadeAdmin>();
+        lista = vulAdminController.findAll();
+        for(int i=0;i<lista.size();i++) {            
+            Vulnerabilidade vul = new Vulnerabilidade(null,
+                                                            lista.get(i).getNome(), 
+                                                            lista.get(i).getDescricao(), 
+                                                            lista.get(i).getNivel(), 
+                                                            lista.get(i).getAcoes(), 
+                                                            lista.get(i).getFonte(), 
+                                                            lista.get(i).getDataCriacao());
+            vul.setIdEmpresa(current);
+            vul.setConsequencia(lista.get(i).getConsequencia());
+            vulController.insert(vul);
+        }
+    }
 }

@@ -60,4 +60,10 @@ public class VulnerabilidadeFacade extends AbstractFacade<Vulnerabilidade> {
         Query query = em.createNativeQuery("SELECT nome FROM vulnerabilidade WHERE id_vulnerabilidade = "+idVul);
         return (String) query.getSingleResult();
     }
+    
+    public List<Vulnerabilidade> findAllVulByUser(Empresa emp) {        
+        return em.createQuery("SELECT u FROM Vulnerabilidade u WHERE u.idEmpresa = :idEmpresa")
+                .setParameter("idEmpresa", emp)
+                .getResultList();
+    }
 }

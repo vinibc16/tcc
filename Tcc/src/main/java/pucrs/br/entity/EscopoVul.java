@@ -28,7 +28,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "EscopoVul.findAll", query = "SELECT e FROM EscopoVul e"),
-    @NamedQuery(name = "EscopoVul.findByIdEmpresa", query = "SELECT e FROM EscopoVul e WHERE e.escopoVulPK.idEmpresa = :idEmpresa"),
     @NamedQuery(name = "EscopoVul.findByIdEscopo", query = "SELECT e FROM EscopoVul e WHERE e.escopoVulPK.idEscopo = :idEscopo"),
     @NamedQuery(name = "EscopoVul.findByIdVulnerabilidade", query = "SELECT e FROM EscopoVul e WHERE e.escopoVulPK.idVulnerabilidade = :idVulnerabilidade"),
     @NamedQuery(name = "EscopoVul.findByDataLink", query = "SELECT e FROM EscopoVul e WHERE e.dataLink = :dataLink"),
@@ -44,17 +43,21 @@ public class EscopoVul implements Serializable {
     @Column(name = "data_link")
     @Temporal(TemporalType.DATE)
     private Date dataLink;
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "impacto")
-    private double impacto;
+    private Double impacto;
     @Column(name = "probabilidade")
-    private double probabilidade;
+    private Double probabilidade;
     @Column(name = "aceito")
     private Integer aceito;
     @Column(name = "risco")
-    private double risco;
-    @JoinColumn(name = "id_empresa", referencedColumnName = "id_empresa", insertable = false, updatable = false)
+    private Double risco;
+    @JoinColumn(name = "id_empresa", referencedColumnName = "id_empresa")
     @ManyToOne(optional = false)
-    private Empresa empresa;
+    private Empresa idEmpresa;
+    @JoinColumn(name = "id_escopo", referencedColumnName = "id_escopo", insertable = false, updatable = false)
+    @ManyToOne(optional = false)
+    private Escopo escopo;
     @JoinColumn(name = "id_vulnerabilidade", referencedColumnName = "id_vulnerabilidade", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Vulnerabilidade vulnerabilidade;
@@ -66,8 +69,8 @@ public class EscopoVul implements Serializable {
         this.escopoVulPK = escopoVulPK;
     }
 
-    public EscopoVul(int idEmpresa, int idEscopo, int idVulnerabilidade) {
-        this.escopoVulPK = new EscopoVulPK(idEmpresa, idEscopo, idVulnerabilidade);
+    public EscopoVul(int idEscopo, int idVulnerabilidade) {
+        this.escopoVulPK = new EscopoVulPK(idEscopo, idVulnerabilidade);
     }
 
     public EscopoVulPK getEscopoVulPK() {
@@ -86,19 +89,19 @@ public class EscopoVul implements Serializable {
         this.dataLink = dataLink;
     }
 
-    public double getImpacto() {
+    public Double getImpacto() {
         return impacto;
     }
 
-    public void setImpacto(double impacto) {
+    public void setImpacto(Double impacto) {
         this.impacto = impacto;
     }
 
-    public double getProbabilidade() {
+    public Double getProbabilidade() {
         return probabilidade;
     }
 
-    public void setProbabilidade(double probabilidade) {
+    public void setProbabilidade(Double probabilidade) {
         this.probabilidade = probabilidade;
     }
 
@@ -110,20 +113,28 @@ public class EscopoVul implements Serializable {
         this.aceito = aceito;
     }
 
-    public double getRisco() {
+    public Double getRisco() {
         return risco;
     }
 
-    public void setRisco(double risco) {
+    public void setRisco(Double risco) {
         this.risco = risco;
     }
 
-    public Empresa getEmpresa() {
-        return empresa;
+    public Empresa getIdEmpresa() {
+        return idEmpresa;
     }
 
-    public void setEmpresa(Empresa empresa) {
-        this.empresa = empresa;
+    public void setIdEmpresa(Empresa idEmpresa) {
+        this.idEmpresa = idEmpresa;
+    }
+
+    public Escopo getEscopo() {
+        return escopo;
+    }
+
+    public void setEscopo(Escopo escopo) {
+        this.escopo = escopo;
     }
 
     public Vulnerabilidade getVulnerabilidade() {

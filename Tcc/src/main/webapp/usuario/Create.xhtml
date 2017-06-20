@@ -9,20 +9,23 @@
         <ui:define name="centro">
             <h:form>
                 <b:panel>
-                    <b:inputText label="Id" id="id" value="#{usuarioController.selectedNew.id}" required="true"/>
-                    <b:inputText label="Nome" id="usuario" value="#{usuarioController.selectedNew.nome}" required="true"/>
-                    <b:inputText label="Senha" type="password" id="senha" value="#{usuarioController.selectedNew.senha}" required="true"/>
-                    <b:selectOneMenu label="Empresa" id="idEmpresa" value="#{usuarioController.selectedNew.idEmpresa}">
+                    <b:inputText label="Id" id="id" value="#{usuarioController.selected.id}" required="true"/>
+                    <b:inputText label="Nome" id="nome" value="#{usuarioController.selected.nome}" required="true"/>
+                    <b:selectOneMenu label="Empresa" id="idEmpresa" value="#{usuarioController.selected.idEmpresa}">
                         <f:selectItems value="#{empresaController.findAll()}" var="emp"
                                        itemLabel="#{emp.nome}" itemValue="#{emp}"/>
                     </b:selectOneMenu>
-                    <b:selectOneMenu label="Grupo" id="idGrupo" value="#{usuarioController.selectedNew.idGrupo}">
+                    <b:selectOneMenu label="Grupo" id="idGrupo" value="#{usuarioController.selected.idGrupo}">
                         <f:selectItems value="#{grupoUsuarioController.findAll()}" var="grupo"
                                        itemLabel="#{grupo.descricao}" itemValue="#{grupo}"/>
                     </b:selectOneMenu>
+                    <b:inputText label="Senha" id="senha" type="password" value="#{usuarioController.selected.senha}" required="true"/>
+                    <b:inputText label="Telefone" type="number" id="telefone" value="#{usuarioController.selected.telefone}" required="true"/>
+                    <b:inputText label="Ramal" type="number" id="ramal" value="#{usuarioController.selected.ramal}"/>
+                    <b:inputText label="E-mail" id="email" value="#{usuarioController.selected.EMail}"/>
                 </b:panel>
                 <br />
-                <b:commandButton action="#{usuarioController.create}" value="#{bundle.CreateUsuarioSaveLink}" />
+                <b:commandButton action="#{usuarioController.create}" value="Salvar" />
             </h:form>
         </ui:define>
     </ui:decorate>
