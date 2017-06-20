@@ -107,14 +107,13 @@ public class ResponsaveisController implements Serializable {
         FacesContext.getCurrentInstance().getExternalContext().redirect("/Tcc/responsaveis/Edit.jsf");
     }
 
-    public String update() {
+    public void update() {
         try {
             getFacade().edit(current);
             JsfUtil.addSuccessMessage("Responsável atualizado");
-            return "ViewResponsaveis";
+            prepareList();
         } catch (Exception e) {
             JsfUtil.addErrorMessage(e, "Erro ao atualizar responsável");
-            return null;
         }
     }
 
