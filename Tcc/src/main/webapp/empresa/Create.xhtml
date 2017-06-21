@@ -6,7 +6,7 @@
       xmlns:b="http://bootsfaces.net/ui">
     <ui:decorate template="/template_admin.xhtml">
         <ui:define name="centro">
-            <h:form>
+            <h:form id="formCreateEmp">
                 <b:panel>
                     <b:inputText label="Nome" id="nome" value="#{empresaController.selected.nome}" required="true"/>
                     <b:inputText label="Razão Social" id="razaosocal" value="#{empresaController.selected.razaoSocial}" required="true"/>
@@ -15,11 +15,11 @@
                     <b:inputText label="Missão" id="missao" value="#{empresaController.selected.missao}"/>
                     <b:inputText label="Visão" id="visao" value="#{empresaController.selected.visao}"/>
                     <b:inputText label="Segmento" id="segmento" value="#{empresaController.selected.segmento}"/>
-                    <b:inputText label="CNPJ" type="number" id="cnpj" value="#{empresaController.selected.cnpj}" required="true"/>
-                    <b:inputText label="Telefone" type="number" id="telefone" value="#{empresaController.selected.telefone}" required="true"/>
+                    <b:inputText label="CNPJ" id="cnpj" value="#{empresaController.selected.cnpj}" required="true"/>
+                    <b:inputText label="Telefone" id="telefone" value="#{empresaController.selected.telefone}" required="true"/>
                 </b:panel>
                 <br />
-                <b:commandButton action="#{empresaController.create}" value="Salvar" />
+                <b:commandButton action="#{empresaController.create}" value="Salvar"/>
                 <b:commandButton action="#{empresaController.prepareList()}" value="Cancelar" style="margin-left: 10px;"/>
             </h:form>
         </ui:define>

@@ -4,12 +4,13 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:b="http://bootsfaces.net/ui"
-      xmlns:ui="http://java.sun.com/jsf/facelets">
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
     <h:head>
         <style type="text/css">
             .form-signin {
                 margin: 0 auto;
-                max-width: 330px;
+                max-width: 400px;
                 padding: 15px;
             }
             .body-sigin {
@@ -31,7 +32,8 @@
                         <b:iconAwesome name="key" />
                     </f:facet>
                 </b:inputText>
-                <b:label id="msg" value="#{usuarioController.menssagem}" style="background: transparent; color: red; font-size: 130%;"/>
+                <b:message for="senha" display="text" />
+                <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
                 <b:commandButton action="#{usuarioController.envia()}" look="primary btn-block" value="Logar" icon="log-in" size="lg"/>
             </h:form>
         </b:container>

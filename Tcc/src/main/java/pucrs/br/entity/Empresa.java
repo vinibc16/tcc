@@ -6,9 +6,7 @@
 package pucrs.br.entity;
 
 import java.io.Serializable;
-import java.util.Collection;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,12 +14,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -78,22 +74,14 @@ public class Empresa implements Serializable {
     private String segmento;
     @Basic(optional = false)
     @NotNull
+    @Size(min = 1, max = 14)
     @Column(name = "cnpj")
-    private int cnpj;
+    private String cnpj;
     @Basic(optional = false)
     @NotNull
+    @Size(min = 1, max = 50)
     @Column(name = "telefone")
-    private int telefone;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idEmpresa")
-    private Collection<EscopoVul> escopoVulCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idEmpresa")
-    private Collection<Escopo> escopoCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idEmpresa")
-    private Collection<Responsaveis> responsaveisCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idEmpresa")
-    private Collection<Vulnerabilidade> vulnerabilidadeCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idEmpresa")
-    private Collection<Usuario> usuarioCollection;
+    private String telefone;
 
     public Empresa() {
     }
@@ -102,7 +90,7 @@ public class Empresa implements Serializable {
         this.idEmpresa = idEmpresa;
     }
 
-    public Empresa(Integer idEmpresa, String nome, String razaoSocial, String endereco, int cnpj, int telefone) {
+    public Empresa(Integer idEmpresa, String nome, String razaoSocial, String endereco, String cnpj, String telefone) {
         this.idEmpresa = idEmpresa;
         this.nome = nome;
         this.razaoSocial = razaoSocial;
@@ -175,65 +163,20 @@ public class Empresa implements Serializable {
         this.segmento = segmento;
     }
 
-    public int getCnpj() {
+    public String getCnpj() {
         return cnpj;
     }
 
-    public void setCnpj(int cnpj) {
+    public void setCnpj(String cnpj) {
         this.cnpj = cnpj;
     }
 
-    public int getTelefone() {
+    public String getTelefone() {
         return telefone;
     }
 
-    public void setTelefone(int telefone) {
+    public void setTelefone(String telefone) {
         this.telefone = telefone;
-    }
-
-    @XmlTransient
-    public Collection<EscopoVul> getEscopoVulCollection() {
-        return escopoVulCollection;
-    }
-
-    public void setEscopoVulCollection(Collection<EscopoVul> escopoVulCollection) {
-        this.escopoVulCollection = escopoVulCollection;
-    }
-
-    @XmlTransient
-    public Collection<Escopo> getEscopoCollection() {
-        return escopoCollection;
-    }
-
-    public void setEscopoCollection(Collection<Escopo> escopoCollection) {
-        this.escopoCollection = escopoCollection;
-    }
-
-    @XmlTransient
-    public Collection<Responsaveis> getResponsaveisCollection() {
-        return responsaveisCollection;
-    }
-
-    public void setResponsaveisCollection(Collection<Responsaveis> responsaveisCollection) {
-        this.responsaveisCollection = responsaveisCollection;
-    }
-
-    @XmlTransient
-    public Collection<Vulnerabilidade> getVulnerabilidadeCollection() {
-        return vulnerabilidadeCollection;
-    }
-
-    public void setVulnerabilidadeCollection(Collection<Vulnerabilidade> vulnerabilidadeCollection) {
-        this.vulnerabilidadeCollection = vulnerabilidadeCollection;
-    }
-
-    @XmlTransient
-    public Collection<Usuario> getUsuarioCollection() {
-        return usuarioCollection;
-    }
-
-    public void setUsuarioCollection(Collection<Usuario> usuarioCollection) {
-        this.usuarioCollection = usuarioCollection;
     }
 
     @Override

@@ -11,6 +11,7 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
@@ -93,9 +94,11 @@ public class EmpresaController implements Serializable {
 
     public void create() {
         try {
-            getFacade().create(current);
-            JsfUtil.addSuccessMessage("Empresa criada.");
-            createVulsEmp();
+            if(verificaCnpj()) {
+                getFacade().create(current);
+                JsfUtil.addSuccessMessage("Empresa criada.");
+                createVulsEmp();
+            }
             prepareList();
         } catch (Exception e) {
             JsfUtil.addErrorMessage(e, "Erro ao criar empresa.");
@@ -110,8 +113,11 @@ public class EmpresaController implements Serializable {
 
     public void update() {
         try {
-            getFacade().edit(current);
-            JsfUtil.addSuccessMessage("Empresa atualizada.");
+            if(verificaCnpj()) {
+                getFacade().edit(current);
+                FacesMessage msg = new FacesMessage("Empresa atualizada");
+                FacesContext.getCurrentInstance().addMessage(null, msg);
+            }            
             prepareList();
         } catch (Exception e) {
             JsfUtil.addErrorMessage(e, "Erro ao atualizar empresa.");
@@ -262,5 +268,13 @@ public class EmpresaController implements Serializable {
             vul.setConsequencia(lista.get(i).getConsequencia());
             vulController.insert(vul);
         }
+    }
+    
+    public boolean verificaCnpj() {
+        if (String.valueOf(current.getCnpj()).length() != 14) {
+            JsfUtil.addErrorMessage("CNPJ inválido");
+            return false;
+        }
+        return true;
     }
 }

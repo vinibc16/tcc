@@ -9,7 +9,7 @@
         <ui:define name="centro">
             <h:form>
                 <b:panel>
-                    <b:inputText label="Id" id="id" value="#{usuarioController.selected.id}" required="true"/>
+                    <b:inputText label="Login" id="id" value="#{usuarioController.selected.id}" required="true"/>
                     <b:inputText label="Nome" id="nome" value="#{usuarioController.selected.nome}" required="true"/>
                     <b:selectOneMenu label="Empresa" id="idEmpresa" value="#{usuarioController.selected.idEmpresa}">
                         <f:selectItems value="#{empresaController.findAll()}" var="emp"

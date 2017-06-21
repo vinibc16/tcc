@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:b="http://bootsfaces.net/ui">
+
+    <ui:decorate template="/template_usuario.xhtml">
+        <ui:define name="centro">
+            <h:form id="editEscopo">
+                <b:panel>
+                    <b:inputText label="Nome" id="nome" value="#{escopoController.selected.nome}" required="true"/>
+                    <b:inputText label="Descrição" id="descricao" value="#{escopoController.selected.descricao}" required="true"/>
+                    <b:selectOneMenu label="Responsável" id="idResponsavel" value="#{escopoController.selected.idResponsavel}">
+                        <f:selectItems value="#{responsaveisController.findAll()}" var="resp"
+                                       itemLabel="#{resp.nome}" itemValue="#{resp}"/>
+                    </b:selectOneMenu>
+                    <b:inputText label="Ativos envolvidos" id="ativos_envolvidos" value="#{escopoController.selected.ativosEnvolvidos}" required="true"/>
+                    <b:inputText label="Controles existentes" id="controles_existentes" value="#{escopoController.selected.controlesExistentes}" required="true"/>
+                    <b:inputText label="Restrições impostas" id="restricoes_impostas" value="#{escopoController.selected.restricoesImpostas}" required="true"/>
+                </b:panel>
+                <b:commandButton action="#{escopoController.update}" value="Salvar"/>
+                <b:commandButton action="#{escopoController.prepareList()}" value="Cancelar" style="margin-left: 10px;"/>
+            </h:form>
+        </ui:define>
+    </ui:decorate>
+
+</html>

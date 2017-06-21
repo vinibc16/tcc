@@ -26,6 +26,7 @@ import java.io.Serializable;
 import java.util.List;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.inject.Inject;
 import org.primefaces.event.CellEditEvent;
 import org.primefaces.event.RowEditEvent;
 
@@ -42,6 +43,8 @@ public class EscopoVulController implements Serializable {
     private DataModel lista = null;
     private List<EscopoVul> listaApontamento, listaAceite;
     private Escopo escopoPag = null;
+    @Inject
+    private UsuarioController logado;
     
     public EscopoVulController() {
         listaApontamento = new ArrayList<>();
@@ -290,7 +293,7 @@ public class EscopoVulController implements Serializable {
 
     }
     
-    public String associaVul(Escopo escopo, List<Vulnerabilidade> vul) {
+    public void associaVul(Escopo escopo, List<Vulnerabilidade> vul) throws IOException {
         List<EscopoVul> lista = ejbFacade.findAllfindByIdEscopo(escopo);
         for (int i=0; lista.size()>i; i++) {
             ejbFacade.remove(lista.get(i));
@@ -307,12 +310,11 @@ public class EscopoVulController implements Serializable {
             evpk.setIdEscopo(escopo.getIdEscopo());
             evpk.setIdVulnerabilidade(vul.get(i).getIdVulnerabilidade());
             ev.setEscopoVulPK(evpk);
+            ev.setIdEmpresa(logado.getLogado().getIdEmpresa());
             
-            System.out.println(ev.toString());
             getFacade().create(ev);
-            System.out.println("Associa Vul ->"+vul.get(i));            
         }                
-        return "ListEscopo";
+        FacesContext.getCurrentInstance().getExternalContext().redirect("/Tcc/escopo/View.jsf");
     }
     
     public String editEscopoVul(Escopo escopo) {

@@ -6,41 +6,42 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:b="http://bootsfaces.net/ui"
       xmlns:f="http://java.sun.com/jsf/core">
-    <ui:composition template="/template_admin.xhtml">
+    <ui:composition template="/template_usuario.xhtml">
         <ui:define name="centro">
-            <h:form id="formEmp">
-                <p:dataTable id="empresas" 
-                             var="emp" 
-                             value="#{empresaController.items}" 
+            <h:form id="formListEsc">
+                <p:dataTable id="escopos" 
+                             var="esc" 
+                             value="#{escopoController.items}" 
                              rows="10" 
                              paginator="true"
                              paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
+                    
                     <p:column headerText="Nome">
-                        <h:outputText value="#{emp.nome}" />
+                        <h:outputText value="#{esc.nome}" />
                     </p:column>
                     
-                    <p:column headerText="Razao Social">
-                        <h:outputText value="#{emp.razaoSocial}" />
+                    <p:column headerText="Descrição">
+                        <h:outputText value="#{esc.descricao}" />
                     </p:column>
                     
                     <p:column style="width:65px;text-align: center">
-                        <p:commandButton actionListener="#{empresaController.prepareView()}" icon="ui-icon-search" title="Detalhes">
-                            <f:setPropertyActionListener value="#{emp}" target="#{empresaController.selected}" />
+                        <p:commandButton actionListener="#{escopoController.prepareView()}" icon="ui-icon-search" title="Detalhes">
+                            <f:setPropertyActionListener value="#{esc}" target="#{escopoController.selected}" />
                         </p:commandButton>
                     </p:column>
                     <p:column style="width:65px;text-align: center">
-                        <p:commandButton update=":principal:formEmp:empresas" icon="ui-icon-pencil" actionListener="#{empresaController.prepareEdit()}" title="Editar">
-                            <f:setPropertyActionListener value="#{emp}" target="#{empresaController.selected}" />
+                        <p:commandButton update=":principal:formListEsc:escopos" icon="ui-icon-pencil" actionListener="#{escopoController.prepareEdit()}" title="Editar">
+                            <f:setPropertyActionListener value="#{esc}" target="#{escopoController.selected}" />
                         </p:commandButton>
                     </p:column>
                     <p:column style="width:65px;text-align: center">
-                        <p:commandButton update=":principal:formEmp:empresas" icon="ui-icon-close" actionListener="#{empresaController.destroy()}" title="Deletar">
-                            <f:setPropertyActionListener value="#{emp}" target="#{empresaController.selected}" />
+                        <p:commandButton update=":principal:formListEsc:escopos" icon="ui-icon-close" actionListener="#{escopoController.destroy()}" title="Deletar">
+                            <f:setPropertyActionListener value="#{esc}" target="#{escopoController.selected}" />
                         </p:commandButton>
                     </p:column>
-                </p:dataTable>
+                </p:dataTable>                
                 <br />
-                <b:commandButton value="Criar Empresa" action="#{empresaController.prepareCreate()}"/>
+                <b:commandButton value="Criar Escopo" action="#{escopoController.prepareCreate()}"/>
             </h:form>
         </ui:define>
     </ui:composition>

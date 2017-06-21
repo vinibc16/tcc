@@ -11,6 +11,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import pucrs.br.entity.Empresa;
 import pucrs.br.entity.Escopo;
 import pucrs.br.entity.Grafico;
 
@@ -33,9 +34,9 @@ public class EscopoFacade extends AbstractFacade<Escopo> {
         super(Escopo.class);
     }
     
-    public List<Escopo> findAllEscByUser(int idEmpresa) {        
+    public List<Escopo> findAllEscByUser(Empresa emp) {        
         return em.createQuery("SELECT u FROM Escopo u WHERE u.idEmpresa = :idEmpresa")
-                .setParameter("idEmpresa", idEmpresa)
+                .setParameter("idEmpresa", emp)
                 .getResultList();
     }
     

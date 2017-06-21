@@ -1,6 +1,5 @@
 package pucrs.br.controller;
 
-import java.io.FileNotFoundException;
 import pucrs.br.entity.Escopo;
 import pucrs.br.controller.util.JsfUtil;
 import pucrs.br.controller.util.PaginationHelper;
@@ -8,7 +7,6 @@ import pucrs.br.bean.EscopoFacade;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import java.util.ResourceBundle;
 import javax.ejb.EJB;
@@ -26,37 +24,20 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import javax.persistence.Query;
 import org.primefaces.event.CellEditEvent;
 import org.primefaces.event.RowEditEvent;
-import org.primefaces.event.SelectEvent;
-import pucrs.br.bean.EscopoVulFacade;
-import pucrs.br.entity.Empresa;
 import pucrs.br.entity.EscopoVul;
 import pucrs.br.entity.Vulnerabilidade;
 import java.io.FileOutputStream;
-import java.io.OutputStream;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.*;
-import com.itextpdf.text.PageSize;
-import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
-import static com.sun.org.apache.xerces.internal.impl.XMLEntityManager.DEFAULT_BUFFER_SIZE;
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import javax.faces.context.ExternalContext;
-import javax.servlet.http.HttpServletResponse;
-import org.primefaces.model.DefaultStreamedContent;
-import org.primefaces.model.StreamedContent;
 import pucrs.br.entity.Grafico;
 
 @Named("escopoController")
@@ -64,7 +45,6 @@ import pucrs.br.entity.Grafico;
 public class EscopoController implements Serializable {
 
     private Escopo current;
-    private Escopo escopoNew;
     private DataModel items = null;
     @EJB
     private EscopoFacade ejbFacade;
@@ -93,14 +73,10 @@ public class EscopoController implements Serializable {
         return current;
     }
 
-    public Escopo getSelectedNew() {
-        if (escopoNew == null) {
-            escopoNew = new Escopo();
-            selectedItemIndex = -1;
-        }
-        return escopoNew;
+    public void setSelected(Escopo current) {
+        this.current = current;
     }
-
+    
     private EscopoFacade getFacade() {
         return ejbFacade;
     }
@@ -116,7 +92,7 @@ public class EscopoController implements Serializable {
 
                 @Override
                 public DataModel createPageDataModel() {
-                    return new ListDataModel(getFacade().findAllEscByUser(usuarioLogado.getLogado().getIdEmpresa().getIdEmpresa()));
+                    return new ListDataModel(getFacade().findAllEscByUser(usuarioLogado.getLogado().getIdEmpresa()));
                     //return new ListDataModel(getFacade().findRange(new int[]{getPageFirstItem(), getPageFirstItem() + getPageSize()}));
                 }
             };
@@ -126,67 +102,66 @@ public class EscopoController implements Serializable {
 
     public void prepareList() throws IOException {
         recreateModel();
-        FacesContext.getCurrentInstance().getExternalContext().redirect("ListEscopo.jsf");
+        FacesContext.getCurrentInstance().getExternalContext().redirect("/Tcc/escopo/List.jsf");
     }
-
-    public String prepareView() {
-        current = (Escopo) getItems().getRowData();
-        selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
-        //Popular lista de vul
+    
+    public void associar() throws IOException {
         selectedVul.clear();
 
         escopovul = escopoVulContrl.findAllfindByIdEscopo(current);
         for (int i = 0; i < escopovul.size(); i++) {
             selectedVul.add(escopovul.get(i).getVulnerabilidade());
         }
-        //selectedVul.addAll(current.getVulnerabilidadeCollection().toArray());
-        return "ViewEscopo";
+        FacesContext.getCurrentInstance().getExternalContext().redirect("/Tcc/escopoVul/Associar.jsf");
     }
 
-    public String prepareCreate() {
-        escopoNew = new Escopo();
-        selectedItemIndex = -1;
-        return "CreateEscopo";
-    }
-
-    public String create() {
-        try {
-            escopoNew.setIdEmpresa(usuarioLogado.getLogado().getIdEmpresa());
-            escopoNew.setDataCriacao(new Date());
-            getFacade().create(escopoNew);
-            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("EscopoCreated"));
-            return prepareCreate();
-        } catch (Exception e) {
-            JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
-            return null;
-        }
-    }
-
-    public String prepareEdit() {
+    public void prepareView() throws IOException {
         current = (Escopo) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
-        return "EditEscopo";
+        FacesContext.getCurrentInstance().getExternalContext().redirect("/Tcc/escopo/View.jsf");
     }
 
-    public String update() {
+    public void prepareCreate() throws IOException {
+        current = new Escopo();
+        selectedItemIndex = -1;
+        FacesContext.getCurrentInstance().getExternalContext().redirect("/Tcc/escopo/Create.jsf");
+    }
+
+    public void create() {
         try {
-            //current.setIdEmpresa(current.getIdEmpresa());
-            getFacade().edit(current);
-            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("EscopoUpdated"));
-            return "ViewEscopo";
+            current.setIdEmpresa(usuarioLogado.getLogado().getIdEmpresa());
+            current.setDataCriacao(new Date());
+            getFacade().create(current);
+            JsfUtil.addSuccessMessage("Escopo criado");
+            prepareList();
         } catch (Exception e) {
-            JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
-            return null;
+            JsfUtil.addErrorMessage(e, "Erro ao criar escopo");
         }
     }
 
-    public String destroy() {
+    public void prepareEdit() throws IOException {
+        current = (Escopo) getItems().getRowData();
+        selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
+        FacesContext.getCurrentInstance().getExternalContext().redirect("/Tcc/escopo/Edit.jsf");
+    }
+
+    public void update() {
+        try {
+            getFacade().edit(current);
+            JsfUtil.addSuccessMessage("Escopo atualizado");
+            prepareList();
+        } catch (Exception e) {
+            JsfUtil.addErrorMessage(e, "Erro ao atualizar o escopo");
+        }
+    }
+
+    public void destroy() throws IOException {
         current = (Escopo) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
         performDestroy();
         recreatePagination();
         recreateModel();
-        return "ListEscopo";
+        prepareList();
     }
 
     public String destroyAndView() {
@@ -205,9 +180,9 @@ public class EscopoController implements Serializable {
     private void performDestroy() {
         try {
             getFacade().remove(current);
-            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("EscopoDeleted"));
+            JsfUtil.addSuccessMessage("Escopo deletado");
         } catch (Exception e) {
-            JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
+            JsfUtil.addErrorMessage(e, "Erro ao deletar escopo");
         }
     }
 
@@ -314,27 +289,6 @@ public class EscopoController implements Serializable {
 
     public void setSelectedVul(List<Vulnerabilidade> selectedVul) {
         this.selectedVul = selectedVul;
-    }
-
-    public void onRowEdit(RowEditEvent event) {
-        current = ((Escopo) event.getObject());
-        update();
-    }
-
-    public void onRowCancel(RowEditEvent event) {
-        FacesMessage msg = new FacesMessage("Escopo Cancelled", ((Escopo) event.getObject()).getNome());
-        FacesContext.getCurrentInstance().addMessage(null, msg);
-    }
-
-    public void onCellEdit(CellEditEvent event) {
-        Object oldValue = event.getOldValue();
-        Object newValue = event.getNewValue();
-
-        if (newValue != null && !newValue.equals(oldValue)) {
-            selectedItemIndex = event.getRowIndex();
-            current = (Escopo) items.getRowData();
-            update();
-        }
     }
 
     public boolean visibleRelatorio() {
