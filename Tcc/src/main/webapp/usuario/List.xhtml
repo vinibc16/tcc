@@ -9,7 +9,8 @@
     <ui:decorate template="/template_admin.xhtml">
         <ui:define name="centro">
             <h:form id="formUser">
-                <b:growl id="msgs2" showDetail="true"/>
+                <p:outputLabel value="Usuários Cadastrados" style="font-weight: bold"/>
+                <br />
                 <p:dataTable id="usuarios" 
                              var="user" 
                              value="#{usuarioController.items}" 

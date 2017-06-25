@@ -8,7 +8,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.ResourceBundle;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
@@ -24,8 +23,6 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import org.primefaces.event.CellEditEvent;
-import org.primefaces.event.RowEditEvent;
 import pucrs.br.entity.EscopoVul;
 import pucrs.br.entity.Vulnerabilidade;
 import java.io.FileOutputStream;
@@ -33,15 +30,13 @@ import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.*;
 import com.itextpdf.text.Phrase;
-import com.itextpdf.text.pdf.PdfDiv;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Map;
+import org.primefaces.event.FileUploadEvent;
+import org.primefaces.model.UploadedFile;
 import pucrs.br.entity.Grafico;
 
 @Named("escopoController")
@@ -65,6 +60,7 @@ public class EscopoController implements Serializable {
     private EscopoVulController escopoVulContrl;
     @Inject
     private VulnerabilidadeController vulctrl;
+    private UploadedFile file;
 
     public EscopoController() {
     }
@@ -461,5 +457,18 @@ public class EscopoController implements Serializable {
     
     public List<Grafico> findResultGrafico() {
         return ejbFacade.findResultGrafico(usuarioLogado.getLogado().getIdEmpresa().getIdEmpresa());
+    }
+
+    public UploadedFile getFile() {
+        return file;
+    }
+
+    public void setFile(UploadedFile file) {
+        this.file = file;
+    }
+    
+    public void importa(FileUploadEvent event) {
+        FacesMessage message = new FacesMessage("Succesful", event.getFile().getFileName() + " is uploaded.");
+        FacesContext.getCurrentInstance().addMessage(null, message);
     }
 }

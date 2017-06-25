@@ -10,6 +10,8 @@
     <ui:decorate template="/template_usuario.xhtml">
         <ui:define name="centro">
             <h:form id="formListVul">
+                <p:outputLabel value="Vulnerabilidades Cadastradas" style="font-weight: bold"/>
+                <br />                
                 <p:dataTable id="tableVul" 
                              var="vul" 
                              value="#{vulnerabilidadeController.items}" 

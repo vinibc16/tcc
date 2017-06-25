@@ -9,6 +9,8 @@
     <ui:composition template="/template_admin.xhtml">
         <ui:define name="centro">
             <h:form id="formEmp">
+                <p:outputLabel value="Empresas Cadastradas" style="font-weight: bold"/>
+                <br />
                 <p:dataTable id="empresas" 
                              var="emp" 
                              value="#{empresaController.items}" 
