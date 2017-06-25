@@ -38,7 +38,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "VulnerabilidadeAdmin.findByAcoes", query = "SELECT v FROM VulnerabilidadeAdmin v WHERE v.acoes = :acoes"),
     @NamedQuery(name = "VulnerabilidadeAdmin.findByFonte", query = "SELECT v FROM VulnerabilidadeAdmin v WHERE v.fonte = :fonte"),
     @NamedQuery(name = "VulnerabilidadeAdmin.findByDataCriacao", query = "SELECT v FROM VulnerabilidadeAdmin v WHERE v.dataCriacao = :dataCriacao"),
-    @NamedQuery(name = "VulnerabilidadeAdmin.findByConsequencia", query = "SELECT v FROM VulnerabilidadeAdmin v WHERE v.consequencia = :consequencia")})
+    @NamedQuery(name = "VulnerabilidadeAdmin.findByConsequencia", query = "SELECT v FROM VulnerabilidadeAdmin v WHERE v.consequencia = :consequencia"),
+    @NamedQuery(name = "VulnerabilidadeAdmin.findByAmeaca", query = "SELECT v FROM VulnerabilidadeAdmin v WHERE v.ameaca = :ameaca")})
 public class VulnerabilidadeAdmin implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -63,7 +64,7 @@ public class VulnerabilidadeAdmin implements Serializable {
     private int nivel;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 1000)
+    @Size(min = 1, max = 2000)
     @Column(name = "acoes")
     private String acoes;
     @Basic(optional = false)
@@ -79,6 +80,9 @@ public class VulnerabilidadeAdmin implements Serializable {
     @Size(max = 2000)
     @Column(name = "consequencia")
     private String consequencia;
+    @Size(max = 2000)
+    @Column(name = "ameaca")
+    private String ameaca;
 
     public VulnerabilidadeAdmin() {
     }
@@ -159,6 +163,14 @@ public class VulnerabilidadeAdmin implements Serializable {
 
     public void setConsequencia(String consequencia) {
         this.consequencia = consequencia;
+    }
+
+    public String getAmeaca() {
+        return ameaca;
+    }
+
+    public void setAmeaca(String ameaca) {
+        this.ameaca = ameaca;
     }
 
     @Override

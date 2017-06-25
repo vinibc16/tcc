@@ -33,11 +33,15 @@ import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.*;
 import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.PdfDiv;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 import pucrs.br.entity.Grafico;
 
 @Named("escopoController")
@@ -313,30 +317,97 @@ public class EscopoController implements Serializable {
 
     public void createPdf(String dest, Escopo esc) throws IOException, DocumentException {
         Document document = new Document();
-        Font boldFont = new Font(Font.FontFamily.TIMES_ROMAN, 16, Font.BOLD);
-        PdfWriter.getInstance(document, new FileOutputStream(dest));
-        document.open();
-        PdfPTable table = new PdfPTable(2);
+        Paragraph p = new Paragraph();
+        PdfPTable table;
         List<EscopoVul> escvul = escopoVulContrl.consultaRelatorio(esc);
         int idvul;
         PdfPCell cell;
-
-        cell = new PdfPCell(new Phrase("Vulnerabilidade", boldFont));
+        Font boldFont16 = new Font(Font.FontFamily.TIMES_ROMAN, 16, Font.BOLD);
+        Font boldFont14 = new Font(Font.FontFamily.TIMES_ROMAN,14,Font.BOLD);
+        PdfWriter.getInstance(document, new FileOutputStream(dest));
+        document.open();
+        
+        // Cabeçalho
+        // Empresa
+        document.add(new Paragraph("Empresa",boldFont16));
+        p.add(new Phrase("Nome: ",boldFont14));
+        p.add(new Phrase(esc.getIdEmpresa().getNome()));
+        document.add(p);
+        p.clear();
+        p.add(new Phrase("Missão: ",boldFont14));
+        p.add(new Phrase(esc.getIdEmpresa().getMissao()));
+        document.add(p);
+        p.clear();
+        p.add(new Phrase("Segmento: ",boldFont14));
+        p.add(new Phrase(esc.getIdEmpresa().getSegmento()));
+        document.add(p);
+        p.clear();
+        
+        // Escopo
+        document.add(new Paragraph("Escopo",boldFont16));
+        p.add(new Phrase("Nome: ",boldFont14));
+        p.add(new Phrase(esc.getNome()));
+        document.add(p);
+        p.clear();
+        p.add(new Phrase("Responsável: ",boldFont14));
+        p.add(new Phrase(esc.getIdResponsavel().getNome()));
+        document.add(p);
+        p.clear();
+        p.add(new Phrase("Descrição: ",boldFont14));
+        p.add(new Phrase(esc.getDescricao()));
+        document.add(p);
+        p.clear();
+        p.add(new Phrase("Ativos: ",boldFont14));
+        p.add(new Phrase(esc.getAtivosEnvolvidos()));
+        document.add(p);
+        p.clear();
+        document.add(new Paragraph(" "));
+        
+        // Tabela 1
+        document.add(new Paragraph("Área de Ataque",boldFont16));
+        table = new PdfPTable(2);
+        
+        cell = new PdfPCell(new Phrase("Ameaça", boldFont16));
+        document.add(new Paragraph(" "));
         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
         table.addCell(cell);
-        cell = new PdfPCell(new Phrase("Risco", boldFont));
+        cell = new PdfPCell(new Phrase("Consequência", boldFont16));
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table.addCell(cell);
+        for (int aw = 0; aw < escvul.size(); aw++) {
+            //idvul = escvul.get(aw).getEscopoVulPK().getIdVulnerabilidade();
+            table.addCell(escvul.get(aw).getAmaeaca());
+            table.addCell(escvul.get(aw).getConsequencia());
+            //table.addCell(recuperaRisco(escvul.get(aw).getRisco()));
+        }
+        document.add(table);
+        
+        // Tabela 2
+        document.add(new Paragraph("Vulnerabilidade - Ativos de Informação",boldFont16));
+        table = new PdfPTable(3);
+        
+        cell = new PdfPCell(new Phrase("Vulnerabilidade", boldFont16));
+        document.add(new Paragraph(" "));
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table.addCell(cell);
+        cell = new PdfPCell(new Phrase("Fonte", boldFont16));
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table.addCell(cell);
+        cell = new PdfPCell(new Phrase("Risco", boldFont16));
         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
         table.addCell(cell);
         for (int aw = 0; aw < escvul.size(); aw++) {
             idvul = escvul.get(aw).getEscopoVulPK().getIdVulnerabilidade();
-            table.addCell(vulctrl.getVulNome(idvul));
+            table.addCell(escvul.get(aw).getVulnerabilidade().getNome());
+            table.addCell(escvul.get(aw).getVulnerabilidade().getFonte());
             table.addCell(recuperaRisco(escvul.get(aw).getRisco()));
         }
         document.add(table);
+        
         document.close();
         JsfUtil.addSuccessMessage("Arquivo exportado.");
     }
-    
+   
     public String recuperaRisco(double risco) {
         if (round(risco,2) == 0.05 || 
             round(risco,2) == 0.04 ||

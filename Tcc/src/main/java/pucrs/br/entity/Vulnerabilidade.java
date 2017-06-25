@@ -44,7 +44,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Vulnerabilidade.findByAcoes", query = "SELECT v FROM Vulnerabilidade v WHERE v.acoes = :acoes"),
     @NamedQuery(name = "Vulnerabilidade.findByFonte", query = "SELECT v FROM Vulnerabilidade v WHERE v.fonte = :fonte"),
     @NamedQuery(name = "Vulnerabilidade.findByDataCriacao", query = "SELECT v FROM Vulnerabilidade v WHERE v.dataCriacao = :dataCriacao"),
-    @NamedQuery(name = "Vulnerabilidade.findByConsequencia", query = "SELECT v FROM Vulnerabilidade v WHERE v.consequencia = :consequencia")})
+    @NamedQuery(name = "Vulnerabilidade.findByConsequencia", query = "SELECT v FROM Vulnerabilidade v WHERE v.consequencia = :consequencia"),
+    @NamedQuery(name = "Vulnerabilidade.findByAmeaca", query = "SELECT v FROM Vulnerabilidade v WHERE v.ameaca = :ameaca")})
 public class Vulnerabilidade implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -69,7 +70,7 @@ public class Vulnerabilidade implements Serializable {
     private int nivel;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 1000)
+    @Size(min = 1, max = 2000)
     @Column(name = "acoes")
     private String acoes;
     @Basic(optional = false)
@@ -85,6 +86,9 @@ public class Vulnerabilidade implements Serializable {
     @Size(max = 2000)
     @Column(name = "consequencia")
     private String consequencia;
+    @Size(max = 2000)
+    @Column(name = "ameaca")
+    private String ameaca;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "vulnerabilidade")
     private Collection<EscopoVul> escopoVulCollection;
     @JoinColumn(name = "id_empresa", referencedColumnName = "id_empresa")
@@ -170,6 +174,14 @@ public class Vulnerabilidade implements Serializable {
 
     public void setConsequencia(String consequencia) {
         this.consequencia = consequencia;
+    }
+
+    public String getAmeaca() {
+        return ameaca;
+    }
+
+    public void setAmeaca(String ameaca) {
+        this.ameaca = ameaca;
     }
 
     @XmlTransient

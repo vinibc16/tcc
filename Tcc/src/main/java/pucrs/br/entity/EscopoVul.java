@@ -7,7 +7,6 @@ package pucrs.br.entity;
 
 import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -18,7 +17,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -38,7 +36,10 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "EscopoVul.findByProbabilidade", query = "SELECT e FROM EscopoVul e WHERE e.probabilidade = :probabilidade"),
     @NamedQuery(name = "EscopoVul.findByAceito", query = "SELECT e FROM EscopoVul e WHERE e.aceito = :aceito"),
     @NamedQuery(name = "EscopoVul.findByRisco", query = "SELECT e FROM EscopoVul e WHERE e.risco = :risco"),
-    @NamedQuery(name = "EscopoVul.findByAcao", query = "SELECT e FROM EscopoVul e WHERE e.acao = :acao")})
+    @NamedQuery(name = "EscopoVul.findByAcao", query = "SELECT e FROM EscopoVul e WHERE e.acao = :acao"),
+    @NamedQuery(name = "EscopoVul.findByAcoes", query = "SELECT e FROM EscopoVul e WHERE e.acoes = :acoes"),
+    @NamedQuery(name = "EscopoVul.findByConsequencia", query = "SELECT e FROM EscopoVul e WHERE e.consequencia = :consequencia"),
+    @NamedQuery(name = "EscopoVul.findByAmaeaca", query = "SELECT e FROM EscopoVul e WHERE e.amaeaca = :amaeaca")})
 public class EscopoVul implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -56,11 +57,18 @@ public class EscopoVul implements Serializable {
     private Integer aceito;
     @Column(name = "risco")
     private Double risco;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 200)
+    @Size(max = 200)
     @Column(name = "acao")
     private String acao;
+    @Size(max = 2000)
+    @Column(name = "acoes")
+    private String acoes;
+    @Size(max = 2000)
+    @Column(name = "consequencia")
+    private String consequencia;
+    @Size(max = 2000)
+    @Column(name = "amaeaca")
+    private String amaeaca;
     @JoinColumn(name = "id_empresa", referencedColumnName = "id_empresa")
     @ManyToOne
     private Empresa idEmpresa;
@@ -76,11 +84,6 @@ public class EscopoVul implements Serializable {
 
     public EscopoVul(EscopoVulPK escopoVulPK) {
         this.escopoVulPK = escopoVulPK;
-    }
-
-    public EscopoVul(EscopoVulPK escopoVulPK, String acao) {
-        this.escopoVulPK = escopoVulPK;
-        this.acao = acao;
     }
 
     public EscopoVul(int idEscopo, int idVulnerabilidade) {
@@ -141,6 +144,30 @@ public class EscopoVul implements Serializable {
 
     public void setAcao(String acao) {
         this.acao = acao;
+    }
+
+    public String getAcoes() {
+        return acoes;
+    }
+
+    public void setAcoes(String acoes) {
+        this.acoes = acoes;
+    }
+
+    public String getConsequencia() {
+        return consequencia;
+    }
+
+    public void setConsequencia(String consequencia) {
+        this.consequencia = consequencia;
+    }
+
+    public String getAmaeaca() {
+        return amaeaca;
+    }
+
+    public void setAmaeaca(String amaeaca) {
+        this.amaeaca = amaeaca;
     }
 
     public Empresa getIdEmpresa() {
