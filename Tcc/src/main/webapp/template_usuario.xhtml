@@ -18,19 +18,20 @@
                 right: 0;
                 font-size: 0.9em;
             }
-            .ui-widget, ui-widget-content, ui-panelgrid, ui-panelgrid-cell, label, .panel-group .panel, .panel-default, ui-datatable-even, ui-datatable-data, ui-panelgrid, ui-widget {
+            .ui-widget, ui-panelgrid, ui-panelgrid-cell, label, panel-group, panel, panel-default, ui-datatable-even, ui-datatable-data, ui-panelgrid, ui-widget {
                 font-weight: normal;   
                 background: transparent;
             }
             .ui-widget-content {
                 font-weight: normal;
                 border: beige;
+                background: transparent;
             }
         </style>
     </h:head>
     <h:body styleClass="body-sigin">
         <h:form>
-            <b:navBar brand="Inicio" brandHref="/Tcc/home.jsf" fixed="top" inverse="true">
+            <b:navBar brand="Inicio" brandHref="/Tcc/home.jsf" fixed="top" inverse="true" >
                 <b:navbarLinks>
                     <b:navCommandLink value="Vulnerabilidades" actionListener="#{vulnerabilidadeController.prepareList()}"></b:navCommandLink>
                     <b:navCommandLink value="Responsáveis" actionListener="#{responsaveisController.prepareList()}"></b:navCommandLink>

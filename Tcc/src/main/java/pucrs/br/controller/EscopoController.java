@@ -375,10 +375,8 @@ public class EscopoController implements Serializable {
         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
         table.addCell(cell);
         for (int aw = 0; aw < escvul.size(); aw++) {
-            //idvul = escvul.get(aw).getEscopoVulPK().getIdVulnerabilidade();
             table.addCell(escvul.get(aw).getAmaeaca());
-            table.addCell(escvul.get(aw).getConsequencia());
-            //table.addCell(recuperaRisco(escvul.get(aw).getRisco()));
+            table.addCell(escvul.get(aw).getConsequencia());            
         }
         document.add(table);
         
@@ -400,7 +398,16 @@ public class EscopoController implements Serializable {
             idvul = escvul.get(aw).getEscopoVulPK().getIdVulnerabilidade();
             table.addCell(escvul.get(aw).getVulnerabilidade().getNome());
             table.addCell(escvul.get(aw).getVulnerabilidade().getFonte());
-            table.addCell(recuperaRisco(escvul.get(aw).getRisco()));
+            cell = new PdfPCell(new Phrase(""+recuperaRisco(escvul.get(aw).getRisco())));
+            if (recuperaRisco(escvul.get(aw).getRisco()).equals("Alto")) {
+                cell.setBackgroundColor(BaseColor.RED);
+            } else if (recuperaRisco(escvul.get(aw).getRisco()).equals("Moderado")) {
+                cell.setBackgroundColor(BaseColor.YELLOW);
+            } else if (recuperaRisco(escvul.get(aw).getRisco()).equals("Baixo")) {
+                cell.setBackgroundColor(BaseColor.GREEN);
+            }
+            table.addCell(cell);
+            //table.addCell(recuperaRisco(escvul.get(aw).getRisco()));
         }
         document.add(table);
         
