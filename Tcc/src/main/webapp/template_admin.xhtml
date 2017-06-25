@@ -9,14 +9,23 @@
     <h:head>
         <title>Tcc</title>
         <style type="text/css">
-            .body-sigin {
-                padding-top: 100px;
-                background-image:url(/Tcc/imagens/iot_bg.jpg);
+            .div {
+               padding-top: 100px;
+            }
+            .ui-widget, .ui-widget-content, .ui-panelgrid, .ui-panelgrid-cell, .label {
+                font-weight: normal;   
+                background: transparent;
+            }
+            .ui-widget-content {
+                font-weight: normal;
+                border: beige;
             }
         </style>
     </h:head>
-    <h:body styleClass="body-sigin">
-        <h:form>
+    <h:body style="background-color: gainsboro;">
+        
+    </h:body>
+    <h:form styleClass="div">
             <b:navBar brand="Inicio" brandHref="/Tcc/home.jsf" fixed="top" inverse="true">
                 <b:navbarLinks>
                     <b:navCommandLink value="Usuários" actionListener="#{usuarioController.prepareList()}"></b:navCommandLink>
@@ -27,11 +36,10 @@
             </b:navBar>
         </h:form>
         <b:container>
-            <h:form id="principal">
-                <b:growl id="msgs" showDetail="true"/>
+            <h:form id="principalAdmin" >
+                <b:growl id="msgs2" showDetail="true"/>
+                <b:messages id="msgs"/>
                 <ui:insert name="centro"/>
             </h:form>
         </b:container>
-
-    </h:body>
 </html>

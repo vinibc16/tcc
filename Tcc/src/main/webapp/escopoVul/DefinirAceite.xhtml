@@ -9,10 +9,26 @@
     <ui:decorate template="/template_usuario.xhtml">
         <ui:define name="centro">
             <h:form>
+                <p:panelGrid columns="4">
+                    <p:outputLabel value="Nome:"/>
+                    <p:outputLabel value="#{escopoController.selected.nome}"/>
+                    <p:outputLabel value="Descrição:"/>
+                    <p:outputLabel value="#{escopoController.selected.descricao}"/>
+                    <p:outputLabel value="Responsável:"/>
+                    <p:outputLabel value="#{escopoController.selected.idResponsavel.nome}"/>
+                    <p:outputLabel value="Ativos envolvidos:"/>
+                    <p:outputLabel value="#{escopoController.selected.ativosEnvolvidos}"/>
+                    <p:outputLabel value="Controles existentes:"/>
+                    <p:outputLabel value="#{escopoController.selected.controlesExistentes}"/>
+                    <p:outputLabel value="Restrições impostas:"/>
+                    <p:outputLabel value="#{escopoController.selected.restricoesImpostas}"/>
+                </p:panelGrid>
+                <br />                
+            </h:form>
+            <h:form>
                 <p:dataTable id="escopoVul" var="item" value="#{escopoVulController.listaApontamento}" editable="true" editMode="cell" rowKey="#{item.escopoVulPK}" style="margin-bottom:0">
-                    <p:ajax event="cellEdit" listener="#{escopoVulController.onCellEdit}" />
-                    <p:column headerText="ID Vulnerabilidade">
-                        <h:outputText value="#{item.escopoVulPK.idVulnerabilidade}"/>
+                    <p:column headerText="Vulnerabilidade">
+                        <h:outputText value="#{item.vulnerabilidade.nome}"/>
                     </p:column>
                     <p:column headerText="Ignorar Vul">
                         <h:selectOneMenu id="Ignorar" value="#{item.aceito}">
@@ -20,8 +36,16 @@
                             <f:selectItem itemLabel="Não" itemValue="0"/>
                         </h:selectOneMenu>
                     </p:column>
+                    <p:column headerText="Ação">
+                        <h:selectOneMenu id="Acao" value="#{item.acao}">
+                            <f:selectItem itemLabel="Mitigar" itemValue="Mitigar"/>
+                            <f:selectItem itemLabel="Aceitar" itemValue="Aceitar"/>
+                            <f:selectItem itemLabel="Evitar" itemValue="Evitar"/>
+                            <f:selectItem itemLabel="Transferir" itemValue="Transferir"/>
+                        </h:selectOneMenu>
+                    </p:column>
                     <f:facet name="footer">
-                        <p:commandButton process="escopoVul" value="Salvar" action="#{escopoVulController.update2()}" />
+                        <p:commandButton process="escopoVul" value="Salvar" action="#{escopoVulController.definirRisco()}" />
                     </f:facet>
                 </p:dataTable>
             </h:form>    

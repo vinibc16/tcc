@@ -10,20 +10,18 @@
         <ui:define name="centro">
             <h:form>
                 <p:panelGrid columns="4">
-                    <p:outputLabel value="#{bundle.ViewEscopoLabel_escopoPK_idEscopo}"/>
-                    <p:outputLabel value="#{escopoController.selected.idEscopo}" title="#{bundle.ViewEscopoTitle_escopoPK_idEscopo}"/>
-                    <p:outputLabel value="#{bundle.ViewEscopoLabel_nome}"/>
-                    <p:outputLabel value="#{escopoController.selected.nome}" title="#{bundle.ViewEscopoTitle_nome}"/>
-                    <p:outputLabel value="#{bundle.ViewEscopoLabel_idResponsavel}"/>
-                    <p:outputLabel value="#{escopoController.selected.idResponsavel}" title="#{bundle.ViewEscopoTitle_idResponsavel}"/>
-                    <p:outputLabel value="#{bundle.ViewEscopoLabel_descricao}"/>
-                    <p:outputLabel value="#{escopoController.selected.descricao}" title="#{bundle.ViewEscopoTitle_descricao}"/>
-                    <p:outputLabel value="#{bundle.ViewEscopoLabel_dataCriacao}"/>
-                    <p:outputLabel value="#{escopoController.selected.dataCriacao}" title="#{bundle.ViewEscopoTitle_dataCriacao}">
-                        <f:convertDateTime pattern="dd/MM/yyyy" />
-                    </p:outputLabel>
-                    <p:outputLabel value="#{bundle.ViewEscopoLabel_empresa}"/>
-                    <p:outputLabel value="#{escopoController.selected.idEmpresa}" title="#{bundle.ViewEscopoTitle_empresa}"/>
+                    <p:outputLabel value="Nome:"/>
+                    <p:outputLabel value="#{escopoController.selected.nome}"/>
+                    <p:outputLabel value="Descrição:"/>
+                    <p:outputLabel value="#{escopoController.selected.descricao}"/>
+                    <p:outputLabel value="Responsável:"/>
+                    <p:outputLabel value="#{escopoController.selected.idResponsavel.nome}"/>
+                    <p:outputLabel value="Ativos envolvidos:"/>
+                    <p:outputLabel value="#{escopoController.selected.ativosEnvolvidos}"/>
+                    <p:outputLabel value="Controles existentes:"/>
+                    <p:outputLabel value="#{escopoController.selected.controlesExistentes}"/>
+                    <p:outputLabel value="Restrições impostas:"/>
+                    <p:outputLabel value="#{escopoController.selected.restricoesImpostas}"/>
                 </p:panelGrid>
                 <br />                
             </h:form>

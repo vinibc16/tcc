@@ -36,7 +36,7 @@ public class EscopoVulFacade extends AbstractFacade<EscopoVul> {
     }
     
     public List<EscopoVul> findAllfindByIdEscopo(Escopo escopo) {        
-        Query query = em.createNativeQuery("SELECT id_empresa, id_escopo, id_vulnerabilidade, impacto, probabilidade, aceito FROM escopo_vul e WHERE id_escopo = "+escopo.getIdEscopo());
+        Query query = em.createNativeQuery("SELECT id_empresa, id_escopo, id_vulnerabilidade, impacto, probabilidade, aceito FROM escopo_vul WHERE id_escopo = "+escopo.getIdEscopo());
         List<Object[]> lista = query.getResultList();
         List<EscopoVul> ev = new ArrayList<>();
         for (Object[] row : lista) {

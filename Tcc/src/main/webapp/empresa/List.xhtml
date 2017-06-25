@@ -29,12 +29,12 @@
                         </p:commandButton>
                     </p:column>
                     <p:column style="width:65px;text-align: center">
-                        <p:commandButton update=":principal:formEmp:empresas" icon="ui-icon-pencil" actionListener="#{empresaController.prepareEdit()}" title="Editar">
+                        <p:commandButton update=":principalAdmin:formEmp:empresas" icon="ui-icon-pencil" actionListener="#{empresaController.prepareEdit()}" title="Editar">
                             <f:setPropertyActionListener value="#{emp}" target="#{empresaController.selected}" />
                         </p:commandButton>
                     </p:column>
                     <p:column style="width:65px;text-align: center">
-                        <p:commandButton update=":principal:formEmp:empresas" icon="ui-icon-close" actionListener="#{empresaController.destroy()}" title="Deletar">
+                        <p:commandButton update=":principalAdmin:formEmp:empresas" icon="ui-icon-close" actionListener="#{empresaController.destroy()}" title="Deletar">
                             <f:setPropertyActionListener value="#{emp}" target="#{empresaController.selected}" />
                         </p:commandButton>
                     </p:column>

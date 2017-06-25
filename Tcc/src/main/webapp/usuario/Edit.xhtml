@@ -10,6 +10,7 @@
     <ui:decorate template="/template_admin.xhtml">
         <ui:define name="centro">
             <h:form id="editVul">
+                <b:growl id="msgs2" showDetail="true"/>
                 <b:panel>
                     <b:inputText label="Nome" id="nome" value="#{usuarioController.selected.nome}" required="true"/>
                     <b:selectOneMenu label="Empresa" id="idEmpresa" value="#{usuarioController.selected.idEmpresa}">
@@ -25,7 +26,7 @@
                     <b:inputText label="Ramal" type="number" id="ramal" value="#{usuarioController.selected.ramal}"/>
                     <b:inputText label="E-mail" id="email" value="#{usuarioController.selected.EMail}"/>
                 </b:panel>
-                <b:commandButton action="#{usuarioController.update}" value="Salvar"/>
+                <b:commandButton action="#{usuarioController.update}" value="Salvar" ajax="false"/>
                 <b:commandButton action="#{usuarioController.prepareList()}" value="Cancelar" style="margin-left: 10px;"/>
             </h:form>
         </ui:define>

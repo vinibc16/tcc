@@ -121,8 +121,8 @@ public class UsuarioController implements Serializable {
     public void update() {
         try {
             getFacade().edit(current);
-            JsfUtil.addSuccessMessage("Usuário atualizado");
             prepareList();
+            JsfUtil.addSuccessMessage("Usuário atualizado.");
         } catch (Exception e) {
             JsfUtil.addErrorMessage(e, "Erro ao atualizar usuário");
         }

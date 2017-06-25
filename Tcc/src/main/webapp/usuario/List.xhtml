@@ -9,6 +9,7 @@
     <ui:decorate template="/template_admin.xhtml">
         <ui:define name="centro">
             <h:form id="formUser">
+                <b:growl id="msgs2" showDetail="true"/>
                 <p:dataTable id="usuarios" 
                              var="user" 
                              value="#{usuarioController.items}" 
@@ -44,12 +45,12 @@
                         </p:commandButton>
                     </p:column>
                     <p:column style="width:65px;text-align: center">
-                        <p:commandButton update=":principal:formUser:usuarios" icon="ui-icon-pencil" actionListener="#{usuarioController.prepareEdit()}" title="Editar">
+                        <p:commandButton update=":principalAdmin:formUser:usuarios" icon="ui-icon-pencil" actionListener="#{usuarioController.prepareEdit()}" title="Editar">
                             <f:setPropertyActionListener value="#{user}" target="#{usuarioController.selected}" />
                         </p:commandButton>
                     </p:column>
                     <p:column style="width:65px;text-align: center">
-                        <p:commandButton update=":principal:formUser:usuarios" icon="ui-icon-close" actionListener="#{usuarioController.destroy()}" title="Deletar">
+                        <p:commandButton update=":principalAdmin:formUser:usuarios" icon="ui-icon-close" actionListener="#{usuarioController.destroy()}" title="Deletar">
                             <f:setPropertyActionListener value="#{user}" target="#{usuarioController.selected}" />
                         </p:commandButton>
                     </p:column>

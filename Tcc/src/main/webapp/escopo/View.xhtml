@@ -27,9 +27,9 @@
                 <br />
                 <b:commandButton value="Voltar" action="#{escopoController.prepareList()}"/>
                 <b:commandButton value="Associar" action="#{escopoController.associar()}" style="margin-left: 10px;"/>
-                <b:commandButton value="Definir Risco" action="#{escopoVulController.editEscopoVul(esc)}" style="margin-left: 10px;"/>
-                <b:commandButton value="Definir Aceite" action="#{escopoVulController.editAceite(esc)}" rendered="#{escopoController.visibleRelatorio()}" style="margin-left: 10px;"/>
-                <b:commandButton value="Relatório" action="#{escopoController.gerarPdf(esc)}" rendered="#{escopoController.visibleRelatorio()}" style="margin-left: 10px;"/>
+                <b:commandButton value="Definir Risco" action="#{escopoVulController.editEscopoVul(escopoController.selected)}" style="margin-left: 10px;"/>
+                <b:commandButton value="Definir Aceite" action="#{escopoVulController.editAceite(escopoController.selected)}" rendered="#{escopoController.visibleRelatorio()}" style="margin-left: 10px;"/>
+                <b:commandButton value="Relatório" action="#{escopoController.gerarPdf(escopoController.selected)}" rendered="#{escopoController.visibleRelatorio()}" style="margin-left: 10px;"/>
             </h:form>
         </ui:define>
     </ui:decorate>

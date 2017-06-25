@@ -131,7 +131,7 @@ public class EscopoVulController implements Serializable {
     public String create() {
         try {
             current.getEscopoVulPK().setIdEscopo(current.getEscopoVulPK().getIdEscopo());
-            current.setIdEmpresa(current.getIdEmpresa());
+            current.setIdEmpresa(logado.getLogado().getIdEmpresa());
             current.getEscopoVulPK().setIdVulnerabilidade(current.getVulnerabilidade().getIdVulnerabilidade());
             getFacade().create(current);
             JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("EscopoVulCreated"));
@@ -294,9 +294,9 @@ public class EscopoVulController implements Serializable {
     }
     
     public void associaVul(Escopo escopo, List<Vulnerabilidade> vul) throws IOException {
-        List<EscopoVul> lista = ejbFacade.findAllfindByIdEscopo(escopo);
-        for (int i=0; lista.size()>i; i++) {
-            ejbFacade.remove(lista.get(i));
+        List<EscopoVul> list = ejbFacade.findAllfindByIdEscopo(escopo);
+        for (int i=0; list.size()>i; i++) {
+            ejbFacade.remove(list.get(i));
         }
         
         for( int i=0; i<vul.size();i++) {
@@ -310,29 +310,27 @@ public class EscopoVulController implements Serializable {
             evpk.setIdEscopo(escopo.getIdEscopo());
             evpk.setIdVulnerabilidade(vul.get(i).getIdVulnerabilidade());
             ev.setEscopoVulPK(evpk);
-            ev.setIdEmpresa(logado.getLogado().getIdEmpresa());
+            ev.setIdEmpresa(vul.get(i).getIdEmpresa());
             
             getFacade().create(ev);
         }                
         FacesContext.getCurrentInstance().getExternalContext().redirect("/Tcc/escopo/View.jsf");
     }
     
-    public String editEscopoVul(Escopo escopo) {
+    public void editEscopoVul(Escopo escopo) throws IOException {
         recreateModel();
         escopoPag = escopo;
         lista = getPagination2().createPageDataModel();
         listaApontamento = getFacade().findAllfindByIdEscopo(escopo);
-        System.out.println(""+listaApontamento.size());
-        return "ListEscopoVul2.jsf";
+        FacesContext.getCurrentInstance().getExternalContext().redirect("/Tcc/escopoVul/DefinirRisco.jsf");
     }
     
-    public String editAceite(Escopo escopo) {
+    public void editAceite(Escopo escopo) throws IOException {
         recreateModel();
         escopoPag = escopo;
         lista = getPagination2().createPageDataModel();
         listaApontamento = getFacade().findAllfindByIdEscopo(escopo);
-        System.out.println(""+listaApontamento.size());
-        return "DefinirAceite.jsf";
+        FacesContext.getCurrentInstance().getExternalContext().redirect("/Tcc/escopoVul/DefinirAceite.jsf");
     }
 
     public DataModel getLista() {
@@ -351,7 +349,7 @@ public class EscopoVulController implements Serializable {
         this.listaApontamento = listaApontamento;
     }    
     
-    public String update2() {
+    public void definirRisco() {
         try {            
             for (int i = 0; i < listaApontamento.size(); i++) {
                 //current = new EscopoVul();
@@ -369,13 +367,12 @@ public class EscopoVulController implements Serializable {
             }
             FacesMessage msg = new FacesMessage("EscopoVul Edited");
             FacesContext.getCurrentInstance().addMessage(null, msg);
-            return "ListEscopo.jsf";
-        } catch (Exception e) {
-            return null;
+            FacesContext.getCurrentInstance().getExternalContext().redirect("/Tcc/escopo/View.jsf");
+        } catch (Exception e) {            
         }
     }
     
-    public String update3() {
+    /*public String update3() {
         try {            
             for (int i = 0; i < listaApontamento.size(); i++) {
                 current = new EscopoVul();
@@ -407,22 +404,7 @@ public class EscopoVulController implements Serializable {
         } catch (Exception e) {
             return null;
         }
-    }
-    
-    public void onRowEdit(RowEditEvent event) {
-        FacesMessage msg = new FacesMessage("EscopoVul Edited");
-        FacesContext.getCurrentInstance().addMessage(null, msg);
-    }
-     
-    public void onRowCancel(RowEditEvent event) {
-        FacesMessage msg = new FacesMessage("EscopoVul Cancelled");
-        FacesContext.getCurrentInstance().addMessage(null, msg);
-    }
-     
-    public void onCellEdit(CellEditEvent event) {
-        Object oldValue = event.getOldValue();
-        Object newValue = event.getNewValue();
-    }
+    }*/
     
     public List<EscopoVul> findAllfindByIdEscopo(Escopo escopo) {
         return ejbFacade.findAllfindByIdEscopo(escopo);

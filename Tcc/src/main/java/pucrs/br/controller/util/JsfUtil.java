@@ -39,13 +39,13 @@ public class JsfUtil {
     }
 
     public static void addErrorMessage(String msg) {
-        FacesMessage facesMsg = new FacesMessage(FacesMessage.SEVERITY_ERROR, msg, msg);
+        FacesMessage facesMsg = new FacesMessage(FacesMessage.SEVERITY_ERROR, msg, "Testeeeeeeeee1");
         FacesContext.getCurrentInstance().addMessage(null, facesMsg);
     }
 
     public static void addSuccessMessage(String msg) {
-        FacesMessage facesMsg = new FacesMessage(FacesMessage.SEVERITY_INFO, msg, msg);
-        FacesContext.getCurrentInstance().addMessage("successInfo", facesMsg);
+        FacesMessage facesMsg = new FacesMessage(FacesMessage.SEVERITY_INFO, msg, "Testeeeeeeeee2");
+        FacesContext.getCurrentInstance().addMessage(null, facesMsg);
     }
 
     public static String getRequestParameter(String key) {

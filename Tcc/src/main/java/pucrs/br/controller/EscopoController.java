@@ -148,8 +148,8 @@ public class EscopoController implements Serializable {
     public void update() {
         try {
             getFacade().edit(current);
-            JsfUtil.addSuccessMessage("Escopo atualizado");
             prepareList();
+            JsfUtil.addSuccessMessage("Escopo atualizado");
         } catch (Exception e) {
             JsfUtil.addErrorMessage(e, "Erro ao atualizar o escopo");
         }

@@ -28,12 +28,12 @@
                         </p:commandButton>
                     </p:column>
                     <p:column style="width:65px;text-align: center">
-                        <p:commandButton update=":principal:formListVulAdmin:tableVul" icon="ui-icon-pencil" actionListener="#{vulnerabilidadeAdminController.prepareEdit()}" title="Editar">
+                        <p:commandButton update=":principalAdmin:formListVulAdmin:tableVul" icon="ui-icon-pencil" actionListener="#{vulnerabilidadeAdminController.prepareEdit()}" title="Editar">
                             <f:setPropertyActionListener value="#{vul}" target="#{vulnerabilidadeAdminController.selected}" />
                         </p:commandButton>
                     </p:column>
                     <p:column style="width:65px;text-align: center">
-                        <p:commandButton update=":principal:formListVulAdmin:tableVul" icon="ui-icon-close" actionListener="#{vulnerabilidadeAdminController.destroy()}" title="Deletar">
+                        <p:commandButton update=":principalAdmin:formListVulAdmin:tableVul" icon="ui-icon-close" actionListener="#{vulnerabilidadeAdminController.destroy()}" title="Deletar">
                             <f:setPropertyActionListener value="#{vul}" target="#{vulnerabilidadeAdminController.selected}" />
                         </p:commandButton>
                     </p:column>
