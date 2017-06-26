@@ -30,10 +30,10 @@
                     <p:column headerText="Vulnerabilidade">
                         <h:outputText value="#{item.vulnerabilidade.nome}"/>
                     </p:column>
-                    <p:column headerText="Ignorar Vul">
+                    <p:column headerText="Aprovar">
                         <h:selectOneMenu id="Ignorar" value="#{item.aceito}">
-                            <f:selectItem itemLabel="Sim" itemValue="1"/>
-                            <f:selectItem itemLabel="Não" itemValue="0"/>
+                            <f:selectItem itemLabel="Sim" itemValue="0"/>
+                            <f:selectItem itemLabel="Não" itemValue="1"/>
                         </h:selectOneMenu>
                     </p:column>
                     <p:column headerText="Ação">

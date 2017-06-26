@@ -4,7 +4,8 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:b="http://bootsfaces.net/ui">
 
     <ui:decorate template="/template_usuario.xhtml">
         <ui:define name="centro">
@@ -47,6 +48,15 @@
                             <f:selectItem itemLabel="Alto" itemValue="0.7"/>
                             <f:selectItem itemLabel="Crítico" itemValue="0.9"/>
                         </h:selectOneMenu>
+                    </p:column>
+                    <p:column headerText="Ações">
+                        <p:inputTextarea value="#{item.acoes}" rows="4" cols="18"/>
+                    </p:column>
+                    <p:column headerText="Ameaça">
+                        <p:inputTextarea value="#{item.amaeaca}" rows="4" cols="18"/>
+                    </p:column>
+                    <p:column headerText="Consequência">
+                        <p:inputTextarea value="#{item.consequencia}" rows="4" cols="18"/>
                     </p:column>
                     <f:facet name="footer">
                         <p:commandButton process="escopoVul" value="Salvar" action="#{escopoVulController.definirRisco()}" />

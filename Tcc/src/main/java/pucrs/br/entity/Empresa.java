@@ -44,15 +44,6 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Empresa.findByTelefone", query = "SELECT e FROM Empresa e WHERE e.telefone = :telefone")})
 public class Empresa implements Serializable {
 
-    @OneToMany(mappedBy = "idEmpresa")
-    private Collection<EscopoVul> escopoVulCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idEmpresa")
-    private Collection<Escopo> escopoCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idEmpresa")
-    private Collection<Responsaveis> responsaveisCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idEmpresa")
-    private Collection<Vulnerabilidade> vulnerabilidadeCollection;
-
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -95,6 +86,16 @@ public class Empresa implements Serializable {
     @Size(min = 1, max = 50)
     @Column(name = "telefone")
     private String telefone;
+    @OneToMany(mappedBy = "idEmpresa")
+    private Collection<EscopoVul> escopoVulCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idEmpresa")
+    private Collection<Escopo> escopoCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idEmpresa")
+    private Collection<Responsaveis> responsaveisCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idEmpresa")
+    private Collection<Vulnerabilidade> vulnerabilidadeCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idEmpresa")
+    private Collection<Usuario> usuarioCollection;
 
     public Empresa() {
     }
@@ -192,31 +193,6 @@ public class Empresa implements Serializable {
         this.telefone = telefone;
     }
 
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (idEmpresa != null ? idEmpresa.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Empresa)) {
-            return false;
-        }
-        Empresa other = (Empresa) object;
-        if ((this.idEmpresa == null && other.idEmpresa != null) || (this.idEmpresa != null && !this.idEmpresa.equals(other.idEmpresa))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return ""+idEmpresa;
-    }
-
     @XmlTransient
     public Collection<EscopoVul> getEscopoVulCollection() {
         return escopoVulCollection;
@@ -251,6 +227,40 @@ public class Empresa implements Serializable {
 
     public void setVulnerabilidadeCollection(Collection<Vulnerabilidade> vulnerabilidadeCollection) {
         this.vulnerabilidadeCollection = vulnerabilidadeCollection;
+    }
+
+    @XmlTransient
+    public Collection<Usuario> getUsuarioCollection() {
+        return usuarioCollection;
+    }
+
+    public void setUsuarioCollection(Collection<Usuario> usuarioCollection) {
+        this.usuarioCollection = usuarioCollection;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (idEmpresa != null ? idEmpresa.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Empresa)) {
+            return false;
+        }
+        Empresa other = (Empresa) object;
+        if ((this.idEmpresa == null && other.idEmpresa != null) || (this.idEmpresa != null && !this.idEmpresa.equals(other.idEmpresa))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return ""+idEmpresa;
     }
     
 }

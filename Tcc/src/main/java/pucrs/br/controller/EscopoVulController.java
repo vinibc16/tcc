@@ -311,6 +311,9 @@ public class EscopoVulController implements Serializable {
             evpk.setIdVulnerabilidade(vul.get(i).getIdVulnerabilidade());
             ev.setEscopoVulPK(evpk);
             ev.setIdEmpresa(logado.getLogado().getIdEmpresa());
+            ev.setAcoes(vul.get(i).getAcoes());
+            ev.setAmaeaca(vul.get(i).getAmeaca());
+            ev.setConsequencia(vul.get(i).getConsequencia());
             
             getFacade().create(ev);
         }                
