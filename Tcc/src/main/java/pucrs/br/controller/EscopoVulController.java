@@ -321,17 +321,17 @@ public class EscopoVulController implements Serializable {
     }
     
     public void editEscopoVul(Escopo escopo) throws IOException {
-        recreateModel();
-        escopoPag = escopo;
-        lista = getPagination2().createPageDataModel();
+        //recreateModel();
+        //escopoPag = escopo;
+        //lista = getPagination2().createPageDataModel();
         listaApontamento = getFacade().findAllfindByIdEscopo(escopo);
         FacesContext.getCurrentInstance().getExternalContext().redirect("/Tcc/escopoVul/DefinirRisco.jsf");
     }
     
     public void editAceite(Escopo escopo) throws IOException {
-        recreateModel();
-        escopoPag = escopo;
-        lista = getPagination2().createPageDataModel();
+        //recreateModel();
+        //escopoPag = escopo;
+        //lista = getPagination2().createPageDataModel();
         listaApontamento = getFacade().findAllfindByIdEscopo(escopo);
         FacesContext.getCurrentInstance().getExternalContext().redirect("/Tcc/escopoVul/DefinirAceite.jsf");
     }
@@ -415,6 +415,10 @@ public class EscopoVulController implements Serializable {
     
     public List<EscopoVul> consultaRelatorio(Escopo escopo) {
         return ejbFacade.consultaRelatorio(escopo);
+    }
+    
+    public boolean desabilitaRelatorio(Escopo escopo) {
+        return ejbFacade.desabilitaRelatorio(escopo);
     }
    
 }

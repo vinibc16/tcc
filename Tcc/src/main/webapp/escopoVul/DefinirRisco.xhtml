@@ -32,22 +32,22 @@
                         <h:outputText value="#{item.vulnerabilidade.nome}"/>
                     </p:column>
                     <p:column headerText="Impacto">
-                        <h:selectOneMenu id="impacto" value="#{item.impacto}">
+                        <b:selectOneMenu id="impacto" value="#{item.impacto}">
                             <f:selectItem itemLabel="Muito Baixo" itemValue="0.05"/>
                             <f:selectItem itemLabel="Baixo" itemValue="0.1"/>
                             <f:selectItem itemLabel="Médio" itemValue="0.2"/>
                             <f:selectItem itemLabel="Alto" itemValue="0.4"/>
                             <f:selectItem itemLabel="Crítico" itemValue="0.8"/>
-                        </h:selectOneMenu>
+                        </b:selectOneMenu>
                     </p:column>
                     <p:column headerText="Probabilidade">
-                        <h:selectOneMenu id="probabilidade" value="#{item.probabilidade}">
+                        <b:selectOneMenu id="probabilidade" value="#{item.probabilidade}">
                             <f:selectItem itemLabel="Muito Baixo" itemValue="0.1"/>
                             <f:selectItem itemLabel="Baixo" itemValue="0.3"/>
                             <f:selectItem itemLabel="Médio" itemValue="0.5"/>
                             <f:selectItem itemLabel="Alto" itemValue="0.7"/>
                             <f:selectItem itemLabel="Crítico" itemValue="0.9"/>
-                        </h:selectOneMenu>
+                        </b:selectOneMenu>
                     </p:column>
                     <p:column headerText="Ações">
                         <p:inputTextarea value="#{item.acoes}" rows="4" cols="18"/>

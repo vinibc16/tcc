@@ -28,11 +28,11 @@
             <h:form>
                 <p:dataTable id="checkboxVul" rows="40" var="item" value="#{vulnerabilidadeController.items}" selection="#{escopoController.selectedVul}" rowKey="#{item.idVulnerabilidade}" style="margin-bottom:0">
                     <p:column selectionMode="multiple" style="width:50px;text-align:center"/>
-                    <p:column headerText="ID Vulnerabilidade">
-                        <h:outputText value="#{item.idVulnerabilidade}"/>
-                    </p:column>
-                    <p:column headerText="Nome">
+                    <p:column headerText="Vulnerabilidade">
                         <h:outputText value="#{item.nome}"/>
+                    </p:column>
+                    <p:column headerText="Descrição">
+                        <h:outputText value="#{item.descricao}"/>
                     </p:column>
                     <f:facet name="footer">
                         <p:commandButton process="checkboxVul" value="Associar" action="#{escopoVulController.associaVul(escopoController.selected,escopoController.selectedVul)}" />

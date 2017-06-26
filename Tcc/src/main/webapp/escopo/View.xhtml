@@ -10,7 +10,7 @@
     <ui:decorate template="/template_usuario.xhtml">
         <ui:define name="centro">
             <h:form>
-                <p:panelGrid columns="2">
+                <p:panelGrid columns="4">
                     <p:outputLabel value="Nome:"/>
                     <p:outputLabel value="#{escopoController.selected.nome}"/>
                     <p:outputLabel value="Descrição:"/>
@@ -25,12 +25,11 @@
                     <p:outputLabel value="#{escopoController.selected.restricoesImpostas}"/>
                 </p:panelGrid>
                 <br />
-                
                 <b:commandButton value="Voltar" actionListener="#{escopoController.prepareList()}"/>
                 <b:commandButton value="Associar" action="#{escopoController.associar()}" style="margin-left: 10px;"/>
                 <b:commandButton value="Definir Risco" action="#{escopoVulController.editEscopoVul(escopoController.selected)}" style="margin-left: 10px;"/>
                 <b:commandButton value="Definir Aceite" action="#{escopoVulController.editAceite(escopoController.selected)}" rendered="#{escopoController.visibleRelatorio()}" style="margin-left: 10px;"/>
-                <b:commandButton value="Relatório" action="#{escopoController.gerarPdf(escopoController.selected)}" rendered="#{escopoController.visibleRelatorio()}" style="margin-left: 10px;"/>
+                <b:commandButton value="Relatório" action="#{escopoController.gerarPdf(escopoController.selected)}" rendered="#{escopoController.visibleRelatorio()}"  style="margin-left: 10px;"/>
             </h:form>
         </ui:define>
     </ui:decorate>

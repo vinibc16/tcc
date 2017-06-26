@@ -4,7 +4,8 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:b="http://bootsfaces.net/ui">
 
     <ui:decorate template="/template_usuario.xhtml">
         <ui:define name="centro">
@@ -30,19 +31,19 @@
                     <p:column headerText="Vulnerabilidade">
                         <h:outputText value="#{item.vulnerabilidade.nome}"/>
                     </p:column>
-                    <p:column headerText="Aprovar">
-                        <h:selectOneMenu id="Ignorar" value="#{item.aceito}">
+                    <p:column headerText="Aprovar" >
+                        <b:selectOneMenu id="Ignorar" value="#{item.aceito}">
                             <f:selectItem itemLabel="Sim" itemValue="0"/>
                             <f:selectItem itemLabel="Não" itemValue="1"/>
-                        </h:selectOneMenu>
+                        </b:selectOneMenu>
                     </p:column>
                     <p:column headerText="Ação">
-                        <h:selectOneMenu id="Acao" value="#{item.acao}">
+                        <b:selectOneMenu id="Acao" value="#{item.acao}">
                             <f:selectItem itemLabel="Mitigar" itemValue="Mitigar"/>
                             <f:selectItem itemLabel="Aceitar" itemValue="Aceitar"/>
                             <f:selectItem itemLabel="Evitar" itemValue="Evitar"/>
                             <f:selectItem itemLabel="Transferir" itemValue="Transferir"/>
-                        </h:selectOneMenu>
+                        </b:selectOneMenu>
                     </p:column>
                     <f:facet name="footer">
                         <p:commandButton process="escopoVul" value="Salvar" action="#{escopoVulController.definirRisco()}" />

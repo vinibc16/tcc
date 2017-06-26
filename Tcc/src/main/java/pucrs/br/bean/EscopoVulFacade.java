@@ -87,5 +87,18 @@ public class EscopoVulFacade extends AbstractFacade<EscopoVul> {
         return lista;
     }
     
+    public boolean desabilitaRelatorio(Escopo escopo) {        
+        Query query = em.createQuery("SELECT u"
+                                    + " FROM EscopoVul u"
+                                    + " WHERE u.escopo = :escopo"
+                                    + " AND u.aceito = 0")
+                        .setParameter("escopo", escopo);
+        List<EscopoVul> lista = query.getResultList();
+        if ( lista == null) {
+            return true;
+        }
+        return true;
+    }
+    
     
 }
