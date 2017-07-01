@@ -20,7 +20,7 @@
                     <b:inputText label="Telefone" id="telefone" value="#{empresaController.selected.telefone}" required="true"/>
                 </b:panel>
                 <br />
-                <h:form id="formCancel">
+                <h:form>
                     <b:commandButton action="#{empresaController.create}" value="Salvar"/>
                     <b:commandButton actionListener="#{empresaController.prepareList()}" update="@form" value="Cancelar" style="margin-left: 10px;"/>
                 </h:form>

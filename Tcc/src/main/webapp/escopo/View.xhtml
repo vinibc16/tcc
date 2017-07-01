@@ -37,7 +37,7 @@
                 <b:commandButton value="Associar" action="#{escopoController.associar()}" style="margin-left: 10px;"/>
                 <b:commandButton value="Definir Risco" action="#{escopoVulController.editEscopoVul(escopoController.selected)}" style="margin-left: 10px;"/>
                 <b:commandButton value="Definir Aceite" action="#{escopoVulController.editAceite(escopoController.selected)}" rendered="#{escopoController.visibleRelatorio()}" style="margin-left: 10px;"/>
-                <b:commandButton  value="Relatório" onclick="abrirRelatorio();" action="#{escopoController.gerarPdf(escopoController.selected)}" rendered="#{escopoController.visibleRelatorio()}"  style="margin-left: 10px;" ajax="false"/>
+                <b:commandButton  value="Relatório" onclick="this.form.target='_blank'" action="#{escopoController.gerarPdf(escopoController.selected)}" rendered="#{escopoController.visibleRelatorio()}"  style="margin-left: 10px;" ajax="false"/>
             </h:form>
         </ui:define>
     </ui:decorate>
