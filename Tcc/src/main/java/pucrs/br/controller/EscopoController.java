@@ -40,7 +40,12 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.transform.stream.StreamResult;
+import static jdk.nashorn.internal.objects.NativeRegExp.source;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -55,7 +60,7 @@ import pucrs.br.entity.Relatorio;
 
 @Named("escopoController")
 @SessionScoped
-public class EscopoController implements Serializable {
+public class EscopoController extends HttpServlet implements Serializable {
 
     private Escopo current;
     private DataModel items = null;
@@ -169,7 +174,7 @@ public class EscopoController implements Serializable {
         }
     }
 
-    public void destroy() throws IOException {
+    public void destroyEscopo() throws IOException {
         current = (Escopo) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
         performDestroy();
@@ -318,23 +323,29 @@ public class EscopoController implements Serializable {
     }
 
     public void gerarPdf(Escopo esc) throws Exception {
-        long lDateTime = new Date().getTime();
-        String DEST = "results/relatorio" + lDateTime + ".pdf";
-        File file = new File(DEST);
-        file.getParentFile().mkdirs();
-        createPdf(DEST, esc);
+        FacesContext context = FacesContext.getCurrentInstance();
+        HttpServletResponse response = (HttpServletResponse) context.getExternalContext().getResponse();
+        response.reset();
+        response.setContentType("application/pdf");
+        response.setHeader("Content-disposition", "inline; filename=Relatorio.pdf");
+        response.getOutputStream().write(createPdf(esc).toByteArray());
+        response.getOutputStream().flush();
+        response.getOutputStream().close();
+        context.responseComplete();
+        
     }
-
-    public void createPdf(String dest, Escopo esc) throws IOException, DocumentException {
+    
+    public ByteArrayOutputStream createPdf(Escopo esc) throws IOException, DocumentException {
         Document document = new Document();
         Paragraph p = new Paragraph();
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         PdfPTable table;
         List<EscopoVul> escvul = escopoVulContrl.consultaRelatorio(esc);
         int idvul;
         PdfPCell cell;
         Font boldFont16 = new Font(Font.FontFamily.TIMES_ROMAN, 16, Font.BOLD);
         Font boldFont14 = new Font(Font.FontFamily.TIMES_ROMAN,14,Font.BOLD);
-        PdfWriter.getInstance(document, new FileOutputStream(dest));
+        PdfWriter.getInstance(document, byteArrayOutputStream);
         document.open();
         
         // Cabeçalho
@@ -422,7 +433,7 @@ public class EscopoController implements Serializable {
         document.add(table);
         
         document.close();
-        JsfUtil.addSuccessMessage("Arquivo exportado.");
+        return byteArrayOutputStream;
     }
    
     public String recuperaRisco(double risco) {

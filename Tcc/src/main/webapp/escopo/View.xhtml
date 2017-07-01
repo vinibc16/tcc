@@ -7,6 +7,14 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:b="http://bootsfaces.net/ui">
 
+    <script type="text/javascript">
+        function abrirRelatorio() {
+            var w=window.open(this.href, '_blank'); 
+            w.document.title='Teste';
+            //(w.onload=function(){w.document.title='New Page Title!';})(); 
+            return false;
+        }
+    </script>
     <ui:decorate template="/template_usuario.xhtml">
         <ui:define name="centro">
             <h:form>
@@ -29,8 +37,7 @@
                 <b:commandButton value="Associar" action="#{escopoController.associar()}" style="margin-left: 10px;"/>
                 <b:commandButton value="Definir Risco" action="#{escopoVulController.editEscopoVul(escopoController.selected)}" style="margin-left: 10px;"/>
                 <b:commandButton value="Definir Aceite" action="#{escopoVulController.editAceite(escopoController.selected)}" rendered="#{escopoController.visibleRelatorio()}" style="margin-left: 10px;"/>
-                <b:commandButton value="Relatório" action="#{escopoController.gerarPdf(escopoController.selected)}" rendered="#{escopoController.visibleRelatorio()}"  style="margin-left: 10px;"/>
-                <b:commandButton value="Relatório Teste" action="#{escopoController.visualizarRelatorio()}" rendered="#{escopoController.visibleRelatorio()}"  style="margin-left: 10px;" onclick="this.form.target='_blank'" ajax="false"/>
+                <b:commandButton  value="Relatório" onclick="abrirRelatorio();" action="#{escopoController.gerarPdf(escopoController.selected)}" rendered="#{escopoController.visibleRelatorio()}"  style="margin-left: 10px;" ajax="false"/>
             </h:form>
         </ui:define>
     </ui:decorate>

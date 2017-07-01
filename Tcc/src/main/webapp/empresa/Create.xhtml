@@ -20,8 +20,10 @@
                     <b:inputText label="Telefone" id="telefone" value="#{empresaController.selected.telefone}" required="true"/>
                 </b:panel>
                 <br />
-                <b:commandButton action="#{empresaController.create}" value="Salvar"/>
-                <b:commandButton actionListener="#{empresaController.prepareList()}" value="Cancelar" style="margin-left: 10px;"/>
+                <h:form id="formCancel">
+                    <b:commandButton action="#{empresaController.create}" value="Salvar"/>
+                    <b:commandButton actionListener="#{empresaController.prepareList()}" update="@form" value="Cancelar" style="margin-left: 10px;"/>
+                </h:form>
             </h:form>
         </ui:define>
     </ui:decorate>

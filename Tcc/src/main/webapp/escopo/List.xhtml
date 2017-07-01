@@ -37,7 +37,7 @@
                         </p:commandButton>
                     </p:column>
                     <p:column style="width:65px;text-align: center">
-                        <p:commandButton update=":principal:formListEsc:escopos" icon="ui-icon-close" actionListener="#{escopoController.destroy()}" title="Deletar">
+                        <p:commandButton update=":principal:formListEsc:escopos" icon="ui-icon-close" actionListener="#{escopoController.destroyEscopo()}" title="Deletar">
                             <f:setPropertyActionListener value="#{esc}" target="#{escopoController.selected}" />
                         </p:commandButton>
                     </p:column>
