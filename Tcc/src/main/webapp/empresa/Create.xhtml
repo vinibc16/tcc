@@ -3,7 +3,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:b="http://bootsfaces.net/ui">
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:p="http://primefaces.org/ui">
     <ui:decorate template="/template_admin.xhtml">
         <ui:define name="centro">
             <h:form id="formCreateEmp">
@@ -20,7 +21,7 @@
                 </b:panel>
                 <br />
                 <b:commandButton action="#{empresaController.create}" value="Salvar"/>
-                <b:commandButton action="#{empresaController.prepareList()}" value="Cancelar" style="margin-left: 10px;"/>
+                <b:commandButton actionListener="#{empresaController.prepareList()}" value="Cancelar" style="margin-left: 10px;"/>
             </h:form>
         </ui:define>
     </ui:decorate>

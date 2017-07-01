@@ -33,11 +33,25 @@ import com.itextpdf.text.Phrase;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletResponse;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.engine.util.JRLoader;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.UploadedFile;
 import pucrs.br.entity.Grafico;
+import pucrs.br.entity.Relatorio;
 
 @Named("escopoController")
 @SessionScoped
@@ -437,6 +451,33 @@ public class EscopoController implements Serializable {
             return "Alto";
         } else {
             return "Risco não encontrado ->"+round(risco,2);
+        }
+    }
+    
+    public void visualizarRelatorio() {
+        try {
+            System.out.println("entrou no visualizar relatorio");
+            //---------- gera o relatorio ----------
+            List<Relatorio> listaRelatorio = new ArrayList<Relatorio>();
+            FacesContext context = FacesContext.getCurrentInstance();
+            HttpServletResponse response = (HttpServletResponse) context.getExternalContext().getResponse();
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            Map<String, Object> params = new HashMap<String, Object>(); 
+            //InputStream stream = this.getClass().getResourceAsStream("/relatorio/Relatorio.jasper");
+            //JasperReport report = (JasperReport) JRLoader.loadObject(stream);
+            ServletContext scontext = (ServletContext) context.getExternalContext().getContext();
+            JasperPrint print = JasperFillManager.fillReport(scontext.getRealPath("/WEB-INF/Relatorio.jasper"), params, new JRBeanCollectionDataSource(listaRelatorio));
+            JasperExportManager.exportReportToPdfStream(print, baos);
+            response.reset();
+            response.setContentType("application/pdf");
+            response.setContentLength(baos.size());
+            response.setHeader("Content-disposition", "inline; filename=relatorio.pdf");
+            response.getOutputStream().write(baos.toByteArray());
+            response.getOutputStream().flush();
+            response.getOutputStream().close();
+            context.responseComplete();
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 

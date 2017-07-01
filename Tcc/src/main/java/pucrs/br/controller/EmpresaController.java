@@ -76,7 +76,8 @@ public class EmpresaController implements Serializable {
     }
 
     public void prepareList() throws IOException {
-        recreateModel();
+        recreatePagination();
+        recreateModel();        
         FacesContext.getCurrentInstance().getExternalContext().redirect("/Tcc/empresa/List.jsf");
     }
 
@@ -94,11 +95,11 @@ public class EmpresaController implements Serializable {
 
     public void create() {
         try {
-            if(verificaCnpj()) {
+            //if(verificaCnpj()) {
                 getFacade().create(current);
                 JsfUtil.addSuccessMessage("Empresa criada.");
                 createVulsEmp();
-            }
+            //}
             prepareList();
         } catch (Exception e) {
             JsfUtil.addErrorMessage(e, "Erro ao criar empresa.");
@@ -113,11 +114,11 @@ public class EmpresaController implements Serializable {
 
     public void update() {
         try {
-            if(verificaCnpj()) {
+            //if(verificaCnpj()) {
                 getFacade().edit(current);
                 FacesMessage msg = new FacesMessage("Empresa atualizada");
                 FacesContext.getCurrentInstance().addMessage(null, msg);
-            }            
+            //}            
             prepareList();
         } catch (Exception e) {
             JsfUtil.addErrorMessage(e, "Erro ao atualizar empresa.");
