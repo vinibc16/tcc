@@ -22,12 +22,14 @@
                                        itemLabel="#{grupo.descricao}" itemValue="#{grupo}"/>
                     </b:selectOneMenu>
                     <b:inputText label="Senha" id="senha" type="password" value="#{usuarioController.selected.senha}" required="true"/>
-                    <b:inputText label="Telefone" type="number" id="telefone" value="#{usuarioController.selected.telefone}" required="true"/>
+                    <b:inputText label="Telefone" id="telefone" value="#{usuarioController.selected.telefone}" required="true"/>
                     <b:inputText label="Ramal" type="number" id="ramal" value="#{usuarioController.selected.ramal}"/>
                     <b:inputText label="E-mail" id="email" value="#{usuarioController.selected.EMail}"/>
                 </b:panel>
-                <b:commandButton action="#{usuarioController.update}" value="Salvar" ajax="false"/>
-                <b:commandButton action="#{usuarioController.prepareList()}" value="Cancelar" style="margin-left: 10px;"/>
+                <h:form>
+                    <b:commandButton action="#{usuarioController.update}" value="Salvar" ajax="false"/>
+                    <b:commandButton action="#{usuarioController.prepareList()}" update="@form" value="Cancelar" style="margin-left: 10px;"/>
+                </h:form>
             </h:form>
         </ui:define>
     </ui:decorate>

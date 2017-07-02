@@ -41,6 +41,7 @@ public class EscopoVulFacade extends AbstractFacade<EscopoVul> {
     public List<EscopoVul> findAllfindByIdEscopoOld(Escopo escopo) {        
         Query query = em.createNativeQuery("SELECT id_empresa, id_escopo, id_vulnerabilidade, impacto, probabilidade, aceito, data_link FROM escopo_vul WHERE id_escopo = "+escopo.getIdEscopo());
         List<Object[]> lista = query.getResultList();
+        em.flush();
         List<EscopoVul> ev = new ArrayList<>();
         for (Object[] row : lista) {
             EscopoVul esc = new EscopoVul(new EscopoVulPK((int)row[1],(int)row[2]));
@@ -68,12 +69,14 @@ public class EscopoVulFacade extends AbstractFacade<EscopoVul> {
         return ev;
     }
     
-    public List<EscopoVul> findAllfindByIdEscopo(Escopo escopo) {        
+    public List<EscopoVul> findAllfindByIdEscopo(Escopo escopo) {   
+        em.clear();
         Query query = em.createQuery("SELECT u"
                                     + " FROM EscopoVul u"
                                     + " WHERE u.escopo = :escopo")
                         .setParameter("escopo", escopo);
         List<EscopoVul> lista = query.getResultList();
+        em.flush();
         return lista;
     }
     
@@ -84,6 +87,7 @@ public class EscopoVulFacade extends AbstractFacade<EscopoVul> {
                                     + " AND u.aceito = 0")
                         .setParameter("escopo", escopo);
         List<EscopoVul> lista = query.getResultList();
+        em.flush();
         return lista;
     }
     
@@ -94,6 +98,7 @@ public class EscopoVulFacade extends AbstractFacade<EscopoVul> {
                                     + " AND u.aceito = 0")
                         .setParameter("escopo", escopo);
         List<EscopoVul> lista = query.getResultList();
+        em.flush();
         if ( lista == null) {
             return true;
         }

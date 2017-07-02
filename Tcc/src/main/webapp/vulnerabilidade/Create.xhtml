@@ -18,8 +18,10 @@
                     <b:inputText label="Consequência" id="consequencia" value="#{vulnerabilidadeController.selected.consequencia}"/>
                 </b:panel>
                 <br />
-                <b:commandButton action="#{vulnerabilidadeController.create}" value="Salvar" />
-                <b:commandButton action="#{vulnerabilidadeController.prepareList()}" value="Cancelar" style="margin-left: 10px;"/>
+                <h:form>
+                    <b:commandButton action="#{vulnerabilidadeController.create}" value="Salvar" />
+                    <b:commandButton action="#{vulnerabilidadeController.prepareList()}" update="@form" value="Cancelar" style="margin-left: 10px;"/>
+                </h:form>
             </h:form>
         </ui:define>
     </ui:decorate>

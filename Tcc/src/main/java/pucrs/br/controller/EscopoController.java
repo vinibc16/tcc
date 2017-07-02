@@ -34,25 +34,16 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.transform.stream.StreamResult;
-import static jdk.nashorn.internal.objects.NativeRegExp.source;
-import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import net.sf.jasperreports.engine.util.JRLoader;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.UploadedFile;
 import pucrs.br.entity.Grafico;
@@ -126,8 +117,10 @@ public class EscopoController extends HttpServlet implements Serializable {
     
     public void associar() throws IOException {
         selectedVul.clear();
-
         escopovul = escopoVulContrl.findAllfindByIdEscopo(current);
+        for (int i=0; i<escopovul.size(); i++) {
+            escopovul.get(i).setVulnerabilidade(vulctrl.getVulnerabilidade(escopovul.get(i).getEscopoVulPK().getIdVulnerabilidade()));
+        }
         for (int i = 0; i < escopovul.size(); i++) {
             selectedVul.add(escopovul.get(i).getVulnerabilidade());
         }
@@ -137,6 +130,12 @@ public class EscopoController extends HttpServlet implements Serializable {
     public void prepareView() throws IOException {
         current = (Escopo) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
+        FacesContext.getCurrentInstance().getExternalContext().redirect("/Tcc/escopo/View.jsf");
+    }
+    
+    public void prepareViewFromEscopo(Escopo escopo) throws IOException {
+        current = escopo;
+        //selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
         FacesContext.getCurrentInstance().getExternalContext().redirect("/Tcc/escopo/View.jsf");
     }
 
@@ -363,6 +362,7 @@ public class EscopoController extends HttpServlet implements Serializable {
         p.add(new Phrase(esc.getIdEmpresa().getSegmento()));
         document.add(p);
         p.clear();
+        document.add(new Paragraph(" "));
         
         // Escopo
         document.add(new Paragraph("Escopo",boldFont16));
@@ -385,14 +385,14 @@ public class EscopoController extends HttpServlet implements Serializable {
         document.add(new Paragraph(" "));
         
         // Tabela 1
-        document.add(new Paragraph("Área de Ataque",boldFont16));
+        document.add(new Paragraph("Área de Ataque",boldFont14));
         table = new PdfPTable(2);
         
-        cell = new PdfPCell(new Phrase("Ameaça", boldFont16));
+        cell = new PdfPCell(new Phrase("Ameaça", boldFont14));
         document.add(new Paragraph(" "));
         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
         table.addCell(cell);
-        cell = new PdfPCell(new Phrase("Consequência", boldFont16));
+        cell = new PdfPCell(new Phrase("Consequência", boldFont14));
         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
         table.addCell(cell);
         for (int aw = 0; aw < escvul.size(); aw++) {
@@ -400,19 +400,23 @@ public class EscopoController extends HttpServlet implements Serializable {
             table.addCell(escvul.get(aw).getConsequencia());            
         }
         document.add(table);
+        document.add(new Paragraph(" "));
         
         // Tabela 2
         document.add(new Paragraph("Vulnerabilidade - Ativos de Informação",boldFont16));
-        table = new PdfPTable(3);
+        table = new PdfPTable(4);
         
-        cell = new PdfPCell(new Phrase("Vulnerabilidade", boldFont16));
+        cell = new PdfPCell(new Phrase("Vulnerabilidade", boldFont14));
         document.add(new Paragraph(" "));
         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
         table.addCell(cell);
-        cell = new PdfPCell(new Phrase("Fonte", boldFont16));
+        cell = new PdfPCell(new Phrase("Fonte", boldFont14));
         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
         table.addCell(cell);
-        cell = new PdfPCell(new Phrase("Risco", boldFont16));
+        cell = new PdfPCell(new Phrase("Risco", boldFont14));
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table.addCell(cell);
+        cell = new PdfPCell(new Phrase("Ação", boldFont14));
         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
         table.addCell(cell);
         for (int aw = 0; aw < escvul.size(); aw++) {
@@ -427,10 +431,18 @@ public class EscopoController extends HttpServlet implements Serializable {
             } else if (recuperaRisco(escvul.get(aw).getRisco()).equals("Baixo")) {
                 cell.setBackgroundColor(BaseColor.GREEN);
             }
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
             table.addCell(cell);
-            //table.addCell(recuperaRisco(escvul.get(aw).getRisco()));
+            table.addCell(escvul.get(aw).getAcao());
         }
         document.add(table);
+        document.add(new Paragraph(" "));
+        
+        // Açoes e controles
+        document.add(new Paragraph("Ações e Controles recomendados",boldFont16));
+        for (int aw = 0; aw < escvul.size(); aw++) {
+            document.add(new Paragraph("       - "+escvul.get(aw).getAcoes()));
+        }
         
         document.close();
         return byteArrayOutputStream;
@@ -507,10 +519,7 @@ public class EscopoController extends HttpServlet implements Serializable {
         return ejbFacade.findAll();
     }
     
-    public List<Grafico> findResultGrafico() {
-        return ejbFacade.findResultGrafico(usuarioLogado.getLogado().getIdEmpresa().getIdEmpresa());
-    }
-
+    
     public UploadedFile getFile() {
         return file;
     }

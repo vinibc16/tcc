@@ -19,8 +19,10 @@
                     <b:inputText label="Controles existentes" id="controles_existentes" value="#{escopoController.selected.controlesExistentes}" required="true"/>
                     <b:inputText label="Restrições impostas" id="restricoes_impostas" value="#{escopoController.selected.restricoesImpostas}" required="true"/>
                 </b:panel>
-                <b:commandButton action="#{escopoController.create()}" value="Salvar"/>
-                <b:commandButton action="#{escopoController.prepareList()}" value="Cancelar" style="margin-left: 10px;"/>
+                <h:form>
+                    <b:commandButton action="#{escopoController.create()}" value="Salvar"/>
+                    <b:commandButton action="#{escopoController.prepareList()}" update="@form" value="Cancelar" style="margin-left: 10px;"/>
+                </h:form>
             </h:form>
         </ui:define>
     </ui:decorate>

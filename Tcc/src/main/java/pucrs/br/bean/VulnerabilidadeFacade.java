@@ -16,6 +16,7 @@ import pucrs.br.entity.Empresa;
 import pucrs.br.entity.Escopo;
 import pucrs.br.entity.EscopoVul;
 import pucrs.br.entity.EscopoVulPK;
+import pucrs.br.entity.Grafico;
 import pucrs.br.entity.Usuario;
 import pucrs.br.entity.Vulnerabilidade;
 
@@ -56,6 +57,12 @@ public class VulnerabilidadeFacade extends AbstractFacade<Vulnerabilidade> {
         return (Vulnerabilidade) query.getSingleResult();
     }
     
+    public Vulnerabilidade findVulbyId(int idVul) {        
+        return (Vulnerabilidade) em.createQuery("SELECT u FROM Vulnerabilidade u WHERE u.idVulnerabilidade = :idVulnerabilidade")
+                .setParameter("idVulnerabilidade", idVul)
+                .getSingleResult();
+    }
+    
     public String getVulNome(int idVul) {
         Query query = em.createNativeQuery("SELECT nome FROM vulnerabilidade WHERE id_vulnerabilidade = "+idVul);
         return (String) query.getSingleResult();
@@ -65,5 +72,19 @@ public class VulnerabilidadeFacade extends AbstractFacade<Vulnerabilidade> {
         return em.createQuery("SELECT u FROM Vulnerabilidade u WHERE u.idEmpresa = :idEmpresa")
                 .setParameter("idEmpresa", emp)
                 .getResultList();
+    }
+    
+    public List<Grafico> findResultGrafico(Empresa emp) {
+        Query query = em.createNativeQuery("select t.id_vulnerabilidade, "
+                                         + "count(t.id_escopo) "
+                                         + "from escopo_vul t "
+                                         + "WHERE id_empresa = "+emp.getIdEmpresa()
+                                         + " GROUP by t.id_vulnerabilidade");
+        List<Object[]> lista = query.getResultList();
+        List<Grafico> grafico = new ArrayList<>();
+        for (Object[] row : lista) {
+            grafico.add(new Grafico(findVulbyId((int) row[0]), (long) row[1]));
+        }
+        return grafico;
     }
 }

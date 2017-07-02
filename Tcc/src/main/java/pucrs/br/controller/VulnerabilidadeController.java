@@ -6,6 +6,7 @@ import pucrs.br.controller.util.JsfUtil;
 import pucrs.br.controller.util.PaginationHelper;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
@@ -18,6 +19,8 @@ import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
 import javax.inject.Inject;
 import pucrs.br.bean.VulnerabilidadeFacade;
+import pucrs.br.entity.Empresa;
+import pucrs.br.entity.Grafico;
 
 @Named("vulnerabilidadeController")
 @SessionScoped
@@ -250,5 +253,9 @@ public class VulnerabilidadeController implements Serializable {
     
     public String getVulNome(int idVul) {
         return ejbFacade.getVulNome(idVul);
+    }
+    
+    public List<Grafico> findResultGrafico(Empresa emp) {
+        return getFacade().findResultGrafico(emp);
     }
 }

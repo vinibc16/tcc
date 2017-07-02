@@ -36,6 +36,12 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Usuario.findByRamal", query = "SELECT u FROM Usuario u WHERE u.ramal = :ramal")})
 public class Usuario implements Serializable {
 
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 100)
+    @Column(name = "telefone")
+    private String telefone;
+
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -53,10 +59,6 @@ public class Usuario implements Serializable {
     @Size(min = 1, max = 50)
     @Column(name = "senha")
     private String senha;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "telefone")
-    private int telefone;
     // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="E-mail inválido")//if the field contains email address consider using this annotation to enforce field validation
     @Basic(optional = false)
     @NotNull
@@ -79,7 +81,7 @@ public class Usuario implements Serializable {
         this.id = id;
     }
 
-    public Usuario(String id, String nome, String senha, int telefone, String eMail) {
+    public Usuario(String id, String nome, String senha, String telefone, String eMail) {
         this.id = id;
         this.nome = nome;
         this.senha = senha;
@@ -111,13 +113,6 @@ public class Usuario implements Serializable {
         this.senha = senha;
     }
 
-    public int getTelefone() {
-        return telefone;
-    }
-
-    public void setTelefone(int telefone) {
-        this.telefone = telefone;
-    }
 
     public String getEMail() {
         return eMail;
@@ -174,6 +169,14 @@ public class Usuario implements Serializable {
     @Override
     public String toString() {
         return "pucrs.br.entity.Usuario[ id=" + id + " ]";
+    }
+
+    public String getTelefone() {
+        return telefone;
+    }
+
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
     }
     
 }

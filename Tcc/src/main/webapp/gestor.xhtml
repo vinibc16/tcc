@@ -1,10 +1,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:b="http://bootsfaces.net/ui">
     <ui:decorate template="/template_usuario.xhtml">
         <ui:define name="centro">
-            
+            <p:panelGrid columns="2">
+                <script type="text/javascript" src="http://output41.rssinclude.com/output?type=js&amp;id=1146031&amp;hash=aeb2d2cf2b96d103c36f6dea9eb8d08d"></script>
+                <p:chart type="pie" model="#{graficocontroller.pieModel1}" style="width:400px;height:400px" />
+            </p:panelGrid>
         </ui:define>
     </ui:decorate>
 </html>

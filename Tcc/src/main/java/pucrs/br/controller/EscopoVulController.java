@@ -45,6 +45,8 @@ public class EscopoVulController implements Serializable {
     private Escopo escopoPag = null;
     @Inject
     private UsuarioController logado;
+    @Inject
+    private VulnerabilidadeController vul;
     
     public EscopoVulController() {
         listaApontamento = new ArrayList<>();
@@ -294,7 +296,7 @@ public class EscopoVulController implements Serializable {
     }
     
     public void associaVul(Escopo escopo, List<Vulnerabilidade> vul) throws IOException {
-        List<EscopoVul> list = ejbFacade.findAllfindByIdEscopo(escopo);
+        List<EscopoVul> list = getFacade().findAllfindByIdEscopo(escopo);
         for (int i=0; list.size()>i; i++) {
             ejbFacade.remove(list.get(i));
         }
@@ -321,18 +323,18 @@ public class EscopoVulController implements Serializable {
     }
     
     public void editEscopoVul(Escopo escopo) throws IOException {
-        //recreateModel();
-        //escopoPag = escopo;
-        //lista = getPagination2().createPageDataModel();
         listaApontamento = getFacade().findAllfindByIdEscopo(escopo);
+        for (int i=0; i<listaApontamento.size(); i++) {
+            listaApontamento.get(i).setVulnerabilidade(vul.getVulnerabilidade(listaApontamento.get(i).getEscopoVulPK().getIdVulnerabilidade()));
+        }
         FacesContext.getCurrentInstance().getExternalContext().redirect("/Tcc/escopoVul/DefinirRisco.jsf");
     }
     
     public void editAceite(Escopo escopo) throws IOException {
-        //recreateModel();
-        //escopoPag = escopo;
-        //lista = getPagination2().createPageDataModel();
         listaApontamento = getFacade().findAllfindByIdEscopo(escopo);
+        for (int i=0; i<listaApontamento.size(); i++) {
+            listaApontamento.get(i).setVulnerabilidade(vul.getVulnerabilidade(listaApontamento.get(i).getEscopoVulPK().getIdVulnerabilidade()));
+        }
         FacesContext.getCurrentInstance().getExternalContext().redirect("/Tcc/escopoVul/DefinirAceite.jsf");
     }
 
@@ -374,40 +376,6 @@ public class EscopoVulController implements Serializable {
         } catch (Exception e) {            
         }
     }
-    
-    /*public String update3() {
-        try {            
-            for (int i = 0; i < listaApontamento.size(); i++) {
-                current = new EscopoVul();
-                current.setEscopoVulPK(listaApontamento.get(i).getEscopoVulPK());
-                current.setAceito(listaApontamento.get(i).getAceito());
-                getFacade().edit(current);
-            }
-            FacesMessage msg = new FacesMessage("EscopoVul Edited");
-            FacesContext.getCurrentInstance().addMessage(null, msg);
-            return "ListEscopo.jsf";
-        } catch (Exception e) {
-            return null;
-        }
-    }
-    
-    public String update4(List<EscopoVul> vul) {
-        try {            
-            System.out.println("Lista1 ->"+vul.size());
-            System.out.println("Lista2 ->"+listaAceite.size());
-            for (int i = 0; i < vul.size(); i++) {
-                current = new EscopoVul();
-                current.setEscopoVulPK(vul.get(i).getEscopoVulPK());
-                current.setAceito(i);
-                getFacade().edit(current);
-            }
-            FacesMessage msg = new FacesMessage("EscopoVul Edited");
-            FacesContext.getCurrentInstance().addMessage(null, msg);
-            return "ListEscopo.jsf";
-        } catch (Exception e) {
-            return null;
-        }
-    }*/
     
     public List<EscopoVul> findAllfindByIdEscopo(Escopo escopo) {
         return ejbFacade.findAllfindByIdEscopo(escopo);

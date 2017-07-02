@@ -11,27 +11,27 @@ package pucrs.br.entity;
  */
 public class Grafico {
     
-    private Escopo escopo;
-    private double total;
+    private Vulnerabilidade vul;
+    private long total;
 
-    public Grafico(Escopo escopo, double total) {
-        this.escopo = escopo;
+    public Grafico(Vulnerabilidade vul, long total) {
+        this.vul = vul;
         this.total = total;
     }
 
-    public Escopo getEscopo() {
-        return escopo;
+    public Vulnerabilidade getVul() {
+        return vul;
     }
 
-    public void setEscopo(Escopo escopo) {
-        this.escopo = escopo;
+    public void setVul(Vulnerabilidade vul) {
+        this.vul = vul;
     }
 
     public double getTotal() {
         return total;
     }
 
-    public void setTotal(double total) {
+    public void setTotal(long total) {
         this.total = total;
     }
     

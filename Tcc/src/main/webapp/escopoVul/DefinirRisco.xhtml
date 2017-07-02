@@ -63,6 +63,10 @@
                     </f:facet>
                 </p:dataTable>
             </h:form>    
+            <br />
+            <h:form>
+                <b:commandButton action="#{escopoController.prepareViewFromEscopo(escopoController.selected)}" update="@form" value="Cancelar" style="margin-left: 10px;"/>
+            </h:form>
         </ui:define>
     </ui:decorate>
 

@@ -20,8 +20,10 @@
                     <b:inputText label="CNPJ" id="cnpj" value="#{empresaController.selected.cnpj}" required="true"/>
                     <b:inputText label="Telefone" id="telefone" value="#{empresaController.selected.telefone}" required="true"/>
                 </b:panel>
-                <b:commandButton actionListener="#{empresaController.update}" value="Salvar"/>
-                <b:commandButton action="#{empresaController.prepareList()}" value="Cancelar" style="margin-left: 10px;"/>
+                <h:form>
+                    <b:commandButton actionListener="#{empresaController.update}" value="Salvar"/>
+                    <b:commandButton action="#{empresaController.prepareList()}" update="@form" value="Cancelar" style="margin-left: 10px;"/>
+                </h:form>
             </h:form>
         </ui:define>
     </ui:decorate>

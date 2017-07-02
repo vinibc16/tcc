@@ -13,8 +13,10 @@
                     <b:inputText label="Nome" id="nome" value="#{responsaveisController.selected.nome}" required="true"/>
                     <b:inputText label="E-mail" id="email" value="#{responsaveisController.selected.EMail}" required="true"/>
                 </b:panel>
-                <b:commandButton action="#{responsaveisController.update}" value="Salvar"/>
-                <b:commandButton action="#{responsaveisController.prepareList()}" value="Cancelar" style="margin-left: 10px;"/>
+                <h:form>
+                    <b:commandButton action="#{responsaveisController.update}" value="Salvar"/>
+                    <b:commandButton action="#{responsaveisController.prepareList()}" update="@form" value="Cancelar" style="margin-left: 10px;"/>
+                </h:form>
             </h:form>
         </ui:define>
     </ui:decorate>
