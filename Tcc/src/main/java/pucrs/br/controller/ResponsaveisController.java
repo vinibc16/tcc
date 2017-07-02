@@ -66,7 +66,7 @@ public class ResponsaveisController implements Serializable {
                 @Override
                 public DataModel createPageDataModel() {
                     //return new ListDataModel(getFacade().findRange(new int[]{getPageFirstItem(), getPageFirstItem() + getPageSize()}));
-                    return new ListDataModel(getFacade().findAllRespByUser(usuario.getLogado().getIdEmpresa().getIdEmpresa()));
+                    return new ListDataModel(getFacade().findAllRespByUser(usuario.getLogado().getIdEmpresa()));
                 }
             };
         }
@@ -243,6 +243,6 @@ public class ResponsaveisController implements Serializable {
     }
     
     public List<Responsaveis> findAll() {
-        return ejbFacade.findAll();
+        return ejbFacade.findAllRespByUser(usuario.getLogado().getIdEmpresa());
     }
 }

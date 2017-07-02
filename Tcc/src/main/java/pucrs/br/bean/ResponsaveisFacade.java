@@ -9,6 +9,7 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import pucrs.br.entity.Empresa;
 import pucrs.br.entity.Escopo;
 import pucrs.br.entity.Responsaveis;
 
@@ -31,9 +32,9 @@ public class ResponsaveisFacade extends AbstractFacade<Responsaveis> {
         super(Responsaveis.class);
     }
     
-    public List<Escopo> findAllRespByUser(int idEmpresa) {        
-        return em.createQuery("SELECT u FROM Responsaveis u WHERE u.idEmpresa.idEmpresa = :idEmpresa")
-                .setParameter("idEmpresa", idEmpresa)
+    public List<Responsaveis> findAllRespByUser(Empresa emp) {        
+        return em.createQuery("SELECT u FROM Responsaveis u WHERE u.idEmpresa = :idEmpresa")
+                .setParameter("idEmpresa", emp)
                 .getResultList();
     }
 }

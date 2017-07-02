@@ -75,14 +75,19 @@ public class VulnerabilidadeFacade extends AbstractFacade<Vulnerabilidade> {
     }
     
     public List<Grafico> findResultGrafico(Empresa emp) {
-        Query query = em.createNativeQuery("select t.id_vulnerabilidade, "
-                                         + "count(t.id_escopo) "
-                                         + "from escopo_vul t "
-                                         + "WHERE id_empresa = "+emp.getIdEmpresa()
-                                         + " GROUP by t.id_vulnerabilidade");
+        Query query = em.createNativeQuery("SELECT t.id_vulnerabilidade,"
+                                         + " COUNT(t.id_escopo)"
+                                         + " FROM escopo_vul t"
+                                         + " WHERE id_empresa = "+emp.getIdEmpresa()
+                                         + " GROUP by t.id_vulnerabilidade"
+                                         + " ORDER BY count(t.id_escopo) DESC");
         List<Object[]> lista = query.getResultList();
         List<Grafico> grafico = new ArrayList<>();
+        int count = 0;
         for (Object[] row : lista) {
+            if (count == 5) {
+                break;
+            }
             grafico.add(new Grafico(findVulbyId((int) row[0]), (long) row[1]));
         }
         return grafico;
