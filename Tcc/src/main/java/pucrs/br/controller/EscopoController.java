@@ -33,10 +33,14 @@ import com.itextpdf.text.Phrase;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
+import javax.faces.context.ExternalContext;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletResponse;
@@ -44,10 +48,13 @@ import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import org.apache.commons.fileupload.util.Streams;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.UploadedFile;
-import pucrs.br.entity.Grafico;
 import pucrs.br.entity.Relatorio;
+import org.apache.commons.io.IOUtils;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
 
 @Named("escopoController")
 @SessionScoped
@@ -71,6 +78,8 @@ public class EscopoController extends HttpServlet implements Serializable {
     @Inject
     private VulnerabilidadeController vulctrl;
     private UploadedFile file;
+    private byte[] exportContent;
+    private StreamedContent fileDownload;
 
     public EscopoController() {
     }
@@ -528,8 +537,61 @@ public class EscopoController extends HttpServlet implements Serializable {
         this.file = file;
     }
     
-    public void importa(FileUploadEvent event) {
-        FacesMessage message = new FacesMessage("Succesful", event.getFile().getFileName() + " is uploaded.");
+    public void importa(FileUploadEvent event) throws IOException {
+        UploadedFile uploadedFile = event.getFile();
+        byte[] arquivo = IOUtils.toByteArray(uploadedFile.getInputstream());
+        System.out.println("Type ->"+uploadedFile.getContentType());
+        System.out.println("Nome ->"+uploadedFile.getFileName());
+        System.out.println("Contents ->"+arquivo);
+        System.out.println("Size ->"+uploadedFile.getSize());
+        
+        current.setFile(arquivo);
+        current.setNomeArquivo(uploadedFile.getFileName());
+        getFacade().edit(current);
+        FacesMessage message = new FacesMessage("O arquivo ", uploadedFile.getFileName() + " foi carregado com susesso.");
         FacesContext.getCurrentInstance().addMessage(null, message);
+    }
+    
+    public boolean isReady() {
+        exportContent = current.getFile();
+        return exportContent != null;
+    }
+    
+    public void export() {
+        exportContent = current.getFile();
+        FacesContext fc = FacesContext.getCurrentInstance();
+        ExternalContext ec = fc.getExternalContext();
+        ec.responseReset();
+        ec.setResponseContentType("text/plain");
+        ec.setResponseContentLength(exportContent.length);
+        String attachmentName = "attachment; filename="+current.getNomeArquivo();
+        ec.setResponseHeader("Content-Disposition", attachmentName);
+        try {
+            OutputStream output = ec.getResponseOutputStream();
+            Streams.copy(new ByteArrayInputStream(exportContent), output, false);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+
+        fc.responseComplete();
+        InputStream myInputStream = new ByteArrayInputStream(current.getFile()); 
+        fileDownload = new DefaultStreamedContent(myInputStream);
+    }
+
+    public StreamedContent getFileDownload() {
+        return fileDownload;
+    }
+
+    public void setFileDownload(StreamedContent fileDownload) {
+        this.fileDownload = fileDownload;
+    }
+    
+    public void importNovo() throws IOException {
+        if (file != null) {
+            String fileName = file.getFileName();
+            String contentType = file.getContentType();
+            byte[] arquivo = IOUtils.toByteArray(file.getInputstream());
+            System.out.println("Arquivo ->" + arquivo);
+        }
     }
 }

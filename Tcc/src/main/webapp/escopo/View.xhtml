@@ -3,21 +3,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui"
       xmlns:b="http://bootsfaces.net/ui">
 
-    <script type="text/javascript">
-        function abrirRelatorio() {
-            var w=window.open(this.href, '_blank'); 
-            w.document.title='Teste';
-            //(w.onload=function(){w.document.title='New Page Title!';})(); 
-            return false;
-        }
-    </script>
     <ui:decorate template="/template_usuario.xhtml">
         <ui:define name="centro">
-            <h:form>
+            <h:form id="viewEscopo" enctype="multipart/form-data">
                 <p:panelGrid columns="4">
                     <p:outputLabel value="Nome:"/>
                     <p:outputLabel value="#{escopoController.selected.nome}"/>
@@ -31,13 +22,24 @@
                     <p:outputLabel value="#{escopoController.selected.controlesExistentes}"/>
                     <p:outputLabel value="Restrições impostas:"/>
                     <p:outputLabel value="#{escopoController.selected.restricoesImpostas}"/>
+                    <p:outputLabel value="Arquivo:"/>
+                    <p:outputLabel value="#{escopoController.selected.nomeArquivo}"/>
+                    <b:commandButton value="Download" ajax="false" actionListener="#{escopoController.export()}">
+                        <p:fileDownload value="#{escopoController.fileDownload}" />
+                    </b:commandButton>
+                    <h:form enctype="multipart/form-data">
+                        <p:fileUpload value="#{escopoController.file}" mode="simple"/>
+                        <b:commandButton value="Upload" ajax="false" actionListener="#{escopoController.importNovo()}"/>
+                    </h:form>
                 </p:panelGrid>
                 <br />
-                <b:commandButton value="Voltar" actionListener="#{escopoController.prepareList()}"/>
-                <b:commandButton value="Associar" action="#{escopoController.associar()}" style="margin-left: 10px;"/>
-                <b:commandButton value="Definir Risco" action="#{escopoVulController.editEscopoVul(escopoController.selected)}" style="margin-left: 10px;"/>
-                <b:commandButton value="Definir Aceite" action="#{escopoVulController.editAceite(escopoController.selected)}" rendered="#{escopoController.visibleRelatorio()}" style="margin-left: 10px;"/>
-                <b:commandButton  value="Relatório" onclick="this.form.target='_blank'" action="#{escopoController.gerarPdf(escopoController.selected)}" rendered="#{escopoController.visibleRelatorio()}"  style="margin-left: 10px;" ajax="false"/>
+                <h:form>
+                    <b:commandButton value="Voltar" actionListener="#{escopoController.prepareList()}" update="@form"/>
+                    <b:commandButton value="Associar" action="#{escopoController.associar()}" style="margin-left: 10px;" update="@form"/>
+                    <b:commandButton value="Definir Risco" action="#{escopoVulController.editEscopoVul(escopoController.selected)}" style="margin-left: 10px;" update="@form"/>
+                    <b:commandButton value="Definir Aceite" action="#{escopoVulController.editAceite(escopoController.selected)}" rendered="#{escopoController.visibleRelatorio()}" style="margin-left: 10px;" update="@form"/>
+                    <b:commandButton  value="Relatório" onclick="this.form.target = '_blank'" action="#{escopoController.gerarPdf(escopoController.selected)}" rendered="#{escopoController.visibleRelatorio()}"  style="margin-left: 10px;" ajax="false" update="@form"/>
+                </h:form>
             </h:form>
         </ui:define>
     </ui:decorate>

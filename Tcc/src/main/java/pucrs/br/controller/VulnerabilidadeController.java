@@ -7,9 +7,11 @@ import pucrs.br.controller.util.PaginationHelper;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Scanner;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
@@ -18,6 +20,10 @@ import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
 import javax.inject.Inject;
+import javax.servlet.http.Part;
+import org.apache.commons.io.IOUtils;
+import org.primefaces.event.FileUploadEvent;
+import org.primefaces.model.UploadedFile;
 import pucrs.br.bean.VulnerabilidadeFacade;
 import pucrs.br.entity.Empresa;
 import pucrs.br.entity.Grafico;
@@ -34,6 +40,7 @@ public class VulnerabilidadeController implements Serializable {
     private int selectedItemIndex;
     @Inject
     private UsuarioController usuario;
+    private Part arquivo;
 
     public VulnerabilidadeController() {
     }
@@ -257,5 +264,37 @@ public class VulnerabilidadeController implements Serializable {
     
     public List<Grafico> findResultGrafico(Empresa emp) {
         return getFacade().findResultGrafico(emp);
+    }
+    
+    public void importa(FileUploadEvent event) throws IOException {
+        UploadedFile uploadedFile = event.getFile();
+        byte[] arquivo = IOUtils.toByteArray(uploadedFile.getInputstream());
+        System.out.println("Type ->"+uploadedFile.getContentType());
+        System.out.println("Nome ->"+uploadedFile.getFileName());
+        System.out.println("Contents ->"+arquivo);
+        System.out.println("Size ->"+uploadedFile.getSize());
+        
+        for(int i=0;i<arquivo.length;i++) {
+            System.out.println("i ="+i+" Valor ->"+arquivo[i]);
+        }
+        FacesMessage message = new FacesMessage("O arquivo ", uploadedFile.getFileName() + " foi carregado com susesso.");
+        FacesContext.getCurrentInstance().addMessage(null, message);
+    }
+
+    public Part getArquivo() {
+        return arquivo;
+    }
+
+    public void setArquivo(Part arquivo) {
+        this.arquivo = arquivo;
+    }
+    
+    public void importarNovo() {
+        try {
+            String conteudo = new Scanner(arquivo.getInputStream())
+                .useDelimiter("\\A").next();
+        } catch (IOException e) {
+            // trata o erro
+        }
     }
 }

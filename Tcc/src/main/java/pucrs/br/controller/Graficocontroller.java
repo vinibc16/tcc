@@ -53,7 +53,7 @@ public class Graficocontroller implements Serializable {
         for(int i=0;i<lista.size();i++) {
             pieModel1.set(lista.get(i).getVul().getNome(), lista.get(i).getTotal());
             
-            //pieModel1.setTitle("Gráfico Teste");
+            pieModel1.setTitle("Vulnerabilidades por Escopo");
             pieModel1.setLegendPosition("s");
         }
     }

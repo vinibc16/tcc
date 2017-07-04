@@ -16,6 +16,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -45,6 +46,13 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Escopo.findByControlesExistentes", query = "SELECT e FROM Escopo e WHERE e.controlesExistentes = :controlesExistentes"),
     @NamedQuery(name = "Escopo.findByRestricoesImpostas", query = "SELECT e FROM Escopo e WHERE e.restricoesImpostas = :restricoesImpostas")})
 public class Escopo implements Serializable {
+
+    @Lob
+    @Column(name = "file")
+    private byte[] file;
+    @Size(max = 200)
+    @Column(name = "nome_arquivo")
+    private String nomeArquivo;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -212,6 +220,22 @@ public class Escopo implements Serializable {
     @Override
     public String toString() {
         return "pucrs.br.entity.Escopo[ idEscopo=" + idEscopo + " ]";
+    }
+
+    public byte[] getFile() {
+        return file;
+    }
+
+    public void setFile(byte[] file) {
+        this.file = file;
+    }
+
+    public String getNomeArquivo() {
+        return nomeArquivo;
+    }
+
+    public void setNomeArquivo(String nomeArquivo) {
+        this.nomeArquivo = nomeArquivo;
     }
     
 }

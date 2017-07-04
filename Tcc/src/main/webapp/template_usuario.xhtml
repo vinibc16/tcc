@@ -32,7 +32,7 @@
         </style>
     </h:head>
     <h:body styleClass="body-sigin">
-        <h:form>
+        <h:form enctype="multipart/form-data">
             <b:navBar brand="Inicio" brandHref="/Tcc/home.jsf" fixed="top" inverse="true" >
                 <b:navbarLinks>
                     <b:navCommandLink value="Vulnerabilidades" actionListener="#{vulnerabilidadeController.prepareList()}"></b:navCommandLink>
@@ -44,7 +44,7 @@
             </b:navBar>
         </h:form>
         <b:container>
-            <h:form id="principal">
+            <h:form id="principal" enctype="multipart/form-data">
                 <b:growl id="msgs" showDetail="true" />
                 <ui:insert name="centro"/>
             </h:form>
