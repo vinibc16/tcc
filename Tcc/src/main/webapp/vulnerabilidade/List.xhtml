@@ -42,8 +42,14 @@
                     </p:column>
                 </p:dataTable>
                 <br />
-                <b:commandButton value="Criar Vulnerabilidade" action="#{vulnerabilidadeController.prepareCreate()}"/>
-                <b:commandButton value="Importar Vulnerabilidades" action="#" style="margin-left: 10px;"/>
+                <h:form enctype="multipart/form-data">
+                    <b:commandButton value="Criar Vulnerabilidade" action="#{vulnerabilidadeController.prepareCreate()}"/>
+                    <p:fileUpload  label="Importar Vul" fileUploadListener="#{vulnerabilidadeController.importa}" mode="advanced"
+                                   update="messages" auto="true"
+                                   sizeLimit="100000" invalidSizeMessage="Tamanho máximo de 1mb" 
+                                   allowTypes="/(\.|\/)(txt|doc|docx)$/" invalidFileMessage="Tipo não é valido" />
+                    <b:growl id="messages" showDetail="true" />
+                </h:form>
             </h:form>
         </ui:define>
     </ui:decorate>

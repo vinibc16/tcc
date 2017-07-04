@@ -24,14 +24,16 @@
                     <p:outputLabel value="#{escopoController.selected.restricoesImpostas}"/>
                     <p:outputLabel value="Arquivo:"/>
                     <p:outputLabel value="#{escopoController.selected.nomeArquivo}"/>
-                    <b:commandButton value="Download" ajax="false" actionListener="#{escopoController.export()}">
+                    <b:commandButton value="Baixar" ajax="false" actionListener="#{escopoController.export()}">
                         <p:fileDownload value="#{escopoController.fileDownload}" />
                     </b:commandButton>
-                    <h:form enctype="multipart/form-data">
-                        <p:fileUpload value="#{escopoController.file}" mode="simple"/>
-                        <b:commandButton value="Upload" ajax="false" actionListener="#{escopoController.importNovo()}"/>
-                    </h:form>
+                    <p:fileUpload label="Importar" fileUploadListener="#{escopoController.importa}" mode="advanced"
+                                  update="messages" auto="true"
+                                  oncomplete="window.location.reload()"
+                                  sizeLimit="100000" invalidSizeMessage="Tamanho máximo de 1mb" 
+                                  allowTypes="/(\.|\/)(txt|doc|docx)$/" invalidFileMessage="Tipo não é valido" />
                 </p:panelGrid>
+                <b:growl id="messages" showDetail="true" />
                 <br />
                 <h:form>
                     <b:commandButton value="Voltar" actionListener="#{escopoController.prepareList()}" update="@form"/>

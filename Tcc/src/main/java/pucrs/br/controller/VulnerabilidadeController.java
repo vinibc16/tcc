@@ -1,6 +1,9 @@
 package pucrs.br.controller;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import pucrs.br.entity.Vulnerabilidade;
 import pucrs.br.controller.util.JsfUtil;
 import pucrs.br.controller.util.PaginationHelper;
@@ -8,6 +11,8 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
@@ -56,7 +61,7 @@ public class VulnerabilidadeController implements Serializable {
     public void setSelected(Vulnerabilidade current) {
         this.current = current;
     }
-    
+
     private VulnerabilidadeFacade getFacade() {
         return ejbFacade;
     }
@@ -84,7 +89,7 @@ public class VulnerabilidadeController implements Serializable {
         recreateModel();
         FacesContext.getCurrentInstance().getExternalContext().redirect("/Tcc/vulnerabilidade/List.jsf");
     }
-    
+
     public void prepareView() throws IOException {
         current = (Vulnerabilidade) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
@@ -249,7 +254,7 @@ public class VulnerabilidadeController implements Serializable {
         }
 
     }
-    
+
     public void insert(Vulnerabilidade vul) {
         try {
             getFacade().create(vul);
@@ -257,28 +262,48 @@ public class VulnerabilidadeController implements Serializable {
             JsfUtil.addErrorMessage(e, "Erro interno");
         }
     }
-    
+
     public String getVulNome(int idVul) {
         return ejbFacade.getVulNome(idVul);
     }
-    
+
     public List<Grafico> findResultGrafico(Empresa emp) {
         return getFacade().findResultGrafico(emp);
     }
-    
+
     public void importa(FileUploadEvent event) throws IOException {
+        String str = "";
+        StringBuffer buf = new StringBuffer();
         UploadedFile uploadedFile = event.getFile();
-        byte[] arquivo = IOUtils.toByteArray(uploadedFile.getInputstream());
-        System.out.println("Type ->"+uploadedFile.getContentType());
-        System.out.println("Nome ->"+uploadedFile.getFileName());
-        System.out.println("Contents ->"+arquivo);
-        System.out.println("Size ->"+uploadedFile.getSize());
-        
-        for(int i=0;i<arquivo.length;i++) {
-            System.out.println("i ="+i+" Valor ->"+arquivo[i]);
+        InputStream is = uploadedFile.getInputstream();
+        try {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(is,"UTF-8"));
+            if (is != null) {
+                while ((str = reader.readLine()) != null) {
+                    Pattern p = Pattern.compile("[a-zA-Zà-úÀ-Ú]+");
+                    Matcher m = p.matcher(str);
+                    System.out.println("Aqui -> " + str);
+                    String[] vulNova = str.split(";");
+                    current = new Vulnerabilidade();
+                    selectedItemIndex = -1;
+                    current.setNome(vulNova[0]);
+                    current.setDescricao(vulNova[1]);
+                    current.setNivel(Integer.parseInt(vulNova[2]));
+                    current.setAcoes(vulNova[3]);
+                    current.setFonte(vulNova[4]);
+                    current.setConsequencia(vulNova[5]);
+                    create();
+                    FacesMessage message = new FacesMessage("O arquivo ", uploadedFile.getFileName() + " foi carregado com susesso.");
+                    FacesContext.getCurrentInstance().addMessage(null, message);
+                }
+            }
+        } catch (Exception e) {
+            //JsfUtil.addErrorMessage(e, "Erro ao importar o arquivo.");
+            //FacesMessage message = new FacesMessage("Erro ao importar o arquivo.");
+            //FacesContext.getCurrentInstance().addMessage(null, message);
+            FacesMessage facesMsg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "","Erro ao importar o arquivo.");
+            FacesContext.getCurrentInstance().addMessage(null, facesMsg);
         }
-        FacesMessage message = new FacesMessage("O arquivo ", uploadedFile.getFileName() + " foi carregado com susesso.");
-        FacesContext.getCurrentInstance().addMessage(null, message);
     }
 
     public Part getArquivo() {
@@ -288,13 +313,5 @@ public class VulnerabilidadeController implements Serializable {
     public void setArquivo(Part arquivo) {
         this.arquivo = arquivo;
     }
-    
-    public void importarNovo() {
-        try {
-            String conteudo = new Scanner(arquivo.getInputStream())
-                .useDelimiter("\\A").next();
-        } catch (IOException e) {
-            // trata o erro
-        }
-    }
+
 }

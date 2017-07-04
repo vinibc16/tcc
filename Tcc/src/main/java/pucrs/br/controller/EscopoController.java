@@ -576,6 +576,8 @@ public class EscopoController extends HttpServlet implements Serializable {
         fc.responseComplete();
         InputStream myInputStream = new ByteArrayInputStream(current.getFile()); 
         fileDownload = new DefaultStreamedContent(myInputStream);
+        FacesMessage message = new FacesMessage("O arquivo ", current.getNomeArquivo() + " foi exportado com susesso.");
+        FacesContext.getCurrentInstance().addMessage(null, message);
     }
 
     public StreamedContent getFileDownload() {
