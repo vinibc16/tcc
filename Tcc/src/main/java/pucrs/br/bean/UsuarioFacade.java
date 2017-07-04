@@ -1,24 +1,17 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package pucrs.br.bean;
 
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.NoResultException;
-import javax.persistence.Persistence;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import pucrs.br.entity.GrupoUsuario;
 import pucrs.br.entity.Usuario;
 
 /**
- *
- * @author psysvica
+ * @Henrique Knorre 
+ * @Vinicius Canteiro
  */
 @Stateless
 public class UsuarioFacade extends AbstractFacade<Usuario> {
@@ -35,18 +28,18 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
         super(Usuario.class);
     }
     
+    // Recupera os grupos
     public List<GrupoUsuario> getGrupos() {
         try {
             Query query = em.createNativeQuery("SELECT id_grupo from grupo_usuario");
             List lista = query.getResultList();
-                //lista = (ArrayList<GrupoUsuario>) em.createQuery("SELECT id_grupo from grupo_usuario").getResultList();
-
             return lista;
         } catch (NoResultException e) {
             return null;
         }
     }
 
+    // Recupera dados de um uusário a partir de um id e senha
     public Usuario getUsuario(String id, String senha) {
 
         try {
@@ -62,6 +55,7 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
         }
     }
     
+    // Verifica se existe um usuário a partir de um ID
     public boolean existeUsuario(String id) {
 
         try {
@@ -73,30 +67,5 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
         } catch (NoResultException e) {
             return false;
         }
-    }
-
-    public boolean inserirUsuario(Usuario usuario) {
-        try {
-            if (existeUsuario(usuario.getId())) {
-                return false;
-            }
-            em.getTransaction().begin();
-            em.persist(usuario);
-            em.getTransaction().commit();
-            return true;
-        } catch (NoResultException e) {
-            return false;
-        }
-    }
-
-    public boolean deletarUsuario(Usuario usuario) {
-        try {
-            em.remove(usuario);
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-    
+    } 
 }

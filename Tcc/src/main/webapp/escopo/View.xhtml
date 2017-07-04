@@ -38,9 +38,9 @@
                 <h:form>
                     <b:commandButton value="Voltar" actionListener="#{escopoController.prepareList()}" update="@form"/>
                     <b:commandButton value="Associar" action="#{escopoController.associar()}" style="margin-left: 10px;" update="@form"/>
-                    <b:commandButton value="Definir Risco" action="#{escopoVulController.editEscopoVul(escopoController.selected)}" style="margin-left: 10px;" update="@form"/>
-                    <b:commandButton value="Definir Aceite" action="#{escopoVulController.editAceite(escopoController.selected)}" rendered="#{escopoController.visibleRelatorio()}" style="margin-left: 10px;" update="@form"/>
-                    <b:commandButton  value="Relatório" onclick="this.form.target = '_blank'" action="#{escopoController.gerarPdf(escopoController.selected)}" rendered="#{escopoController.visibleRelatorio()}"  style="margin-left: 10px;" ajax="false" update="@form"/>
+                    <b:commandButton value="Definir Risco" action="#{escopoVulController.abrirDefinirRisco(escopoController.selected)}" style="margin-left: 10px;" update="@form"/>
+                    <b:commandButton value="Definir Aceite" action="#{escopoVulController.abrirDefinirAceite(escopoController.selected)}" rendered="#{escopoController.visibleRelatorio()}" style="margin-left: 10px;" update="@form"/>
+                    <b:commandButton  value="Relatório" onclick="this.form.target = '_blank'" action="#{escopoController.showPdf(escopoController.selected)}" rendered="#{escopoController.visibleRelatorio()}"  style="margin-left: 10px;" ajax="false" update="@form"/>
                 </h:form>
             </h:form>
         </ui:define>

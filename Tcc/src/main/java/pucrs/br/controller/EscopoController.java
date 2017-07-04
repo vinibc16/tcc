@@ -20,12 +20,8 @@ import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
 import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import pucrs.br.entity.EscopoVul;
 import pucrs.br.entity.Vulnerabilidade;
-import java.io.FileOutputStream;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.*;
@@ -38,48 +34,41 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.HashMap;
-import java.util.Map;
 import javax.faces.context.ExternalContext;
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletResponse;
-import net.sf.jasperreports.engine.JasperExportManager;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.apache.commons.fileupload.util.Streams;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.UploadedFile;
-import pucrs.br.entity.Relatorio;
 import org.apache.commons.io.IOUtils;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 
+/**
+ * @Henrique Knorre 
+ * @Vinicius Canteiro
+ */
 @Named("escopoController")
 @SessionScoped
 public class EscopoController extends HttpServlet implements Serializable {
 
     private Escopo current;
     private DataModel items = null;
-    @EJB
-    private EscopoFacade ejbFacade;
     private PaginationHelper pagination;
     private int selectedItemIndex;
     private List<Vulnerabilidade> selectedVul = new ArrayList<Vulnerabilidade>();
-    private EntityManagerFactory factory = Persistence
-            .createEntityManagerFactory("pucrs_Tcc_war_1.0PU");
-    private EntityManager em = factory.createEntityManager();
+    private List<EscopoVul> escopovul = new ArrayList<EscopoVul>();
+    private UploadedFile file;
+    private byte[] exportContent;
+    private StreamedContent fileDownload;
+    @EJB
+    private EscopoFacade ejbFacade;
     @Inject
     private UsuarioController usuarioLogado;
-    private List<EscopoVul> escopovul = new ArrayList<EscopoVul>();
     @Inject
     private EscopoVulController escopoVulContrl;
     @Inject
     private VulnerabilidadeController vulctrl;
-    private UploadedFile file;
-    private byte[] exportContent;
-    private StreamedContent fileDownload;
 
     public EscopoController() {
     }
@@ -124,18 +113,6 @@ public class EscopoController extends HttpServlet implements Serializable {
         FacesContext.getCurrentInstance().getExternalContext().redirect("/Tcc/escopo/List.jsf");
     }
     
-    public void associar() throws IOException {
-        selectedVul.clear();
-        escopovul = escopoVulContrl.findAllfindByIdEscopo(current);
-        for (int i=0; i<escopovul.size(); i++) {
-            escopovul.get(i).setVulnerabilidade(vulctrl.getVulnerabilidade(escopovul.get(i).getEscopoVulPK().getIdVulnerabilidade()));
-        }
-        for (int i = 0; i < escopovul.size(); i++) {
-            selectedVul.add(escopovul.get(i).getVulnerabilidade());
-        }
-        FacesContext.getCurrentInstance().getExternalContext().redirect("/Tcc/escopoVul/Associar.jsf");
-    }
-
     public void prepareView() throws IOException {
         current = (Escopo) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
@@ -144,7 +121,6 @@ public class EscopoController extends HttpServlet implements Serializable {
     
     public void prepareViewFromEscopo(Escopo escopo) throws IOException {
         current = escopo;
-        //selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
         FacesContext.getCurrentInstance().getExternalContext().redirect("/Tcc/escopo/View.jsf");
     }
 
@@ -216,9 +192,7 @@ public class EscopoController extends HttpServlet implements Serializable {
     private void updateCurrentItem() {
         int count = getFacade().count();
         if (selectedItemIndex >= count) {
-            // selected index cannot be bigger than number of items:
             selectedItemIndex = count - 1;
-            // go to previous page if last page disappeared:
             if (pagination.getPageFirstItem() >= count) {
                 pagination.previousPage();
             }
@@ -317,11 +291,7 @@ public class EscopoController extends HttpServlet implements Serializable {
     public void setSelectedVul(List<Vulnerabilidade> selectedVul) {
         this.selectedVul = selectedVul;
     }
-
-    public boolean visibleRelatorio() {
-        return usuarioLogado.getLogado().getIdGrupo().getIdGrupo() == 2;
-    }
-
+    
     public List<EscopoVul> getEscopovul() {
         return escopovul;
     }
@@ -329,8 +299,30 @@ public class EscopoController extends HttpServlet implements Serializable {
     public void setEscopovul(List<EscopoVul> escopovul) {
         this.escopovul = escopovul;
     }
+    
+    public UploadedFile getFile() {
+        return file;
+    }
 
-    public void gerarPdf(Escopo esc) throws Exception {
+    public void setFile(UploadedFile file) {
+        this.file = file;
+    }
+    
+    public StreamedContent getFileDownload() {
+        return fileDownload;
+    }
+
+    public void setFileDownload(StreamedContent fileDownload) {
+        this.fileDownload = fileDownload;
+    }
+
+    // Retorna se habilita ou não o botão do relatório
+    public boolean visibleRelatorio() {
+        return usuarioLogado.getLogado().getIdGrupo().getIdGrupo() == 2;
+    }
+
+    // Mostra o PDF no browser
+    public void showPdf(Escopo esc) throws Exception {
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletResponse response = (HttpServletResponse) context.getExternalContext().getResponse();
         response.reset();
@@ -343,6 +335,7 @@ public class EscopoController extends HttpServlet implements Serializable {
         
     }
     
+    // Monta o PDF
     public ByteArrayOutputStream createPdf(Escopo esc) throws IOException, DocumentException {
         Document document = new Document();
         Paragraph p = new Paragraph();
@@ -486,33 +479,7 @@ public class EscopoController extends HttpServlet implements Serializable {
         }
     }
     
-    public void visualizarRelatorio() {
-        try {
-            System.out.println("entrou no visualizar relatorio");
-            //---------- gera o relatorio ----------
-            List<Relatorio> listaRelatorio = new ArrayList<Relatorio>();
-            FacesContext context = FacesContext.getCurrentInstance();
-            HttpServletResponse response = (HttpServletResponse) context.getExternalContext().getResponse();
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            Map<String, Object> params = new HashMap<String, Object>(); 
-            //InputStream stream = this.getClass().getResourceAsStream("/relatorio/Relatorio.jasper");
-            //JasperReport report = (JasperReport) JRLoader.loadObject(stream);
-            ServletContext scontext = (ServletContext) context.getExternalContext().getContext();
-            JasperPrint print = JasperFillManager.fillReport(scontext.getRealPath("/WEB-INF/Relatorio.jasper"), params, new JRBeanCollectionDataSource(listaRelatorio));
-            JasperExportManager.exportReportToPdfStream(print, baos);
-            response.reset();
-            response.setContentType("application/pdf");
-            response.setContentLength(baos.size());
-            response.setHeader("Content-disposition", "inline; filename=relatorio.pdf");
-            response.getOutputStream().write(baos.toByteArray());
-            response.getOutputStream().flush();
-            response.getOutputStream().close();
-            context.responseComplete();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-
+    // Método auxiliar para arredondar
     public static double round(double value, int places) {
         if (places < 0) {
             throw new IllegalArgumentException();
@@ -524,26 +491,15 @@ public class EscopoController extends HttpServlet implements Serializable {
         return (double) tmp / factor;
     }
     
+    // Metodo para recuperar todos escopos
     public List<Escopo> findAll() {
         return ejbFacade.findAll();
     }
     
-    
-    public UploadedFile getFile() {
-        return file;
-    }
-
-    public void setFile(UploadedFile file) {
-        this.file = file;
-    }
-    
+    // Importar arquivos
     public void importa(FileUploadEvent event) throws IOException {
         UploadedFile uploadedFile = event.getFile();
         byte[] arquivo = IOUtils.toByteArray(uploadedFile.getInputstream());
-        System.out.println("Type ->"+uploadedFile.getContentType());
-        System.out.println("Nome ->"+uploadedFile.getFileName());
-        System.out.println("Contents ->"+arquivo);
-        System.out.println("Size ->"+uploadedFile.getSize());
         
         current.setFile(arquivo);
         current.setNomeArquivo(uploadedFile.getFileName());
@@ -552,11 +508,7 @@ public class EscopoController extends HttpServlet implements Serializable {
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
     
-    public boolean isReady() {
-        exportContent = current.getFile();
-        return exportContent != null;
-    }
-    
+    // Exportar arquivos
     public void export() {
         exportContent = current.getFile();
         FacesContext fc = FacesContext.getCurrentInstance();
@@ -579,21 +531,17 @@ public class EscopoController extends HttpServlet implements Serializable {
         FacesMessage message = new FacesMessage("O arquivo ", current.getNomeArquivo() + " foi exportado com susesso.");
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
-
-    public StreamedContent getFileDownload() {
-        return fileDownload;
-    }
-
-    public void setFileDownload(StreamedContent fileDownload) {
-        this.fileDownload = fileDownload;
-    }
     
-    public void importNovo() throws IOException {
-        if (file != null) {
-            String fileName = file.getFileName();
-            String contentType = file.getContentType();
-            byte[] arquivo = IOUtils.toByteArray(file.getInputstream());
-            System.out.println("Arquivo ->" + arquivo);
+    // Método executa antes de abrir a tela de associar
+    public void associar() throws IOException {
+        selectedVul.clear();
+        escopovul = escopoVulContrl.findAllfindByIdEscopo(current);
+        for (int i=0; i<escopovul.size(); i++) {
+            escopovul.get(i).setVulnerabilidade(vulctrl.getVulnerabilidade(escopovul.get(i).getEscopoVulPK().getIdVulnerabilidade()));
         }
+        for (int i = 0; i < escopovul.size(); i++) {
+            selectedVul.add(escopovul.get(i).getVulnerabilidade());
+        }
+        FacesContext.getCurrentInstance().getExternalContext().redirect("/Tcc/escopoVul/Associar.jsf");
     }
 }

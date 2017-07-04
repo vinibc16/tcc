@@ -6,8 +6,6 @@ import pucrs.br.controller.util.JsfUtil;
 import pucrs.br.controller.util.PaginationHelper;
 import pucrs.br.bean.UsuarioFacade;
 import java.io.Serializable;
-import java.util.List;
-import java.util.ResourceBundle;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
@@ -19,9 +17,11 @@ import javax.faces.convert.FacesConverter;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
-import org.primefaces.event.RowEditEvent;
-import pucrs.br.entity.Responsaveis;
 
+/**
+ * @Henrique Knorre 
+ * @Vinicius Canteiro
+ */
 @Named("usuarioController")
 @SessionScoped
 public class UsuarioController implements Serializable {
@@ -29,11 +29,10 @@ public class UsuarioController implements Serializable {
     private Usuario current;
     private Usuario logado;
     private DataModel items = null;
-    @EJB
-    private pucrs.br.bean.UsuarioFacade ejbFacade;
     private PaginationHelper pagination;
     private int selectedItemIndex;
-    private String menssagem = null;    
+    @EJB
+    private pucrs.br.bean.UsuarioFacade ejbFacade;    
 
     public UsuarioController() {
     }
@@ -144,7 +143,6 @@ public class UsuarioController implements Serializable {
         if (selectedItemIndex >= 0) {
             return "ViewUsuario";
         } else {
-            // all items were removed - go back to list
             recreateModel();
             return "ListUsuario";
         }
@@ -162,9 +160,7 @@ public class UsuarioController implements Serializable {
     private void updateCurrentItem() {
         int count = getFacade().count();
         if (selectedItemIndex >= count) {
-            // selected index cannot be bigger than number of items:
             selectedItemIndex = count - 1;
-            // go to previous page if last page disappeared:
             if (pagination.getPageFirstItem() >= count) {
                 pagination.previousPage();
             }
@@ -252,32 +248,25 @@ public class UsuarioController implements Serializable {
         }
     }
     
+    // Realizar o login no sistema
     public void envia() throws IOException {
         logado = ejbFacade.getUsuario(logado.getId(), logado.getSenha());
         if (logado == null) {
             logado = new Usuario();
-            //setMenssagem("Usuário ou senha incorretos.");
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "", "Login ou senha inválidos"));
         } else {
             FacesContext.getCurrentInstance().getExternalContext().redirect("/Tcc/home.jsf");
         }
     }
     
+    // Realiza o logout no sistema
     public void logout() throws IOException {
         logado = null;
         FacesContext.getCurrentInstance().getExternalContext().redirect("/Tcc/index.jsf");
     }
     
-    public String getMenssagem() {
-        return menssagem;
-    }
-
-    public void setMenssagem(String menssagem) {
-        this.menssagem = menssagem;
-    }
-    
+    // Redireciona para a página de login caso não esteja logado no sistema
     public void logado() throws IOException {
-        setMenssagem(null);
         if (logado == null) {
             FacesContext.getCurrentInstance().getExternalContext().redirect("/Tcc/login.jsf");
         } else if (logado.getId() == null) {
@@ -287,6 +276,7 @@ public class UsuarioController implements Serializable {
         }
     }
     
+    // Redireciona para o portal corredo dado o grupo do usuário logado
     public void redireciona() throws IOException {
         if(logado.getIdGrupo().getIdGrupo() == 1) {
             FacesContext.getCurrentInstance().getExternalContext().redirect("/Tcc/admin.jsf");

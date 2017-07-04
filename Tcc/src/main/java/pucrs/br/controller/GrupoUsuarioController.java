@@ -4,7 +4,6 @@ import pucrs.br.entity.GrupoUsuario;
 import pucrs.br.controller.util.JsfUtil;
 import pucrs.br.controller.util.PaginationHelper;
 import pucrs.br.bean.GrupoUsuarioFacade;
-
 import java.io.Serializable;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -19,16 +18,20 @@ import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
 
+/**
+ * @Henrique Knorre 
+ * @Vinicius Canteiro
+ */
 @Named("grupoUsuarioController")
 @SessionScoped
 public class GrupoUsuarioController implements Serializable {
 
     private GrupoUsuario current;
     private DataModel items = null;
-    @EJB
-    private pucrs.br.bean.GrupoUsuarioFacade ejbFacade;
     private PaginationHelper pagination;
     private int selectedItemIndex;
+    @EJB
+    private pucrs.br.bean.GrupoUsuarioFacade ejbFacade;
 
     public GrupoUsuarioController() {
     }
@@ -124,7 +127,6 @@ public class GrupoUsuarioController implements Serializable {
         if (selectedItemIndex >= 0) {
             return "View";
         } else {
-            // all items were removed - go back to list
             recreateModel();
             return "List";
         }
@@ -142,9 +144,7 @@ public class GrupoUsuarioController implements Serializable {
     private void updateCurrentItem() {
         int count = getFacade().count();
         if (selectedItemIndex >= count) {
-            // selected index cannot be bigger than number of items:
             selectedItemIndex = count - 1;
-            // go to previous page if last page disappeared:
             if (pagination.getPageFirstItem() >= count) {
                 pagination.previousPage();
             }
@@ -233,6 +233,7 @@ public class GrupoUsuarioController implements Serializable {
 
     }
     
+    // Recupera todos os grupos
     public List<GrupoUsuario> findAll() {
         return ejbFacade.findAll();
     }

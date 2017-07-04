@@ -7,11 +7,9 @@ import pucrs.br.controller.util.PaginationHelper;
 import pucrs.br.bean.ResponsaveisFacade;
 import java.io.Serializable;
 import java.util.List;
-import java.util.ResourceBundle;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
-import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
@@ -20,18 +18,21 @@ import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
 import javax.inject.Inject;
-import org.primefaces.event.RowEditEvent;
 
+/**
+ * @Henrique Knorre 
+ * @Vinicius Canteiro
+ */
 @Named("responsaveisController")
 @SessionScoped
 public class ResponsaveisController implements Serializable {
 
     private Responsaveis current;
     private DataModel items = null;
-    @EJB
-    private pucrs.br.bean.ResponsaveisFacade ejbFacade;
     private PaginationHelper pagination;
     private int selectedItemIndex;
+    @EJB
+    private pucrs.br.bean.ResponsaveisFacade ejbFacade;    
     @Inject
     private UsuarioController usuario;
 
@@ -65,7 +66,6 @@ public class ResponsaveisController implements Serializable {
 
                 @Override
                 public DataModel createPageDataModel() {
-                    //return new ListDataModel(getFacade().findRange(new int[]{getPageFirstItem(), getPageFirstItem() + getPageSize()}));
                     return new ListDataModel(getFacade().findAllRespByUser(usuario.getLogado().getIdEmpresa()));
                 }
             };
@@ -133,7 +133,6 @@ public class ResponsaveisController implements Serializable {
         if (selectedItemIndex >= 0) {
             return "ViewResponsaveis";
         } else {
-            // all items were removed - go back to list
             recreateModel();
             return "ListResponsaveis";
         }
@@ -151,9 +150,7 @@ public class ResponsaveisController implements Serializable {
     private void updateCurrentItem() {
         int count = getFacade().count();
         if (selectedItemIndex >= count) {
-            // selected index cannot be bigger than number of items:
             selectedItemIndex = count - 1;
-            // go to previous page if last page disappeared:
             if (pagination.getPageFirstItem() >= count) {
                 pagination.previousPage();
             }
@@ -242,6 +239,7 @@ public class ResponsaveisController implements Serializable {
 
     }
     
+    // Recupera lista de responsáveis
     public List<Responsaveis> findAll() {
         return ejbFacade.findAllRespByUser(usuario.getLogado().getIdEmpresa());
     }

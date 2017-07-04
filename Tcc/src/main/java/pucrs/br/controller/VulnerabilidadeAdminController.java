@@ -5,7 +5,6 @@ import pucrs.br.entity.VulnerabilidadeAdmin;
 import pucrs.br.controller.util.JsfUtil;
 import pucrs.br.controller.util.PaginationHelper;
 import pucrs.br.bean.VulnerabilidadeAdminFacade;
-
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -20,16 +19,20 @@ import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
 
+/**
+ * @Henrique Knorre 
+ * @Vinicius Canteiro
+ */
 @Named("vulnerabilidadeAdminController")
 @SessionScoped
 public class VulnerabilidadeAdminController implements Serializable {
 
     private VulnerabilidadeAdmin current;
     private DataModel items = null;
-    @EJB
-    private pucrs.br.bean.VulnerabilidadeAdminFacade ejbFacade;
     private PaginationHelper pagination;
     private int selectedItemIndex;
+    @EJB
+    private pucrs.br.bean.VulnerabilidadeAdminFacade ejbFacade;
 
     public VulnerabilidadeAdminController() {
     }
@@ -128,7 +131,6 @@ public class VulnerabilidadeAdminController implements Serializable {
         if (selectedItemIndex >= 0) {
             return "ViewVulAdmin";
         } else {
-            // all items were removed - go back to list
             recreateModel();
             return "ListVulAdmin";
         }
@@ -146,9 +148,7 @@ public class VulnerabilidadeAdminController implements Serializable {
     private void updateCurrentItem() {
         int count = getFacade().count();
         if (selectedItemIndex >= count) {
-            // selected index cannot be bigger than number of items:
             selectedItemIndex = count - 1;
-            // go to previous page if last page disappeared:
             if (pagination.getPageFirstItem() >= count) {
                 pagination.previousPage();
             }
@@ -237,6 +237,7 @@ public class VulnerabilidadeAdminController implements Serializable {
 
     }
 
+    // Recupera todas as vulnerabilidades do Admin
     public List<VulnerabilidadeAdmin> findAll() {
         return ejbFacade.findAll();
     }

@@ -5,8 +5,6 @@ import pucrs.br.entity.EscopoVul;
 import pucrs.br.controller.util.JsfUtil;
 import pucrs.br.controller.util.PaginationHelper;
 import pucrs.br.bean.EscopoVulFacade;
-
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.ResourceBundle;
@@ -27,22 +25,23 @@ import java.util.List;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
-import org.primefaces.event.CellEditEvent;
-import org.primefaces.event.RowEditEvent;
 
+/**
+ * @Henrique Knorre 
+ * @Vinicius Canteiro
+ */
 @Named("escopoVulController")
 @SessionScoped
 public class EscopoVulController implements Serializable {
 
     private EscopoVul current;
     private DataModel items = null;
-    @EJB
-    private pucrs.br.bean.EscopoVulFacade ejbFacade;
     private PaginationHelper pagination;
     private int selectedItemIndex;
     private DataModel lista = null;
     private List<EscopoVul> listaApontamento, listaAceite;
-    private Escopo escopoPag = null;
+    @EJB
+    private pucrs.br.bean.EscopoVulFacade ejbFacade;
     @Inject
     private UsuarioController logado;
     @Inject
@@ -50,8 +49,6 @@ public class EscopoVulController implements Serializable {
     
     public EscopoVulController() {
         listaApontamento = new ArrayList<>();
-        System.out.println("EscopoVulController CRIADO!");
-        //lista = new ArrayList<>();
     }
 
     public List<EscopoVul> getListaAceite() {
@@ -60,8 +57,7 @@ public class EscopoVulController implements Serializable {
 
     public void setListaAceite(List<EscopoVul> listaAceite) {
         this.listaAceite = listaAceite;
-    }
-    
+    }    
 
     public EscopoVul getSelected() {
         if (current == null) {
@@ -94,24 +90,6 @@ public class EscopoVulController implements Serializable {
         return pagination;
     }
     
-    public PaginationHelper getPagination2() {
-        if (pagination == null) {
-            pagination = new PaginationHelper(10) {
-
-                @Override
-                public int getItemsCount() {
-                    return getFacade().count();
-                }
-
-                @Override
-                public DataModel createPageDataModel() {
-                    return new ListDataModel(getFacade().findAllfindByIdEscopo(escopoPag));
-                }
-            };
-        }
-        return pagination;
-    }
-
     public void prepareList() throws IOException {
         recreateModel();
         FacesContext.getCurrentInstance().getExternalContext().redirect("ListEscopoVul.jsf");
@@ -178,7 +156,6 @@ public class EscopoVulController implements Serializable {
         if (selectedItemIndex >= 0) {
             return "ViewEscopoVul";
         } else {
-            // all items were removed - go back to list
             recreateModel();
             return "ListEscopoVul";
         }
@@ -196,9 +173,7 @@ public class EscopoVulController implements Serializable {
     private void updateCurrentItem() {
         int count = getFacade().count();
         if (selectedItemIndex >= count) {
-            // selected index cannot be bigger than number of items:
             selectedItemIndex = count - 1;
-            // go to previous page if last page disappeared:
             if (pagination.getPageFirstItem() >= count) {
                 pagination.previousPage();
             }
@@ -295,6 +270,23 @@ public class EscopoVulController implements Serializable {
 
     }
     
+    public DataModel getLista() {
+        return lista;
+    }
+
+    public void setLista(List<EscopoVul> lista) {
+        this.lista = (DataModel) lista;
+    }
+
+    public List<EscopoVul> getListaApontamento() {
+        return listaApontamento;
+    }
+
+    public void setListaApontamento(List<EscopoVul> listaApontamento) {
+        this.listaApontamento = listaApontamento;
+    }
+    
+    // Método chamado no momento de salvar as associações de vulnerabilidades ao escopo
     public void associaVul(Escopo escopo, List<Vulnerabilidade> vul) throws IOException {
         List<EscopoVul> list = getFacade().findAllfindByIdEscopo(escopo);
         for (int i=0; list.size()>i; i++) {
@@ -304,7 +296,6 @@ public class EscopoVulController implements Serializable {
         for( int i=0; i<vul.size();i++) {
             EscopoVul ev = new EscopoVul();
             long yourmilliseconds = System.currentTimeMillis();
-            SimpleDateFormat sdf = new SimpleDateFormat("MMM dd,yyyy HH:mm");    
             Date resultdate = new Date(yourmilliseconds);
             ev.setDataLink(resultdate);
             
@@ -322,7 +313,8 @@ public class EscopoVulController implements Serializable {
         FacesContext.getCurrentInstance().getExternalContext().redirect("/Tcc/escopo/View.jsf");
     }
     
-    public void editEscopoVul(Escopo escopo) throws IOException {
+    // Método chamado antes de abrir a tela de Definir risco
+    public void abrirDefinirRisco(Escopo escopo) throws IOException {
         listaApontamento = getFacade().findAllfindByIdEscopo(escopo);
         for (int i=0; i<listaApontamento.size(); i++) {
             listaApontamento.get(i).setVulnerabilidade(vul.getVulnerabilidade(listaApontamento.get(i).getEscopoVulPK().getIdVulnerabilidade()));
@@ -330,7 +322,8 @@ public class EscopoVulController implements Serializable {
         FacesContext.getCurrentInstance().getExternalContext().redirect("/Tcc/escopoVul/DefinirRisco.jsf");
     }
     
-    public void editAceite(Escopo escopo) throws IOException {
+    // Método chamado antes de abrir a tela de Definir aceite
+    public void abrirDefinirAceite(Escopo escopo) throws IOException {
         listaApontamento = getFacade().findAllfindByIdEscopo(escopo);
         for (int i=0; i<listaApontamento.size(); i++) {
             listaApontamento.get(i).setVulnerabilidade(vul.getVulnerabilidade(listaApontamento.get(i).getEscopoVulPK().getIdVulnerabilidade()));
@@ -338,26 +331,9 @@ public class EscopoVulController implements Serializable {
         FacesContext.getCurrentInstance().getExternalContext().redirect("/Tcc/escopoVul/DefinirAceite.jsf");
     }
 
-    public DataModel getLista() {
-        return lista;
-    }
-
-    public void setLista(List<EscopoVul> lista) {
-        this.lista = (DataModel) lista;
-    }
-
-    public List<EscopoVul> getListaApontamento() {
-        return listaApontamento;
-    }
-
-    public void setListaApontamento(List<EscopoVul> listaApontamento) {
-        this.listaApontamento = listaApontamento;
-    }    
-    
     public void definirRisco() {
         try {            
             for (int i = 0; i < listaApontamento.size(); i++) {
-                //current = new EscopoVul();
                 current = listaApontamento.get(i);
                 current.setEscopoVulPK(listaApontamento.get(i).getEscopoVulPK());
                 if (listaApontamento.get(i).getImpacto() != 0 && listaApontamento.get(i).getProbabilidade() != 0) {
@@ -377,14 +353,17 @@ public class EscopoVulController implements Serializable {
         }
     }
     
+    // Retorna lista de vulnerabilidade do escopo
     public List<EscopoVul> findAllfindByIdEscopo(Escopo escopo) {
         return ejbFacade.findAllfindByIdEscopo(escopo);
     }
     
+    // Retorna a List de vulnerabilidade do relatório
     public List<EscopoVul> consultaRelatorio(Escopo escopo) {
         return ejbFacade.consultaRelatorio(escopo);
     }
     
+    // Verifica se desabilita botão de relatório
     public boolean desabilitaRelatorio(Escopo escopo) {
         return ejbFacade.desabilitaRelatorio(escopo);
     }

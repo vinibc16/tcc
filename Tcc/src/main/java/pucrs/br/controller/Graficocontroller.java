@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package pucrs.br.controller;
 
 import javax.annotation.PostConstruct;
@@ -12,16 +7,12 @@ import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.inject.Inject;
 import javax.inject.Named;
- 
-import org.primefaces.model.chart.Axis;
-import org.primefaces.model.chart.AxisType;
-import org.primefaces.model.chart.BarChartModel;
-import org.primefaces.model.chart.ChartSeries;
 import org.primefaces.model.chart.PieChartModel;
 import pucrs.br.entity.Grafico;
+
 /**
- *
- * @author psysvica
+ * @Henrique Knorre 
+ * @Vinicius Canteiro
  */
 @ManagedBean
 @Named("graficocontroller")

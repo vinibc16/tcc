@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package pucrs.br.bean;
 
 import javax.ejb.Stateless;
@@ -10,11 +5,10 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import pucrs.br.entity.Empresa;
-import pucrs.br.entity.Usuario;
 
 /**
- *
- * @author psysvica
+ * @Henrique Knorre 
+ * @Vinicius Canteiro
  */
 @Stateless
 public class EmpresaFacade extends AbstractFacade<Empresa> {
@@ -31,6 +25,7 @@ public class EmpresaFacade extends AbstractFacade<Empresa> {
         super(Empresa.class);
     }
     
+    // Verifica se existe uma empresa cadastrada com o ID de parâmetro
     public boolean existeEmpresa(int idEmpresa) {
 
         try {

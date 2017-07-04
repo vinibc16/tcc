@@ -23,16 +23,20 @@ import javax.inject.Inject;
 import pucrs.br.entity.Vulnerabilidade;
 import pucrs.br.entity.VulnerabilidadeAdmin;
 
+/**
+ * @Henrique Knorre 
+ * @Vinicius Canteiro
+ */
 @Named("empresaController")
 @SessionScoped
 public class EmpresaController implements Serializable {
 
     private Empresa current;
     private DataModel items = null;
-    @EJB
-    private pucrs.br.bean.EmpresaFacade ejbFacade;
     private PaginationHelper pagination;
     private int selectedItemIndex;
+    @EJB
+    private EmpresaFacade ejbFacade;
     @Inject
     private VulnerabilidadeAdminController vulAdminController;
     @Inject
@@ -95,11 +99,9 @@ public class EmpresaController implements Serializable {
 
     public void create() {
         try {
-            //if(verificaCnpj()) {
-                getFacade().create(current);
-                JsfUtil.addSuccessMessage("Empresa criada.");
+            getFacade().create(current);
+            JsfUtil.addSuccessMessage("Empresa criada.");
                 createVulsEmp();
-            //}
             prepareList();
         } catch (Exception e) {
             JsfUtil.addErrorMessage(e, "Erro ao criar empresa.");
@@ -114,11 +116,9 @@ public class EmpresaController implements Serializable {
 
     public void update() {
         try {
-            //if(verificaCnpj()) {
                 getFacade().edit(current);
                 FacesMessage msg = new FacesMessage("Empresa atualizada");
                 FacesContext.getCurrentInstance().addMessage(null, msg);
-            //}            
             prepareList();
         } catch (Exception e) {
             JsfUtil.addErrorMessage(e, "Erro ao atualizar empresa.");
@@ -141,7 +141,6 @@ public class EmpresaController implements Serializable {
         if (selectedItemIndex >= 0) {
             return "ViewEmpresa";
         } else {
-            // all items were removed - go back to list
             recreateModel();
             return "ListEmpresa";
         }
@@ -159,9 +158,7 @@ public class EmpresaController implements Serializable {
     private void updateCurrentItem() {
         int count = getFacade().count();
         if (selectedItemIndex >= count) {
-            // selected index cannot be bigger than number of items:
             selectedItemIndex = count - 1;
-            // go to previous page if last page disappeared:
             if (pagination.getPageFirstItem() >= count) {
                 pagination.previousPage();
             }
@@ -250,10 +247,12 @@ public class EmpresaController implements Serializable {
 
     }
     
+    // Retorna todas as empresa
     public List<Empresa> findAll() {
         return ejbFacade.findAll();
     }
     
+    // Criar automaticamente vulnerabilidade vinculadas a empresa no momento que salva uma empresa nova
     public void createVulsEmp() {
         List<VulnerabilidadeAdmin> lista = new ArrayList<VulnerabilidadeAdmin>();
         lista = vulAdminController.findAll();
@@ -269,13 +268,5 @@ public class EmpresaController implements Serializable {
             vul.setConsequencia(lista.get(i).getConsequencia());
             vulController.insert(vul);
         }
-    }
-    
-    public boolean verificaCnpj() {
-        if (String.valueOf(current.getCnpj()).length() != 14) {
-            JsfUtil.addErrorMessage("CNPJ inválido");
-            return false;
-        }
-        return true;
     }
 }

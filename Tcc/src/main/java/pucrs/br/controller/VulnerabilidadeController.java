@@ -10,7 +10,6 @@ import pucrs.br.controller.util.PaginationHelper;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
-import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.ejb.EJB;
@@ -26,26 +25,29 @@ import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
 import javax.inject.Inject;
 import javax.servlet.http.Part;
-import org.apache.commons.io.IOUtils;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.UploadedFile;
 import pucrs.br.bean.VulnerabilidadeFacade;
 import pucrs.br.entity.Empresa;
 import pucrs.br.entity.Grafico;
 
+/**
+ * @Henrique Knorre 
+ * @Vinicius Canteiro
+ */
 @Named("vulnerabilidadeController")
 @SessionScoped
 public class VulnerabilidadeController implements Serializable {
 
     private Vulnerabilidade current;
     private DataModel items = null;
-    @EJB
-    private pucrs.br.bean.VulnerabilidadeFacade ejbFacade;
     private PaginationHelper pagination;
     private int selectedItemIndex;
+    private Part arquivo;
+    @EJB
+    private VulnerabilidadeFacade ejbFacade;
     @Inject
     private UsuarioController usuario;
-    private Part arquivo;
 
     public VulnerabilidadeController() {
     }
@@ -78,7 +80,6 @@ public class VulnerabilidadeController implements Serializable {
                 @Override
                 public DataModel createPageDataModel() {
                     return new ListDataModel(getFacade().findAllVulByUser(usuario.getLogado().getIdEmpresa()));
-                    //return new ListDataModel(getFacade().findRange(new int[]{getPageFirstItem(), getPageFirstItem() + getPageSize()}));
                 }
             };
         }
@@ -254,7 +255,16 @@ public class VulnerabilidadeController implements Serializable {
         }
 
     }
+    
+    public Part getArquivo() {
+        return arquivo;
+    }
 
+    public void setArquivo(Part arquivo) {
+        this.arquivo = arquivo;
+    }
+
+    // Método utilizado quando insere automaticamente vulnerabilidade ao salvar uma nova empresa
     public void insert(Vulnerabilidade vul) {
         try {
             getFacade().create(vul);
@@ -263,14 +273,12 @@ public class VulnerabilidadeController implements Serializable {
         }
     }
 
-    public String getVulNome(int idVul) {
-        return ejbFacade.getVulNome(idVul);
-    }
-
+    // Retorna lista de informações para o gráfico
     public List<Grafico> findResultGrafico(Empresa emp) {
         return getFacade().findResultGrafico(emp);
     }
 
+    // Importar vulnerabilidade por um arquivo externo
     public void importa(FileUploadEvent event) throws IOException {
         String str = "";
         StringBuffer buf = new StringBuffer();
@@ -282,7 +290,6 @@ public class VulnerabilidadeController implements Serializable {
                 while ((str = reader.readLine()) != null) {
                     Pattern p = Pattern.compile("[a-zA-Zà-úÀ-Ú]+");
                     Matcher m = p.matcher(str);
-                    System.out.println("Aqui -> " + str);
                     String[] vulNova = str.split(";");
                     current = new Vulnerabilidade();
                     selectedItemIndex = -1;
@@ -298,20 +305,8 @@ public class VulnerabilidadeController implements Serializable {
                 }
             }
         } catch (Exception e) {
-            //JsfUtil.addErrorMessage(e, "Erro ao importar o arquivo.");
-            //FacesMessage message = new FacesMessage("Erro ao importar o arquivo.");
-            //FacesContext.getCurrentInstance().addMessage(null, message);
             FacesMessage facesMsg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "","Erro ao importar o arquivo.");
             FacesContext.getCurrentInstance().addMessage(null, facesMsg);
         }
     }
-
-    public Part getArquivo() {
-        return arquivo;
-    }
-
-    public void setArquivo(Part arquivo) {
-        this.arquivo = arquivo;
-    }
-
 }
