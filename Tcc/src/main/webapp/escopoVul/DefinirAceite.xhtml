@@ -31,6 +31,12 @@
                     <p:column headerText="Vulnerabilidade">
                         <h:outputText value="#{item.vulnerabilidade.nome}"/>
                     </p:column>
+                    <p:column headerText="Consequência">
+                        <h:outputText value="#{item.consequencia}"/>
+                    </p:column>
+                    <p:column headerText="Risco">
+                        <h:outputText value="#{escopoController.recuperaRisco(item.risco)}"/>
+                    </p:column>
                     <p:column headerText="Aprovar" >
                         <b:selectOneMenu id="Ignorar" value="#{item.aceito}">
                             <f:selectItem itemLabel="Sim" itemValue="0"/>

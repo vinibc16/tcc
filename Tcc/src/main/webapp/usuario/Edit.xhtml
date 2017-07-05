@@ -24,7 +24,7 @@
                     <b:inputText label="Senha" id="senha" type="password" value="#{usuarioController.selected.senha}" required="true"/>
                     <b:inputText label="Telefone" id="telefone" value="#{usuarioController.selected.telefone}" required="true"/>
                     <b:inputText label="Ramal" type="number" id="ramal" value="#{usuarioController.selected.ramal}"/>
-                    <b:inputText label="E-mail" id="email" value="#{usuarioController.selected.EMail}"/>
+                    <b:inputText label="E-mail" id="email" value="#{usuarioController.selected.EMail}" required="true"/>
                 </b:panel>
                 <h:form>
                     <b:commandButton action="#{usuarioController.update}" value="Salvar" ajax="false"/>

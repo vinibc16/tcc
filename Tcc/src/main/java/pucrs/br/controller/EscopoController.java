@@ -101,7 +101,6 @@ public class EscopoController extends HttpServlet implements Serializable {
                 @Override
                 public DataModel createPageDataModel() {
                     return new ListDataModel(getFacade().findAllEscByUser(usuarioLogado.getLogado().getIdEmpresa()));
-                    //return new ListDataModel(getFacade().findRange(new int[]{getPageFirstItem(), getPageFirstItem() + getPageSize()}));
                 }
             };
         }
@@ -407,9 +406,12 @@ public class EscopoController extends HttpServlet implements Serializable {
         // Tabela 2
         document.add(new Paragraph("Vulnerabilidade - Ativos de Informação",boldFont16));
         table = new PdfPTable(4);
-        
-        cell = new PdfPCell(new Phrase("Vulnerabilidade", boldFont14));
         document.add(new Paragraph(" "));
+        table.setTotalWidth(400f);
+        table.setLockedWidth(true);
+        float[] widths = new float[] { 200f, 100f, 50f, 50f };
+        table.setWidths(widths);
+        cell = new PdfPCell(new Phrase("Vulnerabilidade", boldFont14));        
         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
         table.addCell(cell);
         cell = new PdfPCell(new Phrase("Fonte", boldFont14));
